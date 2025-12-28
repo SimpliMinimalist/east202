@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:myapp/features/add_product/models/product_model.dart';
 import 'package:myapp/features/add_product/screens/add_product_screen.dart';
 import 'package:myapp/features/store/widgets/add_category_bottom_sheet.dart';
@@ -9,7 +7,6 @@ import 'package:myapp/providers/selection_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/product_provider.dart';
-import '../../add_product/widgets/add_product_fab.dart';
 import '../../add_product/widgets/product_card.dart';
 
 class StoreScreen extends StatefulWidget {
@@ -20,44 +17,6 @@ class StoreScreen extends StatefulWidget {
 }
 
 class _StoreScreenState extends State<StoreScreen> {
-  final ScrollController _scrollController = ScrollController();
-  bool _isFabVisible = true;
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  bool _handleScrollNotification(ScrollNotification notification) {
-    final selectionProvider = Provider.of<SelectionProvider>(context, listen: false);
-    if (selectionProvider.isSelectionMode) return false;
-    if (notification is ScrollUpdateNotification) {
-      final direction = _scrollController.position.userScrollDirection;
-      final scrollDelta = notification.scrollDelta ?? 0;
-      const threshold = 5.0;
-
-      if (direction == ScrollDirection.reverse && scrollDelta.abs() > threshold) {
-        if (_isFabVisible) _updateFab(false);
-      } else if (direction == ScrollDirection.forward && scrollDelta.abs() > threshold) {
-        if (!_isFabVisible) _updateFab(true);
-      }
-    } else if (notification is ScrollEndNotification) {
-      if (notification.metrics.atEdge) {
-        _updateFab(true);
-      }
-    }
-    return false;
-  }
-
-  void _updateFab(bool visible) {
-    if (_isFabVisible == visible) return;
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      setState(() => _isFabVisible = visible);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
@@ -74,69 +33,56 @@ class _StoreScreenState extends State<StoreScreen> {
     }
 
     return Scaffold(
-      body: NotificationListener<ScrollNotification>(
-        onNotification: _handleScrollNotification,
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: _buildCategoryFilters(),
-              ),
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: _buildCategoryFilters(),
             ),
-            filteredProducts.isEmpty
-                ? const SliverFillRemaining(
-                    child: Center(
-                      child: Text('No products yet. Add one!'),
-                    ),
-                  )
-                : SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final product = filteredProducts[index];
-                          final isSelected =
-                              selectionProvider.selectedProducts.contains(product.id);
-                          return GestureDetector(
-                            onTap: () {
-                              if (selectionProvider.isSelectionMode) {
-                                selectionProvider.toggleSelection(product.id);
-                              } else {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        AddProductScreen(product: product),
-                                  ),
-                                );
-                              }
-                            },
-                            onLongPress: () {
+          ),
+          filteredProducts.isEmpty
+              ? const SliverFillRemaining(
+                  child: Center(
+                    child: Text('No products yet. Add one!'),
+                  ),
+                )
+              : SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final product = filteredProducts[index];
+                        final isSelected =
+                            selectionProvider.selectedProducts.contains(product.id);
+                        return GestureDetector(
+                          onTap: () {
+                            if (selectionProvider.isSelectionMode) {
                               selectionProvider.toggleSelection(product.id);
-                            },
-                            child: ProductCard(
-                              product: product,
-                              isSelected: isSelected,
-                            ),
-                          );
-                        },
-                        childCount: filteredProducts.length,
-                      ),
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      AddProductScreen(product: product),
+                                ),
+                              );
+                            }
+                          },
+                          onLongPress: () {
+                            selectionProvider.toggleSelection(product.id);
+                          },
+                          child: ProductCard(
+                            product: product,
+                            isSelected: isSelected,
+                          ),
+                        );
+                      },
+                      childCount: filteredProducts.length,
                     ),
                   ),
-          ],
-        ),
-      ),
-      floatingActionButton: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        transitionBuilder: (Widget child, Animation<double> animation) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-        child: selectionProvider.isSelectionMode
-            ? const SizedBox.shrink()
-            : (_isFabVisible ? const AddProductFab() : const SizedBox.shrink()),
+                ),
+        ],
       ),
     );
   }

@@ -6,6 +6,8 @@ import 'package:myapp/providers/selection_provider.dart';
 import 'package:myapp/providers/store_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../features/add_product/screens/add_product_screen.dart';
+
 class MainShell extends StatefulWidget {
   const MainShell({super.key, required this.child});
 
@@ -159,6 +161,19 @@ class _MainShellState extends State<MainShell> {
                   width: 24, height: 24),
               onPressed: () => context.push('/search'),
             ),
+            const SizedBox(width: 8.0),
+            IconButton(
+              icon: const Icon(Icons.add, size: 28),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddProductScreen(),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(width: 12.0),
           ],
         );
       case 1:
