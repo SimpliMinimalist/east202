@@ -163,7 +163,7 @@ class _MainShellState extends State<MainShell> {
             ),
             const SizedBox(width: 8.0),
             IconButton(
-              icon: const Icon(Icons.add, size: 28),
+              icon: const Icon(Icons.add, size: 34),
               onPressed: () {
                 Navigator.push(
                   context,
