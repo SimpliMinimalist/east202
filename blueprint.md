@@ -53,6 +53,6 @@ A Flutter-based mobile application for e-commerce administrators to manage their
       - **Solution:** Modified the `showModalBottomSheet` call in `lib/features/store/widgets/add_category_bottom_sheet.dart` by setting `useRootNavigator: true`. This ensures the bottom sheet is pushed onto the root navigator, causing it to overlay the entire screen and dim the background correctly.
   2.  **Fixed Full-Screen Page Navigation:**
       - **Issue:** The "Add/Edit Product" screen (`AddProductScreen`) was opening within the main app shell, leaving the top and bottom navigation bars visible. It was intended to be a full-screen page.
-      - **Solution:** Updated the navigation logic to present `AddProductScreen` as a full-screen dialog. This was done by adding `fullscreenDialog: true` to the `MaterialPageRoute` in the following files:
+      - **Solution:** Updated the navigation logic to use the root navigator when pushing the `AddProductScreen`. This was achieved by using `Navigator.of(context, rootNavigator: true).push(...)` in the following files:
         - `lib/features/store/screens/store_screen.dart`: For navigating to edit an existing product.
         - `lib/core/navigation/main_shell.dart`: For navigating to add a new product.

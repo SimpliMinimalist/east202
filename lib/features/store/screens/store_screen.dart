@@ -60,12 +60,10 @@ class _StoreScreenState extends State<StoreScreen> {
                             if (selectionProvider.isSelectionMode) {
                               selectionProvider.toggleSelection(product.id);
                             } else {
-                              Navigator.push(
-                                context,
+                              Navigator.of(context, rootNavigator: true).push(
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       AddProductScreen(product: product),
-                                  fullscreenDialog: true,
                                 ),
                               );
                             }
