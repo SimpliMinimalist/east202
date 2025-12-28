@@ -117,7 +117,7 @@ class _StoreScreenState extends State<StoreScreen> {
                   padding: const EdgeInsets.only(left: 8.0),
                   child: ChoiceChip(
                     visualDensity: const VisualDensity(vertical: -2),
-                    label: const Icon(Icons.add, size: 20),
+                    label: const Icon(Icons.add, size: 24),
                     selected: false,
                     showCheckmark: false,
                     onSelected: (_) => showAddCategoryBottomSheet(context),
