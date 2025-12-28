@@ -10,6 +10,11 @@ void showAddCategoryBottomSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
+    useRootNavigator: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    backgroundColor: Theme.of(context).cardColor,
     builder: (context) {
       return Padding(
         padding: EdgeInsets.only(
@@ -22,7 +27,19 @@ void showAddCategoryBottomSheet(BuildContext context) {
           key: formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 5,
+                  margin: const EdgeInsets.only(bottom: 16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
               Text(
                 'Add New Category',
                 style: Theme.of(context).textTheme.titleLarge,
@@ -30,6 +47,7 @@ void showAddCategoryBottomSheet(BuildContext context) {
               const SizedBox(height: 16),
               TextFormField(
                 controller: categoryController,
+                autofocus: true,
                 decoration: const InputDecoration(
                   labelText: 'Category Name',
                   border: OutlineInputBorder(),

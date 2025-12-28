@@ -169,6 +169,7 @@ class _MainShellState extends State<MainShell> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const AddProductScreen(),
+                    fullscreenDialog: true,
                   ),
                 );
               },
@@ -190,6 +191,7 @@ class _MainShellState extends State<MainShell> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const SearchOrdersScreen(),
+                    fullscreenDialog: true,
                   ),
                 );
               },

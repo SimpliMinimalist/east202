@@ -43,22 +43,16 @@ A Flutter-based mobile application for e-commerce administrators to manage their
   - A `PopScope` is used to prevent accidental data loss by prompting users to save changes before navigating away.
   - Seamless navigation between the product list, product editor, and variant editor.
 
-## Current Requested Change: Implement Variant Editing Flow
+## Current Requested Change: UI/UX Bug Fixes
 
 ### Plan and Steps
-- **Goal:** Enhance the product variant functionality to allow users to edit individual variants from the "Add Product" screen, as per the provided design.
+- **Goal:** Address several UI/UX bugs related to navigation and overlays to ensure the application behaves as expected.
 - **Steps Taken:**
-  1. **Created `ProductVariant` Model:**
-     - A new file `lib/features/add_product/models/product_variant_model.dart` was created to define the `ProductVariant` class. This class holds the data for each specific variant combination, including its attributes (e.g., {'Size': 'Small', 'Color': 'Red'}), price, and stock.
-  2. **Created `EditVariantScreen`:**
-     - A new screen was built at `lib/features/add_product/screens/edit_variant_screen.dart` to provide a dedicated UI for editing the details (price, stock, image) of a single product variant.
-  3. **Updated `Product` Model:**
-     - The main `Product` model in `lib/features/add_product/models/product_model.dart` was updated to include `List<ProductVariant>` to store the generated variants.
-  4. **Modified `AddProductScreen`:**
-     - The button text now dynamically changes from "Add Product Variants" to "Edit Product Variants" once variants are created.
-     - A `ListView` is now rendered below the button to display the list of generated product variants.
-     - Each item in the list is tappable, navigating the user to the `EditVariantScreen` for the selected variant.
-     - The screen was updated to handle the return data from `EditVariantScreen` and update the state accordingly.
-  5. **Bug Fixes:**
-     - Resolved a `non_abstract_class_inherits_abstract_member` error by correctly implementing the `isValidKey` method in the `ProductVariantEquality` class within `add_product_screen.dart`.
-     - Fixed an `undefined_method` error in `product_variant_model.dart` by importing the `package:collection/collection.dart` library.
+  1.  **Fixed Bottom Sheet Display:**
+      - **Issue:** The "Add New Category" bottom sheet was appearing underneath the main `AppBar` and `BottomNavigationBar`, instead of as an overlay.
+      - **Solution:** Modified the `showModalBottomSheet` call in `lib/features/store/widgets/add_category_bottom_sheet.dart` by setting `useRootNavigator: true`. This ensures the bottom sheet is pushed onto the root navigator, causing it to overlay the entire screen and dim the background correctly.
+  2.  **Fixed Full-Screen Page Navigation:**
+      - **Issue:** The "Add/Edit Product" screen (`AddProductScreen`) was opening within the main app shell, leaving the top and bottom navigation bars visible. It was intended to be a full-screen page.
+      - **Solution:** Updated the navigation logic to present `AddProductScreen` as a full-screen dialog. This was done by adding `fullscreenDialog: true` to the `MaterialPageRoute` in the following files:
+        - `lib/features/store/screens/store_screen.dart`: For navigating to edit an existing product.
+        - `lib/core/navigation/main_shell.dart`: For navigating to add a new product.

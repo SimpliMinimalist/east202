@@ -65,6 +65,7 @@ class _StoreScreenState extends State<StoreScreen> {
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       AddProductScreen(product: product),
+                                  fullscreenDialog: true,
                                 ),
                               );
                             }
