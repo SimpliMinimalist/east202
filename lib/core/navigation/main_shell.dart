@@ -51,7 +51,7 @@ class _MainShellState extends State<MainShell> {
       body: widget.child,
       bottomNavigationBar: BottomAppBar(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: NavigationBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
