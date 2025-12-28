@@ -36,23 +36,24 @@ A Flutter-based mobile application for e-commerce administrators to manage their
 - **Responsive Layout:**
   - The application is designed to be responsive and work well on various screen sizes.
 - **Interactive Elements:**
-  - `ClearableTextFormField` for easy input clearing.
+  - `ClearableTextFormField` for easy input clearing. The clear icon now uses the app's primary color for a consistent look.
   - Smooth page indicators for image carousels.
   - Modals and bottom sheets for interactive category and draft selection.
 - **Navigation:**
   - A `PopScope` is used to prevent accidental data loss by prompting users to save changes before navigating away.
   - Seamless navigation between the product list, product editor, and variant editor.
 
-## Current Requested Change: UI/UX Bug Fixes
+## Current Requested Change: UI/UX Bug Fixes & Theming
 
 ### Plan and Steps
-- **Goal:** Address several UI/UX bugs related to navigation and overlays to ensure the application behaves as expected.
+- **Goal:** Address several UI/UX bugs and apply theme consistency.
 - **Steps Taken:**
   1.  **Fixed Bottom Sheet Display:**
       - **Issue:** The "Add New Category" bottom sheet was appearing underneath the main `AppBar` and `BottomNavigationBar`, instead of as an overlay.
-      - **Solution:** Modified the `showModalBottomSheet` call in `lib/features/store/widgets/add_category_bottom_sheet.dart` by setting `useRootNavigator: true`. This ensures the bottom sheet is pushed onto the root navigator, causing it to overlay the entire screen and dim the background correctly.
+      - **Solution:** Modified the `showModalBottomSheet` call in `lib/features/store/widgets/add_category_bottom_sheet.dart` by setting `useRootNavigator: true`.
   2.  **Fixed Full-Screen Page Navigation:**
-      - **Issue:** The "Add/Edit Product" screen (`AddProductScreen`) was opening within the main app shell, leaving the top and bottom navigation bars visible. It was intended to be a full-screen page.
-      - **Solution:** Updated the navigation logic to use the root navigator when pushing the `AddProductScreen`. This was achieved by using `Navigator.of(context, rootNavigator: true).push(...)` in the following files:
-        - `lib/features/store/screens/store_screen.dart`: For navigating to edit an existing product.
-        - `lib/core/navigation/main_shell.dart`: For navigating to add a new product.
+      - **Issue:** The "Add/Edit Product" screen (`AddProductScreen`) was opening within the main app shell, leaving the top and bottom navigation bars visible.
+      - **Solution:** Updated the navigation logic to use the root navigator by calling `Navigator.of(context, rootNavigator: true).push(...)` in `lib/features/store/screens/store_screen.dart` and `lib/core/navigation/main_shell.dart`.
+  3.  **Themed Clear Icon:**
+      - **Issue:** The clear text icon in `ClearableTextFormField` had a hardcoded color.
+      - **Solution:** Modified `lib/shared/widgets/clearable_text_form_field.dart` to use `Theme.of(context).colorScheme.primary` for the icon color, ensuring it matches the app's theme.

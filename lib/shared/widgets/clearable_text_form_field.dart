@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -57,6 +56,8 @@ class _ClearableTextFormFieldState extends State<ClearableTextFormField> {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColor = Theme.of(context).colorScheme.primary;
+
     return TextFormField(
       controller: widget.controller,
       focusNode: _focusNode,
@@ -66,7 +67,12 @@ class _ClearableTextFormFieldState extends State<ClearableTextFormField> {
         border: const OutlineInputBorder(),
         suffixIcon: _isFocused && widget.controller.text.isNotEmpty
             ? IconButton(
-                icon: SvgPicture.asset('assets/icons/cancel.svg', width: 20, height: 20),
+                icon: SvgPicture.asset(
+                  'assets/icons/cancel.svg',
+                  width: 20,
+                  height: 20,
+                  colorFilter: ColorFilter.mode(primaryColor, BlendMode.srcIn),
+                ),
                 onPressed: () {
                   widget.controller.clear();
                 },
