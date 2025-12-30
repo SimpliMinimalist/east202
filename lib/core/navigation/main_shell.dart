@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:myapp/features/search_orders/screens/search_orders_screen.dart';
 import 'package:myapp/providers/selection_provider.dart';
 import 'package:myapp/providers/store_provider.dart';
 import 'package:provider/provider.dart';
@@ -175,21 +174,6 @@ class _MainShellState extends State<MainShell> {
           title: const Text('Orders'),
           backgroundColor: Colors.transparent,
           elevation: 0,
-          actions: [
-            IconButton(
-              icon: SvgPicture.asset('assets/icons/search.svg',
-                  width: 24, height: 24),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SearchOrdersScreen(),
-                    fullscreenDialog: true,
-                  ),
-                );
-              },
-            ),
-          ],
         );
       case 2:
         return AppBar(
