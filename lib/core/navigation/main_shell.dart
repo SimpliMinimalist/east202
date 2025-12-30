@@ -128,7 +128,7 @@ class _MainShellState extends State<MainShell> {
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
+  PreferredSizeWidget? _buildAppBar() {
     final selectionProvider = Provider.of<SelectionProvider>(context);
 
     if (selectionProvider.isSelectionMode) {
@@ -147,23 +147,6 @@ class _MainShellState extends State<MainShell> {
       );
     }
 
-    switch (_selectedIndex) {
-      case 0:
-        return AppBar(
-          title: const Text('Store'),
-        );
-      case 1:
-        return AppBar(
-          title: const Text('Orders'),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        );
-      case 2:
-        return AppBar(
-          title: const Text('Profile'),
-        );
-      default:
-        return AppBar();
-    }
+    return null;
   }
 }
