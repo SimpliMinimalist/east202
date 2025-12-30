@@ -25,6 +25,9 @@ final ThemeData appTheme = ThemeData(
       fontWeight: FontWeight.bold,
     ),
   ),
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    backgroundColor: primaryColor,
+  ),
   textSelectionTheme: const TextSelectionThemeData(
     cursorColor: primaryColor,
   ),
