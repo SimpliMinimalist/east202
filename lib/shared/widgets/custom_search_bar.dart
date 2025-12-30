@@ -67,7 +67,18 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                 icon: const Icon(Icons.arrow_back),
                 onPressed: widget.onBack ?? () => Navigator.of(context).pop(),
               )
-            : null,
+            : Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: SvgPicture.asset(
+                  'assets/icons/search.svg',
+                  width: 20,
+                  height: 20,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.black54,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
         trailing: widget.trailing ??
             [
               if (widget.controller?.text.isNotEmpty ?? false)

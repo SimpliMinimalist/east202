@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/providers/selection_provider.dart';
-import 'package:myapp/providers/store_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../features/add_product/screens/add_product_screen.dart';
@@ -64,6 +63,7 @@ class _MainShellState extends State<MainShell> {
               child: const Icon(Icons.add),
             )
           : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       bottomNavigationBar: BottomAppBar(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -129,7 +129,6 @@ class _MainShellState extends State<MainShell> {
   }
 
   PreferredSizeWidget _buildAppBar() {
-    final storeProvider = Provider.of<StoreProvider>(context);
     final selectionProvider = Provider.of<SelectionProvider>(context);
 
     if (selectionProvider.isSelectionMode) {
@@ -151,23 +150,7 @@ class _MainShellState extends State<MainShell> {
     switch (_selectedIndex) {
       case 0:
         return AppBar(
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: CircleAvatar(
-              radius: 12,
-              backgroundImage:
-                  storeProvider.logo != null ? FileImage(storeProvider.logo!) : null,
-            ),
-          ),
-          title: Text(
-            storeProvider.storeName.isNotEmpty
-                ? storeProvider.storeName
-                : 'My Store',
-            style: const TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          title: const Text('Store'),
         );
       case 1:
         return AppBar(

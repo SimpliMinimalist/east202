@@ -41,7 +41,7 @@ class _StoreScreenState extends State<StoreScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: CustomSearchBar(
-                hintText: 'Search for products...',
+                hintText: 'Search Products',
                 onTap: () => context.push('/search'),
                 hasBackButton: false,
               ),

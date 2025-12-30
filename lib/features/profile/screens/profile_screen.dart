@@ -1,13 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:myapp/providers/store_provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    final storeProvider = Provider.of<StoreProvider>(context);
+
+    return Scaffold(
       body: Center(
-        child: Text('Profile Screen'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (storeProvider.logo != null)
+              CircleAvatar(
+                radius: 50,
+                backgroundImage: FileImage(storeProvider.logo!),
+              ),
+            const SizedBox(height: 20),
+            Text(
+              storeProvider.storeName.isNotEmpty
+                  ? storeProvider.storeName
+                  : 'My Store',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+          ],
+        ),
       ),
     );
   }

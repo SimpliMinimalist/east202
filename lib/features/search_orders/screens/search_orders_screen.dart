@@ -58,7 +58,7 @@ class _SearchOrdersScreenState extends State<SearchOrdersScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: CustomSearchBar(
               controller: _searchController,
-              hintText: 'Search by Order ID or Customer',
+              hintText: 'Search Orders',
               onChanged: _onSearchChanged,
               hasBackButton: true,
               onBack: () => Navigator.of(context).pop(),

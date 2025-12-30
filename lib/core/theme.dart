@@ -17,6 +17,7 @@ final ThemeData appTheme = ThemeData(
     ),
     backgroundColor: backgroundColor,
     elevation: 0,
+    centerTitle: true,
     iconTheme: IconThemeData(color: Colors.black),
     titleTextStyle: TextStyle(
       color: Colors.black,

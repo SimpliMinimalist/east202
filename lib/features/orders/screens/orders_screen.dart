@@ -15,7 +15,7 @@ class OrdersScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: CustomSearchBar(
-                hintText: 'Search for orders...',
+                hintText: 'Search Orders',
                 onTap: () => context.push('/search_orders'),
                 hasBackButton: false,
               ),
