@@ -9,24 +9,26 @@ class OrdersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: CustomSearchBar(
-                hintText: 'Search Orders',
-                onTap: () => context.push('/search_orders'),
-                hasBackButton: false,
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: CustomSearchBar(
+                  hintText: 'Search Orders',
+                  onTap: () => context.push('/search_orders'),
+                  hasBackButton: false,
+                ),
               ),
             ),
-          ),
-          const SliverFillRemaining(
-            child: Center(
-              child: Text('Orders will be displayed here.'),
-            ),
-          )
-        ],
+            const SliverFillRemaining(
+              child: Center(
+                child: Text('Orders will be displayed here.'),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

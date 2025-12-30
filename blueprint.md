@@ -57,3 +57,6 @@ A Flutter-based mobile application for e-commerce administrators to manage their
   3.  **Themed Clear Icon:**
       - **Issue:** The clear text icon in `ClearableTextFormField` had a hardcoded color.
       - **Solution:** Modified `lib/shared/widgets/clearable_text_form_field.dart` to use `Theme.of(context).colorScheme.primary` for the icon color, ensuring it matches the app's theme.
+  4.  **Fixed Status Bar Overlap:**
+      - **Issue:** The search bar and content on the Store and Orders screens were overlapping with the system status bar.
+      - **Solution:** Wrapped the body of `lib/features/store/screens/store_screen.dart` and `lib/features/orders/screens/orders_screen.dart` with a `SafeArea` widget.
