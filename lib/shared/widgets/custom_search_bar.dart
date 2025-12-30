@@ -50,7 +50,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
       child: SearchBar(
-        constraints: const BoxConstraints(minHeight: 48, maxHeight: 48),
+        constraints: const BoxConstraints(minHeight: 54, maxHeight: 54),
         controller: widget.controller,
         hintText: widget.hintText,
         elevation: WidgetStateProperty.all(0.0),

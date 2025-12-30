@@ -60,3 +60,6 @@ A Flutter-based mobile application for e-commerce administrators to manage their
   4.  **Fixed Status Bar Overlap:**
       - **Issue:** The search bar and content on the Store and Orders screens were overlapping with the system status bar.
       - **Solution:** Wrapped the body of `lib/features/store/screens/store_screen.dart` and `lib/features/orders/screens/orders_screen.dart` with a `SafeArea` widget.
+  5.  **Increased Search Bar Height:**
+      - **Issue:** The search bar height was not consistent with the desired design.
+      - **Solution:** Increased the `minHeight` and `maxHeight` of the `SearchBar` in `lib/shared/widgets/custom_search_bar.dart` to 54px.
