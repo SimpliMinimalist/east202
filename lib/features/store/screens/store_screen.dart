@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myapp/features/add_product/models/product_model.dart';
 import 'package:myapp/features/add_product/screens/add_product_screen.dart';
 import 'package:myapp/features/store/widgets/add_category_bottom_sheet.dart';
 import 'package:myapp/providers/category_provider.dart';
 import 'package:myapp/providers/selection_provider.dart';
+import 'package:myapp/shared/widgets/custom_search_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/product_provider.dart';
@@ -35,6 +37,16 @@ class _StoreScreenState extends State<StoreScreen> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: CustomSearchBar(
+                hintText: 'Search Products',
+                onTap: () => context.push('/search'),
+                hasBackButton: false,
+              ),
+            ),
+          ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),

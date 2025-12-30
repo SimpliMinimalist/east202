@@ -8,6 +8,7 @@ import 'package:myapp/features/orders/screens/orders_screen.dart';
 import 'package:myapp/features/search_product/screens/search_product_screen.dart';
 import 'package:myapp/features/add_product/models/product_model.dart';
 import 'package:myapp/features/profile/screens/profile_screen.dart';
+import 'package:myapp/features/search_orders/screens/search_orders_screen.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/',
@@ -51,6 +52,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/search',
       builder: (context, state) => const SearchProductScreen(),
+    ),
+    GoRoute(
+      path: '/search_orders',
+      builder: (context, state) => const SearchOrdersScreen(),
     ),
   ],
 );
