@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomSearchBar extends StatefulWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String hintText;
-  final ValueChanged<String> onChanged;
+  final ValueChanged<String>? onChanged;
+  final VoidCallback? onTap;
   final VoidCallback? onClear;
   final VoidCallback? onBack;
   final bool hasBackButton;
@@ -13,9 +14,10 @@ class CustomSearchBar extends StatefulWidget {
 
   const CustomSearchBar({
     super.key,
-    required this.controller,
+    this.controller,
     required this.hintText,
-    required this.onChanged,
+    this.onChanged,
+    this.onTap,
     this.onClear,
     this.onBack,
     this.hasBackButton = true,
@@ -30,12 +32,12 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   @override
   void initState() {
     super.initState();
-    widget.controller.addListener(_onTextChanged);
+    widget.controller?.addListener(_onTextChanged);
   }
 
   @override
   void dispose() {
-    widget.controller.removeListener(_onTextChanged);
+    widget.controller?.removeListener(_onTextChanged);
     super.dispose();
   }
 
@@ -59,6 +61,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
           ),
         ),
         onChanged: widget.onChanged,
+        onTap: widget.onTap,
         leading: widget.hasBackButton
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
@@ -67,7 +70,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             : null,
         trailing: widget.trailing ??
             [
-              if (widget.controller.text.isNotEmpty)
+              if (widget.controller?.text.isNotEmpty ?? false)
                 IconButton(
                   icon: SvgPicture.asset(
                     'assets/icons/cancel.svg',
@@ -76,8 +79,8 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                   ),
                   onPressed: widget.onClear ??
                       () {
-                        widget.controller.clear();
-                        widget.onChanged('');
+                        widget.controller?.clear();
+                        widget.onChanged?.call('');
                       },
                 ),
             ],

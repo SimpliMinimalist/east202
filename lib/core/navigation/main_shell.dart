@@ -51,6 +51,20 @@ class _MainShellState extends State<MainShell> {
     return Scaffold(
       appBar: _buildAppBar(),
       body: widget.child,
+      floatingActionButton: _selectedIndex == 0
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddProductScreen(),
+                    fullscreenDialog: true,
+                  ),
+                );
+              },
+              child: const Icon(Icons.add),
+            )
+          : null,
       bottomNavigationBar: BottomAppBar(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -155,27 +169,6 @@ class _MainShellState extends State<MainShell> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          actions: [
-            IconButton(
-              icon: SvgPicture.asset('assets/icons/search.svg',
-                  width: 24, height: 24),
-              onPressed: () => context.push('/search'),
-            ),
-            const SizedBox(width: 8.0),
-            IconButton(
-              icon: const Icon(Icons.add, size: 34),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AddProductScreen(),
-                    fullscreenDialog: true,
-                  ),
-                );
-              },
-            ),
-            const SizedBox(width: 12.0),
-          ],
         );
       case 1:
         return AppBar(
