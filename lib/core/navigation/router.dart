@@ -15,11 +15,15 @@ final GoRouter router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const WelcomeScreen(),
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: WelcomeScreen(),
+      ),
     ),
     GoRoute(
       path: '/store-setup',
-      builder: (context, state) => const StoreSetupScreen(),
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: StoreSetupScreen(),
+      ),
     ),
     ShellRoute(
       pageBuilder: (context, state, child) {
@@ -50,22 +54,30 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: '/add-product',
-      builder: (context, state) => const AddProductScreen(),
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: AddProductScreen(),
+      ),
     ),
     GoRoute(
       path: '/edit-product',
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         final product = state.extra as Product;
-        return AddProductScreen(product: product);
+        return NoTransitionPage(
+          child: AddProductScreen(product: product),
+        );
       },
     ),
     GoRoute(
       path: '/search',
-      builder: (context, state) => const SearchProductScreen(),
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: SearchProductScreen(),
+      ),
     ),
     GoRoute(
       path: '/search_orders',
-      builder: (context, state) => const SearchOrdersScreen(),
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: SearchOrdersScreen(),
+      ),
     ),
   ],
 );

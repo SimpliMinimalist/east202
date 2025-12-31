@@ -49,20 +49,27 @@ class _MainShellState extends State<MainShell> {
     return Scaffold(
       appBar: _buildAppBar(),
       body: widget.child,
-      floatingActionButton: _selectedIndex == 0
-          ? FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AddProductScreen(),
-                    fullscreenDialog: true,
-                  ),
-                );
-              },
-              child: const Icon(Icons.add),
-            )
-          : null,
+      floatingActionButton: AnimatedSwitcher(
+        duration: Duration.zero,
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return child;
+        },
+        child: _selectedIndex == 0
+            ? FloatingActionButton(
+                key: const ValueKey('fab'), // Add key for AnimatedSwitcher
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddProductScreen(),
+                      fullscreenDialog: true,
+                    ),
+                  );
+                },
+                child: const Icon(Icons.add),
+              )
+            : const SizedBox(key: ValueKey('empty')), // Use SizedBox and key
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       bottomNavigationBar: BottomAppBar(
         child: Padding(

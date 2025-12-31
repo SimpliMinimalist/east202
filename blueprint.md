@@ -43,23 +43,16 @@ A Flutter-based mobile application for e-commerce administrators to manage their
   - A `PopScope` is used to prevent accidental data loss by prompting users to save changes before navigating away.
   - Seamless navigation between the product list, product editor, and variant editor.
 
-## Current Requested Change: UI/UX Bug Fixes & Theming
+## Current Requested Change: Store Screen UX and FAB Animation
 
 ### Plan and Steps
-- **Goal:** Address several UI/UX bugs and apply theme consistency.
+- **Goal:** Improve the user experience on the store screen and remove the default animation from the Floating Action Button (FAB).
 - **Steps Taken:**
-  1.  **Fixed Bottom Sheet Display:**
-      - **Issue:** The "Add New Category" bottom sheet was appearing underneath the main `AppBar` and `BottomNavigationBar`, instead of as an overlay.
-      - **Solution:** Modified the `showModalBottomSheet` call in `lib/features/store/widgets/add_category_bottom_sheet.dart` by setting `useRootNavigator: true`.
-  2.  **Fixed Full-Screen Page Navigation:**
-      - **Issue:** The "Add/Edit Product" screen (`AddProductScreen`) was opening within the main app shell, leaving the top and bottom navigation bars visible.
-      - **Solution:** Updated the navigation logic to use the root navigator by calling `Navigator.of(context, rootNavigator: true).push(...)` in `lib/features/store/screens/store_screen.dart` and `lib/core/navigation/main_shell.dart`.
-  3.  **Themed Clear Icon:**
-      - **Issue:** The clear text icon in `ClearableTextFormField` had a hardcoded color.
-      - **Solution:** Modified `lib/shared/widgets/clearable_text_form_field.dart` to use `Theme.of(context).colorScheme.primary` for the icon color, ensuring it matches the app's theme.
-  4.  **Fixed Status Bar Overlap:**
-      - **Issue:** The search bar and content on the Store and Orders screens were overlapping with the system status bar.
-      - **Solution:** Wrapped the body of `lib/features/store/screens/store_screen.dart` and `lib/features/orders/screens/orders_screen.dart` with a `SafeArea` widget.
-  5.  **Increased Search Bar Height:**
-      - **Issue:** The search bar height was not consistent with the desired design.
-      - **Solution:** Increased the `minHeight` and `maxHeight` of the `SearchBar` in `lib/shared/widgets/custom_search_bar.dart` to 54px.
+  1.  **Resolved FAB Confusion:**
+      - **Issue:** The main "Add Product" FAB was correctly located in the `MainShell`, but a confusing `+` button for adding *categories* existed on the `StoreScreen`, creating a conflicting user experience. Additionally, the empty state "Add one!" text was not interactive.
+      - **Solution:**
+        - The misleading "Add Category" `ChoiceChip` was removed from the horizontal filter list in `lib/features/store/screens/store_screen.dart`.
+        - The empty state message ("No products yet. Add one!") was converted into a large, tappable call-to-action that navigates to the "Add Product" screen.
+  2.  **Disabled FAB Animation:**
+      - **Issue:** The FAB had a default rotation and fade animation when appearing/disappearing between tabs.
+      - **Solution:** Wrapped the `FloatingActionButton` in `lib/core/navigation/main_shell.dart` with an `AnimatedSwitcher` and set the `duration` to `Duration.zero` to make the transition instant.
