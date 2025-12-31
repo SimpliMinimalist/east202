@@ -75,12 +75,7 @@ class ProductCard extends StatelessWidget {
                         ),
                   ),
                   const SizedBox(height: 4),
-                  if (product.categories.isNotEmpty)
-                    Text(
-                      product.categories.first,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    )
-                  else
+                  if (product.categories.isEmpty)
                     Text(
                       'Category not assigned',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
