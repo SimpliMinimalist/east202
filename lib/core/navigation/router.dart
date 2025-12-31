@@ -22,19 +22,29 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const StoreSetupScreen(),
     ),
     ShellRoute(
-      builder: (context, state, child) => MainShell(child: child),
+      pageBuilder: (context, state, child) {
+        return NoTransitionPage(
+          child: MainShell(child: child),
+        );
+      },
       routes: [
         GoRoute(
           path: '/home',
-          builder: (context, state) => const StoreScreen(),
+          pageBuilder: (context, state) => const NoTransitionPage(
+            child: StoreScreen(),
+          ),
         ),
         GoRoute(
           path: '/orders',
-          builder: (context, state) => const OrdersScreen(),
+          pageBuilder: (context, state) => const NoTransitionPage(
+            child: OrdersScreen(),
+          ),
         ),
         GoRoute(
           path: '/profile',
-          builder: (context, state) => const ProfileScreen(),
+          pageBuilder: (context, state) => const NoTransitionPage(
+            child: ProfileScreen(),
+          ),
         ),
       ],
     ),
