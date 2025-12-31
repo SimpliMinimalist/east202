@@ -74,26 +74,26 @@ class ProductCard extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                  const SizedBox(height: 4),
-                  if (product.categories.isEmpty)
-                    Text(
-                      'Category not assigned',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey,
-                          ),
-                    ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 2),
                   Text(
                     '₹${product.price.toStringAsFixed(2)}',
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   if (product.stock != null)
                     Padding(
-                      padding: const EdgeInsets.only(top: 4.0),
+                      padding: const EdgeInsets.only(top: 2.0),
                       child: Text(
                         'Stock: ${product.stock}',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
+                    ),
+                  const SizedBox(height: 2),
+                  if (product.categories.isEmpty)
+                    Text(
+                      'Category not assigned',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.grey,
+                          ),
                     ),
                 ],
               ),
