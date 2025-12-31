@@ -52,53 +52,56 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
-      child: TextField(
-        controller: widget.controller,
-        decoration: InputDecoration(
-          hintText: widget.hintText,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(100),
-            borderSide: BorderSide.none,
-          ),
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: EdgeInsets.zero,
-          prefixIcon: widget.hasBackButton
-              ? IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: widget.onBack ?? () => Navigator.of(context).pop(),
-                )
-              : Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 12.0),
-                  child: SvgPicture.asset(
-                    'assets/icons/search.svg',
-                    width: 20,
-                    height: 20,
-                    colorFilter: const ColorFilter.mode(
-                      Colors.black54,
-                      BlendMode.srcIn,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: TextField(
+          controller: widget.controller,
+          decoration: InputDecoration(
+            hintText: widget.hintText,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(100),
+              borderSide: BorderSide.none,
+            ),
+            filled: true,
+            fillColor: Colors.white,
+            contentPadding: EdgeInsets.zero,
+            prefixIcon: widget.hasBackButton
+                ? IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: widget.onBack ?? () => Navigator.of(context).pop(),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.only(left: 16.0, right: 12.0),
+                    child: SvgPicture.asset(
+                      'assets/icons/search.svg',
+                      width: 20,
+                      height: 20,
+                      colorFilter: const ColorFilter.mode(
+                        Colors.black54,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
-                ),
-          suffixIcon: (widget.controller?.text.isNotEmpty ?? false)
-              ? IconButton(
-                  icon: SvgPicture.asset(
-                    'assets/icons/cancel.svg',
-                    width: 20,
-                    height: 20,
-                  ),
-                  onPressed: widget.onClear ??
-                      () {
-                        widget.controller?.clear();
-                        widget.onChanged?.call('');
-                      },
-                )
-              : null,
+            suffixIcon: (widget.controller?.text.isNotEmpty ?? false)
+                ? IconButton(
+                    icon: SvgPicture.asset(
+                      'assets/icons/cancel.svg',
+                      width: 20,
+                      height: 20,
+                    ),
+                    onPressed: widget.onClear ??
+                        () {
+                          widget.controller?.clear();
+                          widget.onChanged?.call('');
+                        },
+                  )
+                : null,
+          ),
+          onChanged: widget.onChanged,
+          onTap: widget.onTap,
+          readOnly: widget.readOnly,
+          autofocus: widget.autoFocus,
         ),
-        onChanged: widget.onChanged,
-        onTap: widget.onTap,
-        readOnly: widget.readOnly,
-        autofocus: widget.autoFocus,
       ),
     );
   }
