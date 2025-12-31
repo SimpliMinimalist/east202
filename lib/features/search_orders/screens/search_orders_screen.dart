@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:myapp/features/search_orders/models/order.dart';
@@ -61,6 +60,7 @@ class _SearchOrdersScreenState extends State<SearchOrdersScreen> {
               hintText: 'Search Orders',
               onChanged: _onSearchChanged,
               hasBackButton: true,
+              autoFocus: true,
               onBack: () => Navigator.of(context).pop(),
             ),
           ),

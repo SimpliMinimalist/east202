@@ -19,6 +19,7 @@ class OrdersScreen extends StatelessWidget {
                   hintText: 'Search Orders',
                   onTap: () => context.push('/search_orders'),
                   hasBackButton: false,
+                  readOnly: true,
                 ),
               ),
             ),

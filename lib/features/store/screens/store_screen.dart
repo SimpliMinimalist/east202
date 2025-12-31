@@ -45,6 +45,7 @@ class _StoreScreenState extends State<StoreScreen> {
                   hintText: 'Search Products',
                   onTap: () => context.push('/search'),
                   hasBackButton: false,
+                  readOnly: true,
                 ),
               ),
             ),

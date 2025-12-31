@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -11,6 +10,8 @@ class CustomSearchBar extends StatefulWidget {
   final VoidCallback? onBack;
   final bool hasBackButton;
   final List<Widget>? trailing;
+  final bool readOnly;
+  final bool autoFocus;
 
   const CustomSearchBar({
     super.key,
@@ -22,6 +23,8 @@ class CustomSearchBar extends StatefulWidget {
     this.onBack,
     this.hasBackButton = true,
     this.trailing,
+    this.readOnly = false,
+    this.autoFocus = false,
   });
 
   @override
@@ -49,40 +52,36 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
-      child: SearchBar(
-        constraints: const BoxConstraints(minHeight: 54, maxHeight: 54),
+      child: TextField(
         controller: widget.controller,
-        hintText: widget.hintText,
-        elevation: WidgetStateProperty.all(0.0),
-        backgroundColor: WidgetStateProperty.all(Colors.white),
-        shape: WidgetStateProperty.all(
-          const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(100)),
+        decoration: InputDecoration(
+          hintText: widget.hintText,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(100),
+            borderSide: BorderSide.none,
           ),
-        ),
-        onChanged: widget.onChanged,
-        onTap: widget.onTap,
-        leading: widget.hasBackButton
-            ? IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: widget.onBack ?? () => Navigator.of(context).pop(),
-              )
-            : Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: SvgPicture.asset(
-                  'assets/icons/search.svg',
-                  width: 20,
-                  height: 20,
-                  colorFilter: const ColorFilter.mode(
-                    Colors.black54,
-                    BlendMode.srcIn,
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding: EdgeInsets.zero,
+          prefixIcon: widget.hasBackButton
+              ? IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: widget.onBack ?? () => Navigator.of(context).pop(),
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 12.0),
+                  child: SvgPicture.asset(
+                    'assets/icons/search.svg',
+                    width: 20,
+                    height: 20,
+                    colorFilter: const ColorFilter.mode(
+                      Colors.black54,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
-              ),
-        trailing: widget.trailing ??
-            [
-              if (widget.controller?.text.isNotEmpty ?? false)
-                IconButton(
+          suffixIcon: (widget.controller?.text.isNotEmpty ?? false)
+              ? IconButton(
                   icon: SvgPicture.asset(
                     'assets/icons/cancel.svg',
                     width: 20,
@@ -93,8 +92,13 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                         widget.controller?.clear();
                         widget.onChanged?.call('');
                       },
-                ),
-            ],
+                )
+              : null,
+        ),
+        onChanged: widget.onChanged,
+        onTap: widget.onTap,
+        readOnly: widget.readOnly,
+        autofocus: widget.autoFocus,
       ),
     );
   }

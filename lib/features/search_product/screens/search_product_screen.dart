@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/features/add_product/widgets/product_card.dart';
@@ -68,6 +67,7 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
                     _searchController.clear();
                     _filterProducts('');
                   },
+                  autoFocus: true,
                 ),
                 const SizedBox(height: 16),
                 Expanded(
