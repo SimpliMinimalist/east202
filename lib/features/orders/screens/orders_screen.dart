@@ -14,7 +14,7 @@ class OrdersScreen extends StatelessWidget {
           slivers: [
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: CustomSearchBar(
                   hintText: 'Search Orders',
                   onTap: () => context.push('/search_orders'),

@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -477,8 +476,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
     List<List<T>> result = [[]];
     for (var list in lists) {
       List<List<T>> newResult = [];
-      for (var item in list) {
-        for (var res in result) {
+      for (var res in result) {
+        for (var item in list) {
           newResult.add([...res, item]);
         }
       }
