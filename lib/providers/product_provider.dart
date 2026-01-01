@@ -5,6 +5,9 @@ class ProductProvider with ChangeNotifier {
   final List<Product> _products = [];
   String? _selectedDraftId;
 
+  List<Product> get allProducts => _products;
+  bool get hasProducts => _products.isNotEmpty;
+
   List<Product> get products => _products.where((p) => !p.isDraft).toList();
   List<Product> get drafts => _products.where((p) => p.isDraft).toList();
   String? get selectedDraftId => _selectedDraftId;
@@ -42,6 +45,7 @@ class ProductProvider with ChangeNotifier {
       _products.insert(0, newDraft);
     }
     setSelectedDraftId(newDraft.id);
+    notifyListeners();
   }
 
   void updateProduct(Product product) {
