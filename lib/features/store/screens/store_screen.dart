@@ -40,7 +40,7 @@ class _StoreScreenState extends State<StoreScreen> {
           slivers: [
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 12.0),
                 child: CustomSearchBar(
                   hintText: 'Search Products',
                   onTap: () => context.push('/search'),
