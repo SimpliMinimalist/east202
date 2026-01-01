@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:myapp/features/add_product/screens/add_product_screen.dart';
 import 'package:myapp/features/orders/screens/orders_screen.dart';
 import 'package:myapp/features/profile/screens/profile_screen.dart';
