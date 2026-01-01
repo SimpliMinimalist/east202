@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:myapp/features/add_product/screens/add_product_screen.dart';
 import 'package:myapp/providers/selection_provider.dart';
+import 'package:myapp/shared/widgets/floating_action_button.dart';
 import 'package:provider/provider.dart';
-
-import '../../features/add_product/screens/add_product_screen.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({super.key, required this.child});
@@ -54,19 +54,20 @@ class _MainShellState extends State<MainShell> {
         transitionBuilder: (Widget child, Animation<double> animation) {
           return child;
         },
-        child: _selectedIndex == 0
-            ? FloatingActionButton(
-                key: const ValueKey('fab'), // Add key for AnimatedSwitcher
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AddProductScreen(),
-                      fullscreenDialog: true,
-                    ),
-                  );
-                },
-                child: const Icon(Icons.add),
+        child: _selectedIndex == 0 || _selectedIndex == 1
+            ? AddProductFab(
+                key: const ValueKey('fab'),
+                onPressed: _selectedIndex == 0
+                    ? () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AddProductScreen(),
+                            fullscreenDialog: true,
+                          ),
+                        );
+                      }
+                    : null,
               )
             : const SizedBox(key: ValueKey('empty')), // Use SizedBox and key
       ),
