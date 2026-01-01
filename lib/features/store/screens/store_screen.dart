@@ -36,72 +36,62 @@ class _StoreScreenState extends State<StoreScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 12.0),
-                child: CustomSearchBar(
-                  hintText: 'Search Products',
-                  onTap: () => context.push('/search'),
-                  hasBackButton: false,
-                  readOnly: true,
-                ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 12.0),
+              child: CustomSearchBar(
+                hintText: 'Search Products',
+                onTap: () => context.push('/search'),
+                hasBackButton: false,
+                readOnly: true,
               ),
             ),
             if (productProvider.hasProducts)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: _buildCategoryFilters(),
-                ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: _buildCategoryFilters(),
               ),
-            productProvider.hasProducts
-                ? filteredProducts.isEmpty
-                    ? const SliverFillRemaining(
-                        child: Center(
+            Expanded(
+              child: productProvider.hasProducts
+                  ? filteredProducts.isEmpty
+                      ? const Center(
                           child: Text('No products found in this category.'),
-                        ),
-                      )
-                    : SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        sliver: SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              final product = filteredProducts[index];
-                              final isSelected =
-                                  selectionProvider.selectedProducts.contains(product.id);
-                              return GestureDetector(
-                                onTap: () {
-                                  if (selectionProvider.isSelectionMode) {
-                                    selectionProvider.toggleSelection(product.id);
-                                  } else {
-                                    Navigator.of(context, rootNavigator: true).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            AddProductScreen(product: product),
-                                      ),
-                                    );
-                                  }
-                                },
-                                onLongPress: () {
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          itemCount: filteredProducts.length,
+                          itemBuilder: (context, index) {
+                            final product = filteredProducts[index];
+                            final isSelected =
+                                selectionProvider.selectedProducts.contains(product.id);
+                            return GestureDetector(
+                              onTap: () {
+                                if (selectionProvider.isSelectionMode) {
                                   selectionProvider.toggleSelection(product.id);
-                                },
-                                child: ProductCard(
-                                  product: product,
-                                  isSelected: isSelected,
-                                ),
-                              );
-                            },
-                            childCount: filteredProducts.length,
-                          ),
-                        ),
-                      )
-                : const SliverFillRemaining(
-                    child: Center(
+                                } else {
+                                  Navigator.of(context, rootNavigator: true).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          AddProductScreen(product: product),
+                                    ),
+                                  );
+                                }
+                              },
+                              onLongPress: () {
+                                selectionProvider.toggleSelection(product.id);
+                              },
+                              child: ProductCard(
+                                product: product,
+                                isSelected: isSelected,
+                              ),
+                            );
+                          },
+                        )
+                  : const Center(
                       child: Text('No products yet. Add one!'),
                     ),
-                  ),
+            ),
           ],
         ),
       ),

@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/features/add_product/screens/add_product_screen.dart';
+import 'package:myapp/features/orders/screens/orders_screen.dart';
+import 'package:myapp/features/profile/screens/profile_screen.dart';
+import 'package:myapp/features/store/screens/store_screen.dart';
 import 'package:myapp/providers/selection_provider.dart';
 import 'package:myapp/shared/widgets/floating_action_button.dart';
 import 'package:provider/provider.dart';
 
 class MainShell extends StatefulWidget {
-  const MainShell({super.key, required this.child});
-
-  final Widget child;
+  const MainShell({super.key});
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -17,8 +18,21 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   int _selectedIndex = 0;
+  late final PageController _pageController;
 
-  void _onItemTapped(int index, BuildContext context) {
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: _selectedIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _onItemTapped(int index) {
     final selectionProvider =
         Provider.of<SelectionProvider>(context, listen: false);
     if (selectionProvider.isSelectionMode) {
@@ -27,17 +41,7 @@ class _MainShellState extends State<MainShell> {
     setState(() {
       _selectedIndex = index;
     });
-    switch (index) {
-      case 0:
-        context.go('/home');
-        break;
-      case 1:
-        context.go('/orders');
-        break;
-      case 2:
-        context.go('/profile');
-        break;
-    }
+    _pageController.jumpToPage(index);
   }
 
   @override
@@ -48,7 +52,15 @@ class _MainShellState extends State<MainShell> {
 
     return Scaffold(
       appBar: _buildAppBar(),
-      body: widget.child,
+      body: PageView(
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: const [
+          StoreScreen(),
+          OrdersScreen(),
+          ProfileScreen(),
+        ],
+      ),
       floatingActionButton: AnimatedSwitcher(
         duration: Duration.zero,
         transitionBuilder: (Widget child, Animation<double> animation) {
@@ -78,7 +90,7 @@ class _MainShellState extends State<MainShell> {
           child: NavigationBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
-            onDestinationSelected: (index) => _onItemTapped(index, context),
+            onDestinationSelected: (index) => _onItemTapped(index),
             selectedIndex: _selectedIndex,
             destinations: <Widget>[
               NavigationDestination(
