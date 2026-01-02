@@ -13,6 +13,8 @@ class ClearableTextFormField extends StatefulWidget {
   final bool readOnly;
   final VoidCallback? onTap;
   final Widget? suffixIcon;
+  final FocusNode? focusNode;
+  final bool forceFocus;
 
   const ClearableTextFormField({
     super.key,
@@ -27,6 +29,8 @@ class ClearableTextFormField extends StatefulWidget {
     this.readOnly = false,
     this.onTap,
     this.suffixIcon,
+    this.focusNode,
+    this.forceFocus = false,
   });
 
   @override
@@ -34,12 +38,19 @@ class ClearableTextFormField extends StatefulWidget {
 }
 
 class _ClearableTextFormFieldState extends State<ClearableTextFormField> {
-  final FocusNode _focusNode = FocusNode();
+  late final FocusNode _focusNode;
   bool _isFocused = false;
+  bool _didCreateFocusNode = false;
 
   @override
   void initState() {
     super.initState();
+    if (widget.focusNode == null) {
+      _focusNode = FocusNode();
+      _didCreateFocusNode = true;
+    } else {
+      _focusNode = widget.focusNode!;
+    }
     _focusNode.addListener(_onFocusChange);
     widget.controller.addListener(_onTextChanged);
   }
@@ -48,23 +59,38 @@ class _ClearableTextFormFieldState extends State<ClearableTextFormField> {
   void dispose() {
     _focusNode.removeListener(_onFocusChange);
     widget.controller.removeListener(_onTextChanged);
-    _focusNode.dispose();
+    if (_didCreateFocusNode) {
+      _focusNode.dispose();
+    }
     super.dispose();
   }
 
   void _onFocusChange() {
-    setState(() {
-      _isFocused = _focusNode.hasFocus;
-    });
+    if (mounted) {
+      setState(() {
+        _isFocused = _focusNode.hasFocus;
+      });
+    }
   }
 
   void _onTextChanged() {
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final Color primaryColor = Theme.of(context).colorScheme.primary;
+    final bool shouldAppearFocused = widget.forceFocus || _isFocused;
+    final bool hasText = widget.controller.text.isNotEmpty;
+
+    final FloatingLabelBehavior floatingLabelBehavior;
+    if (shouldAppearFocused || hasText) {
+      floatingLabelBehavior = FloatingLabelBehavior.always;
+    } else {
+      floatingLabelBehavior = FloatingLabelBehavior.auto;
+    }
 
     return TextFormField(
       controller: widget.controller,
@@ -73,18 +99,27 @@ class _ClearableTextFormFieldState extends State<ClearableTextFormField> {
       onTap: widget.onTap,
       decoration: InputDecoration(
         labelText: widget.labelText,
+        labelStyle: shouldAppearFocused ? TextStyle(color: primaryColor) : null,
         hintText: widget.hintText,
+        floatingLabelBehavior: floatingLabelBehavior,
         border: const OutlineInputBorder(),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: primaryColor, width: 2.0),
+        ),
+        enabledBorder: widget.forceFocus
+            ? OutlineInputBorder(
+                borderSide: BorderSide(color: primaryColor, width: 2.0),
+              )
+            : null,
         prefixText: widget.prefixText,
         suffixIcon: widget.suffixIcon ??
-            (_isFocused && widget.controller.text.isNotEmpty && !widget.readOnly
+            (shouldAppearFocused && hasText && !widget.readOnly
                 ? IconButton(
                     icon: SvgPicture.asset(
                       'assets/icons/cancel.svg',
                       width: 20,
                       height: 20,
-                      colorFilter:
-                          ColorFilter.mode(primaryColor, BlendMode.srcIn),
+                      colorFilter: ColorFilter.mode(primaryColor, BlendMode.srcIn),
                     ),
                     onPressed: () {
                       widget.controller.clear();

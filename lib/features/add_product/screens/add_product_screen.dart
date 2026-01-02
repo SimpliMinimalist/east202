@@ -1,3 +1,4 @@
+
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -18,6 +19,7 @@ import 'package:uuid/uuid.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:myapp/shared/widgets/clearable_text_form_field.dart';
 import 'package:myapp/features/add_product/widgets/drafts_popup.dart';
+import 'package:myapp/shared/widgets/stock_input_field.dart';
 
 class AddProductScreen extends StatefulWidget {
   final Product? product;
@@ -637,19 +639,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   focusNode: _categoryFocusNode,
                 ),
                 const SizedBox(height: 16),
-                ClearableTextFormField(
+                StockInputField(
                   controller: _stockController,
                   labelText: 'Stock',
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value != null &&
-                        value.isNotEmpty &&
-                        int.tryParse(value) == null) {
-                      return 'Please enter a valid integer';
-                    }
-                    return null;
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 const SizedBox(height: 16),
                 ClearableTextFormField(
