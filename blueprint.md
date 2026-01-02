@@ -53,3 +53,6 @@ A Flutter-based mobile application for e-commerce administrators to manage their
       - **Solution:**
         - The `ClearableTextFormField` widget was enhanced to support a `readOnly` state, a custom `onTap` action, and a `suffixIcon`.
         - The custom category selector was replaced with the enhanced `ClearableTextFormField`, making it visually and behaviorally identical to other fields on the screen.
+  2.  **Polished Category Field Label:**
+      - **Issue:** The category field displayed "Categories" when unfocused and "Select categories" when focused.
+      - **Solution:** The `labelText` was set to a consistent "Category", and the `hintText` was removed to eliminate the confusing behavior.

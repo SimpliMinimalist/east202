@@ -625,8 +625,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 const SizedBox(height: 16),
                 ClearableTextFormField(
                   controller: _categoryController,
-                  labelText: 'Categories',
-                  hintText: 'Select categories',
+                  labelText: 'Category',
                   readOnly: true,
                   onTap: _showCategoryPicker,
                   suffixIcon: const Icon(Icons.arrow_drop_down),
