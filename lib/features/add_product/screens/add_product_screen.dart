@@ -738,15 +738,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
       onTap: _showCategoryPicker,
       child: InputDecorator(
         decoration: const InputDecoration(
-          labelText: 'Category',
           border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(_editedProduct.categories.isEmpty
-                ? 'Select categories'
-                : _editedProduct.categories.join(', ')),
+            Expanded(
+              child: Text(
+                _editedProduct.categories.isEmpty ? 'Select categories' : _editedProduct.categories.join(', '),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
             const Icon(Icons.arrow_drop_down),
           ],
         ),
