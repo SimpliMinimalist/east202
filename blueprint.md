@@ -43,16 +43,13 @@ A Flutter-based mobile application for e-commerce administrators to manage their
   - A `PopScope` is used to prevent accidental data loss by prompting users to save changes before navigating away.
   - Seamless navigation between the product list, product editor, and variant editor.
 
-## Current Requested Change: Store Screen UX and FAB Animation
+## Current Requested Change: Form Field Consistency
 
 ### Plan and Steps
-- **Goal:** Improve the user experience on the store screen and remove the default animation from the Floating Action Button (FAB).
+- **Goal:** Ensure all form fields on the "Add Product" screen have a consistent look and feel.
 - **Steps Taken:**
-  1.  **Resolved FAB Confusion:**
-      - **Issue:** The main "Add Product" FAB was correctly located in the `MainShell`, but a confusing `+` button for adding *categories* existed on the `StoreScreen`, creating a conflicting user experience. Additionally, the empty state "Add one!" text was not interactive.
+  1.  **Replaced Custom Category Selector:**
+      - **Issue:** The "Select categories" field was a custom widget that did not visually match the other `TextFormField` widgets, leading to an inconsistent UI.
       - **Solution:**
-        - The misleading "Add Category" `ChoiceChip` was removed from the horizontal filter list in `lib/features/store/screens/store_screen.dart`.
-        - The empty state message ("No products yet. Add one!") was converted into a large, tappable call-to-action that navigates to the "Add Product" screen.
-  2.  **Disabled FAB Animation:**
-      - **Issue:** The FAB had a default rotation and fade animation when appearing/disappearing between tabs.
-      - **Solution:** Wrapped the `FloatingActionButton` in `lib/core/navigation/main_shell.dart` with an `AnimatedSwitcher` and set the `duration` to `Duration.zero` to make the transition instant.
+        - The `ClearableTextFormField` widget was enhanced to support a `readOnly` state, a custom `onTap` action, and a `suffixIcon`.
+        - The custom category selector was replaced with the enhanced `ClearableTextFormField`, making it visually and behaviorally identical to other fields on the screen.

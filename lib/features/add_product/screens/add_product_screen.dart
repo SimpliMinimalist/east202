@@ -43,6 +43,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final _salePriceController = TextEditingController();
   final _stockController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _categoryController = TextEditingController();
 
   Product? _initialProduct;
   late Product _editedProduct;
@@ -74,6 +75,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     _salePriceController.addListener(_onFormChanged);
     _stockController.addListener(_onFormChanged);
     _descriptionController.addListener(_onFormChanged);
+    _updateCategoryController();
   }
 
   @override
@@ -88,6 +90,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     _salePriceController.dispose();
     _stockController.dispose();
     _descriptionController.dispose();
+    _categoryController.dispose();
     super.dispose();
   }
 
@@ -120,6 +123,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     _stockController.text = product.stock?.toString() ?? '';
     _images.clear();
     _images.addAll(product.images.map((path) => XFile(path)));
+    _updateCategoryController();
 
     // Also update the provider with the loaded draft's ID
     Provider.of<ProductProvider>(context, listen: false).setSelectedDraftId(product.id);
@@ -448,8 +452,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
         );
       },
     ).then((_) {
-      setState(() {});
+      setState(() {
+        _updateCategoryController();
+      });
     });
+  }
+
+  void _updateCategoryController() {
+    if (_editedProduct.categories.isEmpty) {
+      _categoryController.text = '';
+    } else {
+      _categoryController.text = _editedProduct.categories.join(', ');
+    }
+    setState(() {});
   }
 
   List<ProductVariant> _generateVariants(List<VariantOption> options) {
@@ -608,7 +623,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 const SizedBox(height: 16),
-                _buildCategorySelector(),
+                ClearableTextFormField(
+                  controller: _categoryController,
+                  labelText: 'Categories',
+                  hintText: 'Select categories',
+                  readOnly: true,
+                  onTap: _showCategoryPicker,
+                  suffixIcon: const Icon(Icons.arrow_drop_down),
+                ),
                 const SizedBox(height: 16),
                 ClearableTextFormField(
                   controller: _stockController,
@@ -730,30 +752,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildCategorySelector() {
-    return InkWell(
-      onTap: _showCategoryPicker,
-      child: InputDecorator(
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text(
-                _editedProduct.categories.isEmpty ? 'Select categories' : _editedProduct.categories.join(', '),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            const Icon(Icons.arrow_drop_down),
-          ],
-        ),
-      ),
     );
   }
 

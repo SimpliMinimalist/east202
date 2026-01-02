@@ -4,21 +4,29 @@ import 'package:flutter_svg/flutter_svg.dart';
 class ClearableTextFormField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
+  final String? hintText;
   final String? prefixText;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
   final AutovalidateMode? autovalidateMode;
   final int? maxLines;
+  final bool readOnly;
+  final VoidCallback? onTap;
+  final Widget? suffixIcon;
 
   const ClearableTextFormField({
     super.key,
     required this.controller,
     required this.labelText,
+    this.hintText,
     this.prefixText,
     this.keyboardType,
     this.validator,
     this.autovalidateMode,
     this.maxLines,
+    this.readOnly = false,
+    this.onTap,
+    this.suffixIcon,
   });
 
   @override
@@ -61,28 +69,33 @@ class _ClearableTextFormFieldState extends State<ClearableTextFormField> {
     return TextFormField(
       controller: widget.controller,
       focusNode: _focusNode,
+      readOnly: widget.readOnly,
+      onTap: widget.onTap,
       decoration: InputDecoration(
         labelText: widget.labelText,
-        prefixText: widget.prefixText,
+        hintText: widget.hintText,
         border: const OutlineInputBorder(),
-        suffixIcon: _isFocused && widget.controller.text.isNotEmpty
-            ? IconButton(
-                icon: SvgPicture.asset(
-                  'assets/icons/cancel.svg',
-                  width: 20,
-                  height: 20,
-                  colorFilter: ColorFilter.mode(primaryColor, BlendMode.srcIn),
-                ),
-                onPressed: () {
-                  widget.controller.clear();
-                },
-              )
-            : null,
+        prefixText: widget.prefixText,
+        suffixIcon: widget.suffixIcon ??
+            (_isFocused && widget.controller.text.isNotEmpty && !widget.readOnly
+                ? IconButton(
+                    icon: SvgPicture.asset(
+                      'assets/icons/cancel.svg',
+                      width: 20,
+                      height: 20,
+                      colorFilter:
+                          ColorFilter.mode(primaryColor, BlendMode.srcIn),
+                    ),
+                    onPressed: () {
+                      widget.controller.clear();
+                    },
+                  )
+                : null),
       ),
       keyboardType: widget.keyboardType,
       validator: widget.validator,
       autovalidateMode: widget.autovalidateMode,
-      maxLines: widget.maxLines,
+      maxLines: widget.maxLines ?? (widget.readOnly ? null : 1),
     );
   }
 }
