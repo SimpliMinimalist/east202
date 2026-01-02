@@ -44,6 +44,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final _stockController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _categoryController = TextEditingController();
+  final _categoryFocusNode = FocusNode();
 
   Product? _initialProduct;
   late Product _editedProduct;
@@ -91,6 +92,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     _stockController.dispose();
     _descriptionController.dispose();
     _categoryController.dispose();
+    _categoryFocusNode.dispose();
     super.dispose();
   }
 
@@ -451,10 +453,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
           },
         );
       },
-    ).then((_) {
-      setState(() {
-        _updateCategoryController();
-      });
+    ).whenComplete(() {
+      if (mounted) {
+        _categoryFocusNode.unfocus();
+        setState(() {
+          _updateCategoryController();
+        });
+      }
     });
   }
 
@@ -629,6 +634,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   readOnly: true,
                   onTap: _showCategoryPicker,
                   suffixIcon: const Icon(Icons.arrow_drop_down),
+                  focusNode: _categoryFocusNode,
                 ),
                 const SizedBox(height: 16),
                 ClearableTextFormField(
