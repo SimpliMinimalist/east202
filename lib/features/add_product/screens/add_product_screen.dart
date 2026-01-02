@@ -575,8 +575,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 const SizedBox(height: 16),
-                _buildCategorySelector(),
-                const SizedBox(height: 16),
                 ClearableTextFormField(
                   controller: _priceController,
                   labelText: 'Price',
@@ -609,6 +607,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   },
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
+                const SizedBox(height: 16),
+                _buildCategorySelector(),
                 const SizedBox(height: 16),
                 ClearableTextFormField(
                   controller: _stockController,

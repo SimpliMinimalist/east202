@@ -54,4 +54,9 @@ final ThemeData appTheme = ThemeData(
       borderRadius: BorderRadius.circular(12.0),
     ),
   ),
+  navigationBarTheme: NavigationBarThemeData(
+    labelTextStyle: WidgetStateProperty.all(
+      const TextStyle(fontSize: 14),
+    ),
+  ),
 );
