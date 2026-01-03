@@ -12,6 +12,8 @@ A Flutter application for managing products and orders.
 -   Fields for product name, price, category, stock, and description.
 -   Ability to add product variants.
 -   Draft saving functionality.
+-   Sale price functionality with a bottom sheet for input.
+-   Display of the original price with a strikethrough when a sale price is active.
 
 ## Current Change: Refactor Sale Price Input
 
@@ -21,3 +23,4 @@ A Flutter application for managing products and orders.
     2.  Add a `TextButton` with the label "Add discount" inside the "Price" text field as a `suffixIcon`.
     3.  Implement a `showModalBottomSheet` that is triggered when the "Add discount" button is pressed.
     4.  The bottom sheet contains a `ClearableTextFormField` for the "Sale Price" and a "Done" button.
+    5.  When a sale price is entered, the UI updates to show the sale price prominently, with the original price struck through.

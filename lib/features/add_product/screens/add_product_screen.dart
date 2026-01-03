@@ -492,6 +492,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
+                  setState(() {});
                   Navigator.pop(context);
                 },
                 child: const Text('Done'),
@@ -551,6 +552,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     final titleTextStyle = Theme.of(context).textTheme.titleLarge;
     final isEditing = _initialProduct != null && !_initialProduct!.isDraft;
     final isDraft = _initialProduct != null && _initialProduct!.isDraft;
+    final hasSalePrice = _salePriceController.text.isNotEmpty && double.tryParse(_salePriceController.text) != null;
 
     return PopScope(
       canPop: !_isFormModified(),
@@ -635,26 +637,58 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 const SizedBox(height: 16),
-                ClearableTextFormField(
-                  controller: _priceController,
-                  labelText: 'Price',
-                  prefixText: '₹ ',
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a price';
-                    }
-                    if (double.tryParse(value) == null) {
-                      return 'Please enter a valid number';
-                    }
-                    return null;
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  suffixIcon: TextButton(
-                    onPressed: _showSalePriceBottomSheet,
-                    child: const Text('Add discount'),
+                if (hasSalePrice)
+                  GestureDetector(
+                    onTap: _showSalePriceBottomSheet,
+                    child: InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: 'Price',
+                        border: const OutlineInputBorder(),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            '₹${_salePriceController.text}',
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            '₹${_priceController.text}',
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  decoration: TextDecoration.lineThrough,
+                                  color: Colors.grey,
+                                ),
+                          ),
+                          const Spacer(),
+                          const Icon(Icons.edit, color: Colors.grey, size: 20),
+                        ],
+                      ),
+                    ),
+                  )
+                else
+                  ClearableTextFormField(
+                    controller: _priceController,
+                    labelText: 'Price',
+                    prefixText: '₹ ',
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a price';
+                      }
+                      if (double.tryParse(value) == null) {
+                        return 'Please enter a valid number';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    suffixIcon: TextButton(
+                      onPressed: _showSalePriceBottomSheet,
+                      child: const Text('Add discount'),
+                    ),
                   ),
-                ),
                 const SizedBox(height: 16),
                 ClearableTextFormField(
                   controller: _categoryController,
