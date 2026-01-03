@@ -464,6 +464,44 @@ class _AddProductScreenState extends State<AddProductScreen> {
       }
     });
   }
+  
+  void _showSalePriceBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ClearableTextFormField(
+                controller: _salePriceController,
+                labelText: 'Sale Price',
+                prefixText: '₹ ',
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value != null &&
+                      value.isNotEmpty &&
+                      double.tryParse(value) == null) {
+                    return 'Please enter a valid number';
+                  }
+                  return null;
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Done'),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   void _updateCategoryController() {
     if (_editedProduct.categories.isEmpty) {
@@ -612,22 +650,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     return null;
                   },
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                ),
-                const SizedBox(height: 16),
-                ClearableTextFormField(
-                  controller: _salePriceController,
-                  labelText: 'Sale Price',
-                  prefixText: '₹ ',
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value != null &&
-                        value.isNotEmpty &&
-                        double.tryParse(value) == null) {
-                      return 'Please enter a valid number';
-                    }
-                    return null;
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  suffixIcon: TextButton(
+                    onPressed: _showSalePriceBottomSheet,
+                    child: const Text('Add discount'),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 ClearableTextFormField(
