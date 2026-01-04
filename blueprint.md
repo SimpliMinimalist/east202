@@ -28,11 +28,12 @@ The project follows a feature-based folder structure.
 -   Draft saving functionality.
 -   Sale price functionality with a bottom sheet for input.
 -   Display of the original price with a strikethrough when a sale price is active.
+-   "Add discount" button is disabled until a valid price is entered.
+-   "Add discount" button text changes to "Edit discount" when a sale price is active.
 
-## Current Change: Refactor Project Structure
+## Current Change: Add Icons to Discount Buttons
 
--   **Goal:** Improve project organization by grouping related features and providers together.
+-   **Goal:** Enhance the user interface by adding icons to the discount buttons for better visual clarity.
 -   **Steps:**
-    1.  Moved `lib/features/store_setup` to `lib/features/store/store_setup`.
-    2.  Moved `lib/features/search_orders` to `lib/features/orders/search_orders`.
-    3.  Moved `lib/providers` to `lib/features/store/providers`.
+    1.  Added a `+` icon to the "Add discount" button.
+    2.  Added an `edit` icon to the "Edit discount" button.

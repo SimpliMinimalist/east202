@@ -88,9 +88,10 @@ class _PriceInputFieldState extends State<PriceInputField> {
                     ),
               ),
               const Spacer(),
-              TextButton(
+              TextButton.icon(
                 onPressed: widget.onSalePriceTapped,
-                child: const Text('Edit discount'),
+                icon: const Icon(Icons.edit, size: 16),
+                label: const Text('Edit discount'),
               ),
             ],
           ),
@@ -113,11 +114,10 @@ class _PriceInputFieldState extends State<PriceInputField> {
           return null;
         },
         autovalidateMode: AutovalidateMode.onUserInteraction,
-        suffixIcon: TextButton(
+        suffixIcon: TextButton.icon(
           onPressed: _isPriceEntered ? widget.onSalePriceTapped : null,
-          child: const Text(
-            'Add discount',
-          ),
+          icon: const Icon(Icons.add, size: 16),
+          label: const Text('Add discount'),
         ),
       );
     }
