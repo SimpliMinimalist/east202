@@ -129,6 +129,7 @@ class _ClearableTextFormFieldState extends State<ClearableTextFormField> {
                     },
                   )
                 : null),
+        counterText: shouldAppearFocused ? null : '',
       ),
       keyboardType: widget.keyboardType,
       validator: widget.validator,
