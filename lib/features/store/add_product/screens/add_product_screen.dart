@@ -16,7 +16,7 @@ import 'package:uuid/uuid.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:myapp/shared/widgets/clearable_text_form_field.dart';
 import 'package:myapp/features/store/add_product/widgets/drafts_popup.dart';
-import 'package:myapp/shared/widgets/stock_input_field.dart';
+import 'package:myapp/features/store/add_product/widgets/stock_input_field.dart';
 
 class AddProductScreen extends StatefulWidget {
   final Product? product;
@@ -566,6 +566,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ClearableTextFormField(
                   controller: _productNameController,
                   labelText: 'Product Name',
+                  maxLength: 100,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a product name';
@@ -598,6 +599,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ClearableTextFormField(
                   controller: _descriptionController,
                   labelText: 'Description',
+                  maxLength: 300,
                   maxLines: 3,
                 ),
                 const SizedBox(height: 16),

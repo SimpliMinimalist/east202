@@ -21,40 +21,52 @@ class PriceInputField extends StatefulWidget {
 }
 
 class _PriceInputFieldState extends State<PriceInputField> {
-  bool get hasSalePrice =>
+  bool _isPriceEntered = false;
+
+  bool get _hasSalePrice =>
       widget.salePriceController.text.isNotEmpty &&
       double.tryParse(widget.salePriceController.text) != null;
 
   @override
   void initState() {
     super.initState();
-    widget.priceController.addListener(_onPriceChanged);
-    widget.salePriceController.addListener(_onPriceChanged);
+    widget.priceController.addListener(_updateState);
+    widget.salePriceController.addListener(_updateState);
+    _updateState();
   }
 
   @override
   void dispose() {
-    widget.priceController.removeListener(_onPriceChanged);
-    widget.salePriceController.removeListener(_onPriceChanged);
+    widget.priceController.removeListener(_updateState);
+    widget.salePriceController.removeListener(_updateState);
     super.dispose();
   }
 
-  void _onPriceChanged() {
+  void _updateState() {
     if (mounted) {
-      setState(() {
-        // State is managed by the controllers, just need to trigger a rebuild
-      });
+      final newPriceEntered = widget.priceController.text.isNotEmpty &&
+          double.tryParse(widget.priceController.text) != null &&
+          double.parse(widget.priceController.text) > 0;
+
+      final newHasSalePrice = widget.salePriceController.text.isNotEmpty &&
+          double.tryParse(widget.salePriceController.text) != null;
+
+      if (newPriceEntered != _isPriceEntered || newHasSalePrice != _hasSalePrice) {
+        setState(() {
+          _isPriceEntered = newPriceEntered;
+        });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (hasSalePrice) {
+    if (_hasSalePrice) {
       return GestureDetector(
         onTap: widget.onSalePriceTapped,
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: 'Price',
+            labelText: 'Enter Price',
             border: const OutlineInputBorder(),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
@@ -76,7 +88,10 @@ class _PriceInputFieldState extends State<PriceInputField> {
                     ),
               ),
               const Spacer(),
-              const Icon(Icons.edit, color: Colors.grey, size: 20),
+              TextButton(
+                onPressed: widget.onSalePriceTapped,
+                child: const Text('Edit discount'),
+              ),
             ],
           ),
         ),
@@ -85,7 +100,7 @@ class _PriceInputFieldState extends State<PriceInputField> {
       return ClearableTextFormField(
         controller: widget.priceController,
         focusNode: widget.priceFocusNode,
-        labelText: 'Price',
+        labelText: 'Enter Price',
         prefixText: '₹ ',
         keyboardType: TextInputType.number,
         validator: (value) {
@@ -99,8 +114,10 @@ class _PriceInputFieldState extends State<PriceInputField> {
         },
         autovalidateMode: AutovalidateMode.onUserInteraction,
         suffixIcon: TextButton(
-          onPressed: widget.onSalePriceTapped,
-          child: const Text('Add discount'),
+          onPressed: _isPriceEntered ? widget.onSalePriceTapped : null,
+          child: const Text(
+            'Add discount',
+          ),
         ),
       );
     }

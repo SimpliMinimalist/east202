@@ -10,6 +10,7 @@ class ClearableTextFormField extends StatefulWidget {
   final String? Function(String?)? validator;
   final AutovalidateMode? autovalidateMode;
   final int? maxLines;
+  final int? maxLength;
   final bool readOnly;
   final VoidCallback? onTap;
   final Widget? suffixIcon;
@@ -26,6 +27,7 @@ class ClearableTextFormField extends StatefulWidget {
     this.validator,
     this.autovalidateMode,
     this.maxLines,
+    this.maxLength,
     this.readOnly = false,
     this.onTap,
     this.suffixIcon,
@@ -97,6 +99,7 @@ class _ClearableTextFormFieldState extends State<ClearableTextFormField> {
       focusNode: _focusNode,
       readOnly: widget.readOnly,
       onTap: widget.onTap,
+      maxLength: widget.maxLength,
       decoration: InputDecoration(
         labelText: widget.labelText,
         labelStyle: shouldAppearFocused ? TextStyle(color: primaryColor) : null,
