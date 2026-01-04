@@ -1,20 +1,17 @@
 
-import 'dart:io';
-
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:collection/collection.dart';
 import 'package:myapp/features/store/add_product/models/product_model.dart';
 import 'package:myapp/features/store/add_product/models/product_variant_model.dart';
 import 'package:myapp/features/store/add_product/models/variant_model.dart';
 import 'package:myapp/features/store/add_product/screens/add_variants_screen.dart';
-import 'package:myapp/features/store/add_product/screens/edit_variant_screen.dart';
+import 'package:myapp/features/store/add_product/widgets/price_input_field.dart';
+import 'package:myapp/features/store/add_product/widgets/product_image_handler.dart';
+import 'package:myapp/features/store/add_product/widgets/variants_list.dart';
 import 'package:myapp/features/store/widgets/add_category_bottom_sheet.dart';
 import 'package:myapp/features/store/providers/category_provider.dart';
 import 'package:myapp/features/store/providers/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:myapp/shared/widgets/clearable_text_form_field.dart';
@@ -36,9 +33,7 @@ class AddProductScreen extends StatefulWidget {
 class _AddProductScreenState extends State<AddProductScreen> {
   final _formKey = GlobalKey<FormState>();
   final _imageFieldKey = GlobalKey<FormFieldState<List<XFile>>>();
-  final ImagePicker _picker = ImagePicker();
   final List<XFile> _images = [];
-  int _activePage = 0;
 
   final _productNameController = TextEditingController();
   final _priceController = TextEditingController();
@@ -368,43 +363,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
   }
 
-  Future<void> _pickImages() async {
-    final messenger = ScaffoldMessenger.of(context);
-    if (_images.length >= 10) {
-      messenger.showSnackBar(
-        const SnackBar(content: Text('You can only select up to 10 images.')),
-      );
-      return;
-    }
-
-    final List<XFile> pickedFiles = await _picker.pickMultiImage(
-      limit: 10 - _images.length,
-    );
-
-    if (pickedFiles.isNotEmpty) {
-      setState(() {
-        _images.addAll(pickedFiles);
-        _editedProduct = _editedProduct.copyWith(
-          images: _images.map((image) => image.path).toList(),
-        );
-      });
-      _imageFieldKey.currentState?.validate();
-    }
-  }
-
-  void _removeImage(int index) {
-    setState(() {
-      _images.removeAt(index);
-      if (_images.isNotEmpty && _activePage >= _images.length) {
-        _activePage = _images.length - 1;
-      }
-      _editedProduct = _editedProduct.copyWith(
-        images: _images.map((image) => image.path).toList(),
-      );
-    });
-    _imageFieldKey.currentState?.validate();
-  }
-
   void _showCategoryPicker() {
     showModalBottomSheet(
       context: context,
@@ -464,7 +422,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       }
     });
   }
-  
+
   void _showSalePriceBottomSheet() {
     showModalBottomSheet(
       context: context,
@@ -552,7 +510,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
     final titleTextStyle = Theme.of(context).textTheme.titleLarge;
     final isEditing = _initialProduct != null && !_initialProduct!.isDraft;
     final isDraft = _initialProduct != null && _initialProduct!.isDraft;
-    final hasSalePrice = _salePriceController.text.isNotEmpty && double.tryParse(_salePriceController.text) != null;
 
     return PopScope(
       canPop: !_isFormModified(),
@@ -592,37 +549,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                FormField<List<XFile>>(
-                  key: _imageFieldKey,
-                  initialValue: _images,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (_images.isEmpty) {
-                      return 'Please select at least one image.';
-                    }
-                    return null;
+                ProductImageHandler(
+                  initialImages: _images,
+                  onImagesChanged: (newImages) {
+                    setState(() {
+                      _images.clear();
+                      _images.addAll(newImages);
+                      _editedProduct = _editedProduct.copyWith(
+                        images: _images.map((image) => image.path).toList(),
+                      );
+                    });
                   },
-                  builder: (formFieldState) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _images.isEmpty
-                            ? _buildAddPhotoImage(formFieldState.hasError)
-                            : _buildImageCarousel(),
-                        if (formFieldState.hasError)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8.0, left: 12.0),
-                            child: Text(
-                              formFieldState.errorText!,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.error,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                      ],
-                    );
-                  },
+                  imageFieldKey: _imageFieldKey,
                 ),
                 const SizedBox(height: 24),
                 ClearableTextFormField(
@@ -637,58 +575,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 const SizedBox(height: 16),
-                if (hasSalePrice)
-                  GestureDetector(
-                    onTap: _showSalePriceBottomSheet,
-                    child: InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: 'Price',
-                        border: const OutlineInputBorder(),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            '₹${_salePriceController.text}',
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            '₹${_priceController.text}',
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  decoration: TextDecoration.lineThrough,
-                                  color: Colors.grey,
-                                ),
-                          ),
-                          const Spacer(),
-                          const Icon(Icons.edit, color: Colors.grey, size: 20),
-                        ],
-                      ),
-                    ),
-                  )
-                else
-                  ClearableTextFormField(
-                    controller: _priceController,
-                    labelText: 'Price',
-                    prefixText: '₹ ',
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a price';
-                      }
-                      if (double.tryParse(value) == null) {
-                        return 'Please enter a valid number';
-                      }
-                      return null;
-                    },
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    suffixIcon: TextButton(
-                      onPressed: _showSalePriceBottomSheet,
-                      child: const Text('Add discount'),
-                    ),
-                  ),
+                PriceInputField(
+                  priceController: _priceController,
+                  salePriceController: _salePriceController,
+                  onSalePriceTapped: _showSalePriceBottomSheet,
+                ),
                 const SizedBox(height: 16),
                 ClearableTextFormField(
                   controller: _categoryController,
@@ -740,7 +631,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ),
                 if (_editedProduct.productVariants.isNotEmpty) ...[
                   const SizedBox(height: 16),
-                  _buildVariantsList(),
+                  VariantsList(
+                    variants: _editedProduct.productVariants,
+                    onVariantUpdated: (index, updatedVariant) {
+                      setState(() {
+                        final newVariants =
+                            List<ProductVariant>.from(_editedProduct.productVariants);
+                        newVariants[index] = updatedVariant;
+                        _editedProduct = _editedProduct.copyWith(
+                          productVariants: newVariants,
+                        );
+                      });
+                    },
+                  ),
                 ]
               ],
             ),
@@ -772,225 +675,4 @@ class _AddProductScreenState extends State<AddProductScreen> {
       ),
     );
   }
-
-  Widget _buildVariantsList() {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: _editedProduct.productVariants.length,
-      itemBuilder: (context, index) {
-        final variant = _editedProduct.productVariants[index];
-        return Card(
-          margin: const EdgeInsets.symmetric(vertical: 4.0),
-          child: ListTile(
-            leading: const Icon(Icons.image, color: Colors.grey, size: 40),
-            title: Text(variant.name),
-            subtitle: Text(
-              '₹${variant.price.toStringAsFixed(2)} • ${variant.stock} available',
-              style: TextStyle(
-                color: variant.stock > 0 ? Colors.green : Colors.red,
-              ),
-            ),
-            onTap: () async {
-              final result = await Navigator.push<ProductVariant>(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditVariantScreen(variant: variant),
-                ),
-              );
-              if (result != null) {
-                setState(() {
-                  final newVariants = List<ProductVariant>.from(_editedProduct.productVariants);
-                  newVariants[index] = result;
-                  _editedProduct = _editedProduct.copyWith(productVariants: newVariants);
-                });
-              }
-            },
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildImageCarousel() {
-    return Column(
-      children: [
-        AspectRatio(
-          aspectRatio: 1.0,
-          child: CarouselSlider.builder(
-            itemCount: _images.length,
-            itemBuilder: (context, index, realIndex) {
-              return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Image.file(
-                        File(_images[index].path),
-                        fit: BoxFit.cover,
-                      ),
-                      Positioned(
-                        top: 8,
-                        left: 8,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withAlpha(128),
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          child: Text(
-                            '${index + 1}/${_images.length}',
-                            style: const TextStyle(color: Colors.white, fontSize: 12),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 8,
-                        right: 8,
-                        child: GestureDetector(
-                          onTap: () => _removeImage(index),
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withAlpha(128),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(Icons.delete_outline, color: Colors.white, size: 20),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-            options: CarouselOptions(
-              height: double.infinity,
-              viewportFraction: 1.0,
-              enlargeCenterPage: false,
-              enableInfiniteScroll: false,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _activePage = index;
-                });
-              },
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        if (_images.length > 1)
-          Center(
-            child: AnimatedSmoothIndicator(
-              activeIndex: _activePage,
-              count: _images.length,
-              effect: ScrollingDotsEffect(
-                dotHeight: 6,
-                dotWidth: 6,
-                activeDotColor: Theme.of(context).primaryColor,
-                dotColor: Colors.grey,
-                maxVisibleDots: 5,
-              ),
-            ),
-          ),
-        const SizedBox(height: 12),
-        if (_images.length < 10)
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: _pickImages,
-              icon: const Icon(Icons.add_a_photo_outlined),
-              label: const Text('Add More Photos'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.black87,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                elevation: 0,
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildAddPhotoImage(bool hasError) {
-    final backgroundColor = hasError
-        ? Theme.of(context).colorScheme.error.withAlpha(25)
-        : Colors.white;
-
-    return AspectRatio(
-      aspectRatio: 1 / 1,
-      child: InkWell(
-        onTap: _pickImages,
-        child: Container(
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.add_a_photo_outlined,
-                  size: 64,
-                  color: Colors.grey.shade600,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'Add up to 10 Photos',
-                  style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-extension ProductEquals on Product {
-  bool equals(Product other) {
-    const listEquals = ListEquality();
-    const productVariantEquality = ListEquality(ProductVariantEquality());
-
-    return id == other.id &&
-        name == other.name &&
-        description == other.description &&
-        price == other.price &&
-        salePrice == other.salePrice &&
-        stock == other.stock &&
-        listEquals.equals(categories, other.categories) &&
-        listEquals.equals(images, other.images) &&
-        listEquals.equals(variants, other.variants) &&
-        productVariantEquality.equals(productVariants, other.productVariants);
-  }
-}
-
-class ProductVariantEquality implements Equality<ProductVariant> {
-  const ProductVariantEquality();
-
-  @override
-  bool equals(ProductVariant e1, ProductVariant e2) {
-    return e1.id == e2.id &&
-        e1.price == e2.price &&
-        e1.stock == e2.stock &&
-        const MapEquality().equals(e1.attributes, e2.attributes);
-  }
-
-  @override
-  int hash(ProductVariant e) {
-    return e.id.hashCode ^ e.price.hashCode ^ e.stock.hashCode ^ const MapEquality().hash(e.attributes);
-  }
-
-  @override
-  bool isValidKey(Object? o) => o is ProductVariant;
 }

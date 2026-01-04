@@ -47,3 +47,26 @@ class ProductVariant {
     return mapEquality.equals(a.attributes, b.attributes);
   }
 }
+
+class ProductVariantEquality implements Equality<ProductVariant> {
+  const ProductVariantEquality();
+
+  @override
+  bool equals(ProductVariant e1, ProductVariant e2) {
+    return e1.id == e2.id &&
+        e1.price == e2.price &&
+        e1.stock == e2.stock &&
+        const MapEquality().equals(e1.attributes, e2.attributes);
+  }
+
+  @override
+  int hash(ProductVariant e) {
+    return e.id.hashCode ^
+        e.price.hashCode ^
+        e.stock.hashCode ^
+        const MapEquality().hash(e.attributes);
+  }
+
+  @override
+  bool isValidKey(Object? o) => o is ProductVariant;
+}

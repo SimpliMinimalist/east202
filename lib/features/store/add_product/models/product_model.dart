@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import './product_variant_model.dart';
 import './variant_model.dart';
@@ -61,4 +62,45 @@ class Product {
       productVariants: productVariants ?? this.productVariants,
     );
   }
+}
+
+extension ProductEquals on Product {
+  bool equals(Product other) {
+    const listEquals = ListEquality();
+    const productVariantEquality = ListEquality(ProductVariantEquality());
+
+    return id == other.id &&
+        name == other.name &&
+        description == other.description &&
+        price == other.price &&
+        salePrice == other.salePrice &&
+        stock == other.stock &&
+        listEquals.equals(categories, other.categories) &&
+        listEquals.equals(images, other.images) &&
+        listEquals.equals(variants, other.variants) &&
+        productVariantEquality.equals(productVariants, other.productVariants);
+  }
+}
+
+class ProductVariantEquality implements Equality<ProductVariant> {
+  const ProductVariantEquality();
+
+  @override
+  bool equals(ProductVariant e1, ProductVariant e2) {
+    return e1.id == e2.id &&
+        e1.price == e2.price &&
+        e1.stock == e2.stock &&
+        const MapEquality().equals(e1.attributes, e2.attributes);
+  }
+
+  @override
+  int hash(ProductVariant e) {
+    return e.id.hashCode ^
+        e.price.hashCode ^
+        e.stock.hashCode ^
+        const MapEquality().hash(e.attributes);
+  }
+
+  @override
+  bool isValidKey(Object? o) => o is ProductVariant;
 }
