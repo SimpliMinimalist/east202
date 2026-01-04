@@ -5,6 +5,7 @@ import 'package:myapp/features/store/add_product/models/variant_model.dart';
 import 'package:myapp/features/store/add_product/screens/add_variants_screen.dart';
 import 'package:myapp/features/store/add_product/widgets/price_input_field.dart';
 import 'package:myapp/features/store/add_product/widgets/product_image_handler.dart';
+import 'package:myapp/features/store/add_product/widgets/sale_price_bottom_sheet.dart';
 import 'package:myapp/features/store/add_product/widgets/variants_list.dart';
 import 'package:myapp/features/store/widgets/add_category_bottom_sheet.dart';
 import 'package:myapp/features/store/providers/category_provider.dart';
@@ -428,44 +429,27 @@ class _AddProductScreenState extends State<AddProductScreen> {
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: 16.0,
-            right: 16.0,
-            top: 16.0,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ClearableTextFormField(
-                controller: _salePriceController,
-                labelText: 'Sale Price',
-                prefixText: '₹ ',
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value != null &&
-                      value.isNotEmpty &&
-                      double.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {});
-                  Navigator.pop(context);
-                },
-                child: const Text('Done'),
-              )
-            ],
-          ),
+        return SalePriceBottomSheet(
+          priceController: _priceController,
+          salePriceController: _salePriceController,
         );
       },
-    );
+    ).whenComplete(() {
+      final originalPriceString = _priceController.text;
+      final salePriceString = _salePriceController.text;
+
+      if (salePriceString.isNotEmpty) {
+        final originalPrice = double.tryParse(originalPriceString);
+        final salePrice = double.tryParse(salePriceString);
+
+        if (originalPrice != null &&
+            salePrice != null &&
+            salePrice >= originalPrice) {
+          _salePriceController.clear();
+        }
+      }
+      setState(() {});
+    });
   }
 
   void _updateCategoryController() {
