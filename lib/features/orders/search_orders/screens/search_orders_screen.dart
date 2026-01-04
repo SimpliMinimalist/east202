@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:myapp/features/search_orders/models/order.dart';
+import 'package:myapp/features/orders/search_orders/models/order.dart';
 import 'package:myapp/shared/widgets/custom_search_bar.dart';
 
 class SearchOrdersScreen extends StatefulWidget {
