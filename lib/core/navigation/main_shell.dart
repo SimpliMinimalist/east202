@@ -4,7 +4,7 @@ import 'package:myapp/features/store/add_product/screens/add_product_screen.dart
 import 'package:myapp/features/orders/screens/orders_screen.dart';
 import 'package:myapp/features/profile/screens/profile_screen.dart';
 import 'package:myapp/features/store/screens/store_screen.dart';
-import 'package:myapp/providers/selection_provider.dart';
+import 'package:myapp/features/store/providers/selection_provider.dart';
 import 'package:myapp/shared/widgets/floating_action_button.dart';
 import 'package:provider/provider.dart';
 

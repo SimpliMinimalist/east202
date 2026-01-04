@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:myapp/providers/category_provider.dart';
+import 'package:myapp/features/store/providers/category_provider.dart';
 import 'package:provider/provider.dart';
 
 void showAddCategoryBottomSheet(BuildContext context) {

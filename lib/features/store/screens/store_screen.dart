@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/features/store/add_product/models/product_model.dart';
 import 'package:myapp/features/store/widgets/add_category_bottom_sheet.dart';
-import 'package:myapp/providers/category_provider.dart';
-import 'package:myapp/providers/selection_provider.dart';
+import 'package:myapp/features/store/providers/category_provider.dart';
+import 'package:myapp/features/store/providers/selection_provider.dart';
 import 'package:myapp/shared/widgets/custom_search_bar.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../providers/product_provider.dart';
+import '../../../../features/store/providers/product_provider.dart';
 import '../add_product/widgets/product_card.dart';
 
 class StoreScreen extends StatefulWidget {

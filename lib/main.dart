@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/core/navigation/router.dart';
 import 'package:myapp/core/theme.dart';
-import 'package:myapp/providers/category_provider.dart';
-import 'package:myapp/providers/product_provider.dart';
-import 'package:myapp/providers/selection_provider.dart';
-import 'package:myapp/providers/store_provider.dart';
+import 'package:myapp/features/store/providers/category_provider.dart';
+import 'package:myapp/features/store/providers/product_provider.dart';
+import 'package:myapp/features/store/providers/selection_provider.dart';
+import 'package:myapp/features/store/providers/store_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {

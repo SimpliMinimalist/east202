@@ -14,6 +14,7 @@ The project follows a feature-based folder structure.
 -   `lib/features/profile`: User profile management.
 -   `lib/features/store`: Store management features.
     -   `lib/features/store/add_product`: Feature for adding and editing products.
+    -   `lib/features/store/providers`: Contains providers for the store feature.
     -   `lib/features/store/search_product`: Feature for searching products.
     -   `lib/features/store/store_setup`: Feature for setting up the store.
 
@@ -28,9 +29,10 @@ The project follows a feature-based folder structure.
 -   Sale price functionality with a bottom sheet for input.
 -   Display of the original price with a strikethrough when a sale price is active.
 
-## Current Change: Refactor Feature Folders
+## Current Change: Refactor Project Structure
 
--   **Goal:** Improve project organization by grouping related features together.
+-   **Goal:** Improve project organization by grouping related features and providers together.
 -   **Steps:**
     1.  Moved `lib/features/store_setup` to `lib/features/store/store_setup`.
     2.  Moved `lib/features/search_orders` to `lib/features/orders/search_orders`.
+    3.  Moved `lib/providers` to `lib/features/store/providers`.

@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:myapp/providers/store_provider.dart';
+import 'package:myapp/features/store/providers/store_provider.dart';
 import 'package:provider/provider.dart';
 
 class StoreSetupScreen extends StatefulWidget {

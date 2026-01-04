@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:myapp/providers/product_provider.dart';
+import 'package:myapp/features/store/providers/product_provider.dart';
 import 'package:myapp/features/store/add_product/models/product_model.dart';
 
 class DraftsPopup extends StatefulWidget {
