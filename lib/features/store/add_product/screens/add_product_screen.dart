@@ -426,9 +426,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
   void _showSalePriceBottomSheet() {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (context) {
         return Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 16.0,
+            right: 16.0,
+            top: 16.0,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

@@ -31,9 +31,11 @@ The project follows a feature-based folder structure.
 -   "Add discount" button is disabled until a valid price is entered.
 -   "Add discount" button text changes to "Edit discount" when a sale price is active.
 
-## Current Change: Add Icons to Discount Buttons
+## Current Change: Fix Sale Price Bottom Sheet Overlap
 
--   **Goal:** Enhance the user interface by adding icons to the discount buttons for better visual clarity.
+-   **Goal:** Prevent the keyboard from overlapping the sale price input bottom sheet.
 -   **Steps:**
-    1.  Added a `+` icon to the "Add discount" button.
-    2.  Added an `edit` icon to the "Edit discount" button.
+    1.  Modified `_showSalePriceBottomSheet` in `add_product_screen.dart`.
+    2.  Set `isScrollControlled: true` on the `showModalBottomSheet` widget.
+    3.  Added `EdgeInsets` to account for the keyboard's view insets, ensuring the bottom sheet is always visible.
+    4. Corrected a typo from `_edited` to `_editedProduct`
