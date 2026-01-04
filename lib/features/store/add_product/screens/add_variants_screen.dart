@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/features/add_product/models/variant_model.dart';
+import 'package:myapp/features/store/add_product/models/variant_model.dart';
 
 class AddVariantsScreen extends StatefulWidget {
   final List<VariantOption> initialVariants;

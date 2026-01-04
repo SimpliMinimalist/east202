@@ -1,7 +1,6 @@
-
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:myapp/features/add_product/models/product_model.dart';
+import 'package:myapp/features/store/add_product/models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;

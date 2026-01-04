@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:myapp/features/add_product/models/product_model.dart';
-import 'package:myapp/features/add_product/screens/add_product_screen.dart';
+import 'package:myapp/features/store/add_product/models/product_model.dart';
 import 'package:myapp/features/store/widgets/add_category_bottom_sheet.dart';
 import 'package:myapp/providers/category_provider.dart';
 import 'package:myapp/providers/selection_provider.dart';
 import 'package:myapp/shared/widgets/custom_search_bar.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/product_provider.dart';
-import '../../add_product/widgets/product_card.dart';
+import '../../../../providers/product_provider.dart';
+import '../add_product/widgets/product_card.dart';
 
 class StoreScreen extends StatefulWidget {
   const StoreScreen({super.key});
@@ -74,12 +73,7 @@ class _StoreScreenState extends State<StoreScreen> {
                                   if (selectionProvider.isSelectionMode) {
                                     selectionProvider.toggleSelection(product.id);
                                   } else {
-                                    Navigator.of(context, rootNavigator: true).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            AddProductScreen(product: product),
-                                      ),
-                                    );
+                                    context.push('/edit-product', extra: product);
                                   }
                                 },
                                 onLongPress: () {

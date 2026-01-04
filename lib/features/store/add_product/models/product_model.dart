@@ -1,7 +1,6 @@
-
 import 'package:flutter/foundation.dart';
-import 'package:myapp/features/add_product/models/product_variant_model.dart';
-import 'package:myapp/features/add_product/models/variant_model.dart';
+import './product_variant_model.dart';
+import './variant_model.dart';
 
 @immutable
 class Product {

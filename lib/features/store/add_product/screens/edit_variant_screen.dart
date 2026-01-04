@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:myapp/features/add_product/models/product_variant_model.dart';
+import 'package:myapp/features/store/add_product/models/product_variant_model.dart';
 import 'package:myapp/shared/widgets/clearable_text_form_field.dart';
 
 class EditVariantScreen extends StatefulWidget {

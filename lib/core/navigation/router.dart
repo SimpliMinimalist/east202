@@ -2,9 +2,9 @@ import 'package:go_router/go_router.dart';
 import 'package:myapp/core/navigation/main_shell.dart';
 import 'package:myapp/features/auth/screens/welcome_screen.dart';
 import 'package:myapp/features/store_setup/screens/store_setup_screen.dart';
-import 'package:myapp/features/add_product/screens/add_product_screen.dart';
-import 'package:myapp/features/search_product/screens/search_product_screen.dart';
-import 'package:myapp/features/add_product/models/product_model.dart';
+import 'package:myapp/features/store/add_product/screens/add_product_screen.dart';
+import 'package:myapp/features/store/search_product/screens/search_product_screen.dart';
+import 'package:myapp/features/store/add_product/models/product_model.dart';
 import 'package:myapp/features/search_orders/screens/search_orders_screen.dart';
 
 final GoRouter router = GoRouter(
@@ -37,7 +37,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/edit-product',
       pageBuilder: (context, state) {
-        final product = state.extra as Product;
+        final product = state.extra as Product?;
         return NoTransitionPage(
           child: AddProductScreen(product: product),
         );

@@ -3,11 +3,11 @@ import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:collection/collection.dart';
-import 'package:myapp/features/add_product/models/product_model.dart';
-import 'package:myapp/features/add_product/models/product_variant_model.dart';
-import 'package:myapp/features/add_product/models/variant_model.dart';
-import 'package:myapp/features/add_product/screens/add_variants_screen.dart';
-import 'package:myapp/features/add_product/screens/edit_variant_screen.dart';
+import 'package:myapp/features/store/add_product/models/product_model.dart';
+import 'package:myapp/features/store/add_product/models/product_variant_model.dart';
+import 'package:myapp/features/store/add_product/models/variant_model.dart';
+import 'package:myapp/features/store/add_product/screens/add_variants_screen.dart';
+import 'package:myapp/features/store/add_product/screens/edit_variant_screen.dart';
 import 'package:myapp/features/store/widgets/add_category_bottom_sheet.dart';
 import 'package:myapp/providers/category_provider.dart';
 import 'package:myapp/providers/product_provider.dart';
@@ -18,7 +18,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:myapp/shared/widgets/clearable_text_form_field.dart';
-import 'package:myapp/features/add_product/widgets/drafts_popup.dart';
+import 'package:myapp/features/store/add_product/widgets/drafts_popup.dart';
 import 'package:myapp/shared/widgets/stock_input_field.dart';
 
 class AddProductScreen extends StatefulWidget {
