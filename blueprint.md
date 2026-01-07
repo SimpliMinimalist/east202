@@ -27,6 +27,7 @@ The project follows a feature-based folder structure.
 -   Character limit for product name and description fields is only shown on focus.
 -   Ability to add product variants.
 -   "Add Product Variants" button width is now based on its content and centered.
+-   The icon for the "Add Product Variants" button changes from an add icon to an edit icon when variants are present.
 -   Draft saving functionality.
 -   Sale price functionality with a dedicated bottom sheet widget (`SalePriceBottomSheet`).
 -   Display of the original price with a strikethrough when a sale price is active.
@@ -38,10 +39,9 @@ The project follows a feature-based folder structure.
 -   The sale price bottom sheet is scroll-controlled to avoid keyboard overlap.
 -   Corrected a typo from `_editedDitedProduct` to `_editedProduct`.
 
-## Current Change: UI Adjustments and Bug Fix
+## Current Change: Dynamic Variant Button Icon
 
--   **Goal:** Improve the user interface by adjusting the character limit display, modifying the variant button width, and fixing a typo.
+-   **Goal:** Change the icon on the "Add Product Variants" button to reflect the current state (add or edit).
 -   **Steps:**
-    1.  Modified `ClearableTextFormField` to only show the character counter when the text field is focused.
-    2.  Adjusted the "Add Product Variants" button in `add_product_screen.dart` to automatically size based on its content and be centered.
-    3.  Corrected a typo from `_editedDitedProduct` to `_editedProduct` in `add_product_screen.dart`.
+    1.  Modified the `icon` property of the `OutlinedButton.icon` in `add_product_screen.dart` to be conditional.
+    2.  The button now displays an `Icons.edit` icon if product variants exist, and an `Icons.add` icon otherwise.

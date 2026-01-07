@@ -626,7 +626,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         });
                       }
                     },
-                    icon: const Icon(Icons.add),
+                    icon: Icon(_editedProduct.productVariants.isEmpty ? Icons.add : Icons.edit),
                     label: Text(_editedProduct.productVariants.isEmpty
                         ? 'Add Product Variants'
                         : 'Edit Product Variants'),
