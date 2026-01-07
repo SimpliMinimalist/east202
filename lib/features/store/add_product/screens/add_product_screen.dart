@@ -1,4 +1,3 @@
-
 import 'package:myapp/features/store/add_product/models/product_model.dart';
 import 'package:myapp/features/store/add_product/models/product_variant_model.dart';
 import 'package:myapp/features/store/add_product/models/variant_model.dart';
@@ -46,6 +45,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   Product? _initialProduct;
   late Product _editedProduct;
+  String _discountPercentage = '';
 
   @override
   void initState() {
@@ -63,18 +63,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
     if (widget.product != null) {
       _loadProductData(widget.product!);
-    } else {
-      // When creating a new product, clear any lingering selection
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Provider.of<ProductProvider>(context, listen: false).clearSelection();
-      });
     }
+    
     _productNameController.addListener(_onFormChanged);
     _priceController.addListener(_onFormChanged);
     _salePriceController.addListener(_onFormChanged);
     _stockController.addListener(_onFormChanged);
     _descriptionController.addListener(_onFormChanged);
+    _salePriceController.addListener(_calculateDiscount);
     _updateCategoryController();
+    _calculateDiscount();
   }
 
   @override
@@ -84,6 +82,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     _salePriceController.removeListener(_onFormChanged);
     _stockController.removeListener(_onFormChanged);
     _descriptionController.removeListener(_onFormChanged);
+    _salePriceController.removeListener(_calculateDiscount);
     _productNameController.dispose();
     _priceController.dispose();
     _salePriceController.dispose();
@@ -107,6 +106,30 @@ class _AddProductScreenState extends State<AddProductScreen> {
     });
   }
 
+  void _calculateDiscount() {
+    final originalPrice = double.tryParse(_priceController.text);
+    final salePrice = double.tryParse(_salePriceController.text);
+
+    if (originalPrice != null &&
+        salePrice != null &&
+        originalPrice > 0 &&
+        salePrice < originalPrice) {
+      final discount = ((originalPrice - salePrice) / originalPrice) * 100;
+      if (mounted) {
+        setState(() {
+          _discountPercentage = '(${discount.toStringAsFixed(0)}% off)';
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          _discountPercentage = '';
+        });
+      }
+    }
+  }
+
+
   void _loadProductData(Product product) {
     _initialProduct = product.copyWith();
     _editedProduct = product.copyWith();
@@ -124,8 +147,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
     _images.clear();
     _images.addAll(product.images.map((path) => XFile(path)));
     _updateCategoryController();
+    _calculateDiscount();
 
-    // Also update the provider with the loaded draft's ID
     Provider.of<ProductProvider>(context, listen: false).setSelectedDraftId(product.id);
 
     setState(() {});
@@ -392,7 +415,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               } else {
                                 newCategories.remove(category);
                               }
-                              _editedProduct = _editedProduct.copyWith(categories: newCategories);
+                               _editedProduct = _editedProduct.copyWith(categories: newCategories);
                             });
                           },
                         );
@@ -435,6 +458,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         );
       },
     ).whenComplete(() {
+      _calculateDiscount();
       setState(() {});
     });
   }
@@ -511,7 +535,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             ),
           ),
           actions: [
-            if (!isEditing) // Show drafts icon only when not editing a published product
+            if (!isEditing)
               IconButton(
                 icon: SvgPicture.asset('assets/icons/draft_products.svg', width: 24, height: 24),
                 onPressed: _showDraftsPopup,
@@ -557,6 +581,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   priceController: _priceController,
                   salePriceController: _salePriceController,
                   onSalePriceTapped: _showSalePriceBottomSheet,
+                  discountPercentage: _discountPercentage,
                 ),
                 const SizedBox(height: 16),
                 ClearableTextFormField(

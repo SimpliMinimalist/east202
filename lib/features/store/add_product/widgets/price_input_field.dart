@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:myapp/shared/widgets/clearable_text_form_field.dart';
 
@@ -7,6 +6,7 @@ class PriceInputField extends StatefulWidget {
   final TextEditingController salePriceController;
   final VoidCallback onSalePriceTapped;
   final FocusNode? priceFocusNode;
+  final String? discountPercentage;
 
   const PriceInputField({
     super.key,
@@ -14,6 +14,7 @@ class PriceInputField extends StatefulWidget {
     required this.salePriceController,
     required this.onSalePriceTapped,
     this.priceFocusNode,
+    this.discountPercentage,
   });
 
   @override
@@ -87,6 +88,15 @@ class _PriceInputFieldState extends State<PriceInputField> {
                       color: Colors.grey,
                     ),
               ),
+              const SizedBox(width: 4),
+              if (widget.discountPercentage != null)
+                Text(
+                  widget.discountPercentage!,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
               const Spacer(),
               TextButton.icon(
                 onPressed: widget.onSalePriceTapped,
