@@ -144,6 +144,16 @@ class _ClearableTextFormFieldState extends State<ClearableTextFormField> {
       onTap: widget.onTap,
       maxLength: widget.maxLength,
       maxLines: widget.maxLines,
+      buildCounter: (context,
+          {required currentLength, required isFocused, required maxLength}) {
+        if (isFocused && maxLength != null) {
+          return Text(
+            '$currentLength/$maxLength',
+            style: Theme.of(context).textTheme.bodySmall,
+          );
+        }
+        return null;
+      },
       decoration: InputDecoration(
         labelText: widget.labelText,
         labelStyle: shouldAppearFocused ? TextStyle(color: primaryColor) : null,
