@@ -70,9 +70,10 @@ class _PriceInputFieldState extends State<PriceInputField> {
             labelText: 'Enter Price',
             border: const OutlineInputBorder(),
             contentPadding:
-                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
           ),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 '₹${widget.salePriceController.text}',
@@ -90,18 +91,25 @@ class _PriceInputFieldState extends State<PriceInputField> {
               ),
               const SizedBox(width: 4),
               if (widget.discountPercentage != null)
-                Text(
-                  widget.discountPercentage!,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 2.0), // Adjust alignment
+                  child: Text(
+                    widget.discountPercentage!,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
                 ),
               const Spacer(),
               TextButton.icon(
                 onPressed: widget.onSalePriceTapped,
                 icon: const Icon(Icons.edit, size: 16),
                 label: const Text('Edit discount'),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
               ),
             ],
           ),
