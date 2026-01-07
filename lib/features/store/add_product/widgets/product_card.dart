@@ -18,6 +18,14 @@ class ProductCard extends StatelessWidget {
         ? Theme.of(context).primaryColor.withAlpha(25) // 10% opacity
         : Colors.white;
 
+    final bool hasSalePrice =
+        product.salePrice != null && product.salePrice! < product.price;
+    String discountPercentage = '';
+    if (hasSalePrice) {
+      final discount = ((product.price - product.salePrice!) / product.price) * 100;
+      discountPercentage = '(${discount.toStringAsFixed(0)}% off)';
+    }
+
     return Card(
       elevation: 0.0,
       color: cardColor,
@@ -74,9 +82,37 @@ class ProductCard extends StatelessWidget {
                         ),
                   ),
                   const SizedBox(height: 2),
-                  Text(
-                    '₹${product.price.toStringAsFixed(2)}',
-                    style: Theme.of(context).textTheme.bodyLarge,
+                  Row(
+                    children: [
+                      if (hasSalePrice)
+                        Text(
+                          '₹${product.salePrice!.toStringAsFixed(2)}',
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      if (hasSalePrice)
+                        const SizedBox(width: 8),
+                      Text(
+                        '₹${product.price.toStringAsFixed(2)}',
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              decoration: hasSalePrice
+                                  ? TextDecoration.lineThrough
+                                  : null,
+                              color: hasSalePrice ? Colors.grey : null,
+                            ),
+                      ),
+                      if (hasSalePrice)
+                        const SizedBox(width: 4),
+                      if (hasSalePrice)
+                        Text(
+                          discountPercentage,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                    ],
                   ),
                   if (product.stock != null)
                     Padding(
