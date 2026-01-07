@@ -605,32 +605,34 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   maxLines: 3,
                 ),
                 const SizedBox(height: 16),
-                OutlinedButton.icon(
-                  onPressed: () async {
-                    final result = await Navigator.push<List<VariantOption>>(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddVariantsScreen(
-                          initialVariants: _editedProduct.variants,
+                Center(
+                  child: OutlinedButton.icon(
+                    onPressed: () async {
+                      final result = await Navigator.push<List<VariantOption>>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddVariantsScreen(
+                            initialVariants: _editedProduct.variants,
+                          ),
                         ),
-                      ),
-                    );
-                    if (result != null) {
-                      final newProductVariants = _generateVariants(result);
-                      setState(() {
-                        _editedProduct = _editedProduct.copyWith(
-                          variants: result,
-                          productVariants: newProductVariants,
-                        );
-                      });
-                    }
-                  },
-                  icon: const Icon(Icons.add),
-                  label: Text(_editedProduct.productVariants.isEmpty
-                      ? 'Add Product Variants'
-                      : 'Edit Product Variants'),
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 50),
+                      );
+                      if (result != null) {
+                        final newProductVariants = _generateVariants(result);
+                        setState(() {
+                          _editedProduct = _editedProduct.copyWith(
+                            variants: result,
+                            productVariants: newProductVariants,
+                          );
+                        });
+                      }
+                    },
+                    icon: const Icon(Icons.add),
+                    label: Text(_editedProduct.productVariants.isEmpty
+                        ? 'Add Product Variants'
+                        : 'Edit Product Variants'),
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(0, 50),
+                    ),
                   ),
                 ),
                 if (_editedProduct.productVariants.isNotEmpty) ...[

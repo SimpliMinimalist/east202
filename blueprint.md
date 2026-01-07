@@ -24,7 +24,9 @@ The project follows a feature-based folder structure.
 -   Allows creating and editing products.
 -   Image picker for adding up to 10 product images.
 -   Fields for product name, price, category, stock, and description.
+-   Character limit for product name and description fields is only shown on focus.
 -   Ability to add product variants.
+-   "Add Product Variants" button width is now based on its content and centered.
 -   Draft saving functionality.
 -   Sale price functionality with a dedicated bottom sheet widget (`SalePriceBottomSheet`).
 -   Display of the original price with a strikethrough when a sale price is active.
@@ -34,15 +36,12 @@ The project follows a feature-based folder structure.
 -   The "Done" button in the sale price bottom sheet is disabled if the validation fails.
 -   The sale price is automatically cleared if the bottom sheet is dismissed with an invalid value.
 -   The sale price bottom sheet is scroll-controlled to avoid keyboard overlap.
-- Corrected a typo from `_edited` to `_editedProduct`
+-   Corrected a typo from `_editedDitedProduct` to `_editedProduct`.
 
-## Current Change: Refactor and Enhance Sale Price Input
+## Current Change: UI Adjustments and Bug Fix
 
--   **Goal:** Improve the sale price input functionality by refactoring it into a separate widget and enhancing its validation logic.
+-   **Goal:** Improve the user interface by adjusting the character limit display, modifying the variant button width, and fixing a typo.
 -   **Steps:**
-    1.  Created a new widget `SalePriceBottomSheet` in `lib/features/store/add_product/widgets/sale_price_bottom_sheet.dart`.
-    2.  The new widget encapsulates the sale price input and validation logic.
-    3.  Updated `add_product_screen.dart` to use the new `SalePriceBottomSheet` widget.
-    4.  Implemented validation to ensure the sale price is less than the original price.
-    5.  Disabled the "Done" button in the bottom sheet when the input is invalid.
-    6.  Added logic to clear the sale price if the bottom sheet is dismissed with an invalid value.
+    1.  Modified `ClearableTextFormField` to only show the character counter when the text field is focused.
+    2.  Adjusted the "Add Product Variants" button in `add_product_screen.dart` to automatically size based on its content and be centered.
+    3.  Corrected a typo from `_editedDitedProduct` to `_editedProduct` in `add_product_screen.dart`.
