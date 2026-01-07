@@ -31,6 +31,7 @@ The project follows a feature-based folder structure.
 -   Draft saving functionality.
 -   Sale price functionality with a dedicated bottom sheet widget (`SalePriceBottomSheet`).
 -   Display of the original price with a strikethrough when a sale price is active.
+-   The strikethrough line and the text color for the original price are now the same.
 -   "Add discount" button is disabled until a valid price is entered.
 -   "Add discount" button text changes to "Edit discount" when a sale price is active.
 -   Sale price input validation to ensure the sale price is less than the original price.
@@ -39,9 +40,9 @@ The project follows a feature-based folder structure.
 -   The sale price bottom sheet is scroll-controlled to avoid keyboard overlap.
 -   Corrected a typo from `_editedDitedProduct` to `_editedProduct`.
 
-## Current Change: Dynamic Variant Button Icon
+## Current Change: Strikethrough Color Consistency
 
--   **Goal:** Change the icon on the "Add Product Variants" button to reflect the current state (add or edit).
+-   **Goal:** Ensure that the color of the strikethrough decoration on the original price matches the text color.
 -   **Steps:**
-    1.  Modified the `icon` property of the `OutlinedButton.icon` in `add_product_screen.dart` to be conditional.
-    2.  The button now displays an `Icons.edit` icon if product variants exist, and an `Icons.add` icon otherwise.
+    1.  Modified the `TextStyle` for the original price in `price_input_field.dart`.
+    2.  Set the `decorationColor` property to match the `color` property, ensuring consistent color for the strikethrough effect.

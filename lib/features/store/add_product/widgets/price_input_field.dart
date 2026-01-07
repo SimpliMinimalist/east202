@@ -87,6 +87,7 @@ class _PriceInputFieldState extends State<PriceInputField> {
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       decoration: TextDecoration.lineThrough,
                       color: Colors.grey,
+                      decorationColor: Colors.grey,
                     ),
               ),
               const SizedBox(width: 4),
