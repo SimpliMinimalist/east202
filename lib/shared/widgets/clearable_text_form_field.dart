@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ClearableTextFormField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
   final String? hintText;
   final String? prefixText;
-  final TextInputType? keyboardType;
-  final String? Function(String?)? validator;
-  final AutovalidateMode? autovalidateMode;
-  final int? maxLines;
-  final int? maxLength;
   final bool readOnly;
   final VoidCallback? onTap;
-  final Widget? suffixIcon;
-  final FocusNode? focusNode;
+  final int? maxLength;
+  final String? Function(String?)? validator;
+  final ValueChanged<String>? onChanged;
+  final AutovalidateMode? autovalidateMode;
+  final TextInputType? keyboardType;
   final bool forceFocus;
+  final Widget? suffixIcon;
+  final String? suffixText;
+  final FocusNode? focusNode;
+  final int? maxLines;
 
   const ClearableTextFormField({
     super.key,
@@ -23,16 +25,18 @@ class ClearableTextFormField extends StatefulWidget {
     required this.labelText,
     this.hintText,
     this.prefixText,
-    this.keyboardType,
-    this.validator,
-    this.autovalidateMode,
-    this.maxLines,
-    this.maxLength,
     this.readOnly = false,
     this.onTap,
-    this.suffixIcon,
-    this.focusNode,
+    this.maxLength,
+    this.validator,
+    this.onChanged,
+    this.autovalidateMode,
+    this.keyboardType,
     this.forceFocus = false,
+    this.suffixIcon,
+    this.suffixText,
+    this.focusNode,
+    this.maxLines,
   });
 
   @override
@@ -41,57 +45,96 @@ class ClearableTextFormField extends StatefulWidget {
 
 class _ClearableTextFormFieldState extends State<ClearableTextFormField> {
   late final FocusNode _focusNode;
-  bool _isFocused = false;
-  bool _didCreateFocusNode = false;
+  bool _hasFocus = false;
+  bool _hasText = false;
 
   @override
   void initState() {
     super.initState();
-    if (widget.focusNode == null) {
-      _focusNode = FocusNode();
-      _didCreateFocusNode = true;
-    } else {
-      _focusNode = widget.focusNode!;
-    }
+    _focusNode = widget.focusNode ?? FocusNode();
     _focusNode.addListener(_onFocusChange);
-    widget.controller.addListener(_onTextChanged);
+    widget.controller.addListener(_onTextChange);
+    _hasText = widget.controller.text.isNotEmpty;
+    if (widget.forceFocus) {
+      _hasFocus = true;
+    }
   }
 
   @override
   void dispose() {
-    _focusNode.removeListener(_onFocusChange);
-    widget.controller.removeListener(_onTextChanged);
-    if (_didCreateFocusNode) {
+    if (widget.focusNode == null) {
+      // Only dispose the focus node if it was created internally.
       _focusNode.dispose();
     }
+    _focusNode.removeListener(_onFocusChange);
+    widget.controller.removeListener(_onTextChange);
     super.dispose();
   }
 
   void _onFocusChange() {
-    if (mounted) {
-      setState(() {
-        _isFocused = _focusNode.hasFocus;
-      });
+    if (widget.forceFocus) {
+      if (!_hasFocus) {
+        setState(() => _hasFocus = true);
+      }
+    } else {
+      setState(() => _hasFocus = _focusNode.hasFocus);
     }
   }
 
-  void _onTextChanged() {
-    if (mounted) {
-      setState(() {});
-    }
+  void _onTextChange() {
+    setState(() => _hasText = widget.controller.text.isNotEmpty);
   }
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColor = Theme.of(context).colorScheme.primary;
-    final bool shouldAppearFocused = widget.forceFocus || _isFocused;
-    final bool hasText = widget.controller.text.isNotEmpty;
+    final primaryColor = Theme.of(context).colorScheme.primary;
+    final bool shouldAppearFocused = _hasFocus || widget.forceFocus;
 
-    final FloatingLabelBehavior floatingLabelBehavior;
-    if (shouldAppearFocused || hasText) {
-      floatingLabelBehavior = FloatingLabelBehavior.always;
-    } else {
-      floatingLabelBehavior = FloatingLabelBehavior.auto;
+    final floatingLabelBehavior =
+        (shouldAppearFocused || _hasText || widget.prefixText != null)
+            ? FloatingLabelBehavior.auto
+            : FloatingLabelBehavior.never;
+
+    final clearIcon = (shouldAppearFocused && _hasText && !widget.readOnly)
+        ? IconButton(
+            icon: SvgPicture.asset(
+              'assets/icons/cancel.svg',
+              colorFilter: ColorFilter.mode(
+                  Theme.of(context).colorScheme.onSurface, BlendMode.srcIn),
+            ),
+            onPressed: () {
+              widget.controller.clear();
+              widget.onChanged?.call('');
+            },
+            tooltip: 'Clear',
+          )
+        : null;
+
+    final suffixTextWidget = (widget.suffixText?.isNotEmpty ?? false)
+        ? Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(
+              widget.suffixText!,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )
+        : null;
+
+    Widget? finalSuffixWidget;
+    if (widget.suffixIcon != null) {
+      finalSuffixWidget = widget.suffixIcon;
+    } else if (suffixTextWidget != null || clearIcon != null) {
+      finalSuffixWidget = Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (suffixTextWidget != null) suffixTextWidget,
+          if (clearIcon != null) clearIcon,
+        ],
+      );
     }
 
     return TextFormField(
@@ -100,6 +143,7 @@ class _ClearableTextFormFieldState extends State<ClearableTextFormField> {
       readOnly: widget.readOnly,
       onTap: widget.onTap,
       maxLength: widget.maxLength,
+      maxLines: widget.maxLines,
       decoration: InputDecoration(
         labelText: widget.labelText,
         labelStyle: shouldAppearFocused ? TextStyle(color: primaryColor) : null,
@@ -115,26 +159,12 @@ class _ClearableTextFormFieldState extends State<ClearableTextFormField> {
               )
             : null,
         prefixText: widget.prefixText,
-        suffixIcon: widget.suffixIcon ??
-            (shouldAppearFocused && hasText && !widget.readOnly
-                ? IconButton(
-                    icon: SvgPicture.asset(
-                      'assets/icons/cancel.svg',
-                      width: 20,
-                      height: 20,
-                      colorFilter: ColorFilter.mode(primaryColor, BlendMode.srcIn),
-                    ),
-                    onPressed: () {
-                      widget.controller.clear();
-                    },
-                  )
-                : null),
-        counterText: shouldAppearFocused ? null : '',
+        suffixIcon: finalSuffixWidget,
       ),
-      keyboardType: widget.keyboardType,
       validator: widget.validator,
+      onChanged: widget.onChanged,
       autovalidateMode: widget.autovalidateMode,
-      maxLines: widget.maxLines ?? (widget.readOnly ? null : 1),
+      keyboardType: widget.keyboardType,
     );
   }
 }
