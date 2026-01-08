@@ -40,9 +40,14 @@ The project follows a feature-based folder structure.
 -   The sale price bottom sheet is scroll-controlled to avoid keyboard overlap.
 -   Corrected a typo from `_editedDitedProduct` to `_editedProduct`.
 
-## Current Change: Strikethrough Color Consistency
+### Variant List UI
+-   Removed the shadow effect from the variant cards in the product details screen.
+-   Added a light border to maintain visual separation between the cards.
 
--   **Goal:** Ensure that the color of the strikethrough decoration on the original price matches the text color.
+## Current Change: Variant Card Style
+
+-   **Goal:** Adjust the visual presentation of the variant cards.
 -   **Steps:**
-    1.  Modified the `TextStyle` for the original price in `price_input_field.dart`.
-    2.  Set the `decorationColor` property to match the `color` property, ensuring consistent color for the strikethrough effect.
+    1.  Located the `Card` widget in `lib/features/store/add_product/widgets/variants_list.dart`.
+    2.  Set the `elevation` property of the `Card` to `0` to remove the shadow.
+    3.  Added a `shape` property with a `RoundedRectangleBorder` to define a light gray border, ensuring the cards remain distinct.

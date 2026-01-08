@@ -23,6 +23,11 @@ class VariantsList extends StatelessWidget {
         final variant = variants[index];
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 4.0),
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: Colors.grey.shade300, width: 1),
+            borderRadius: BorderRadius.circular(8),
+          ),
           child: ListTile(
             leading: const Icon(Icons.image, color: Colors.grey, size: 40),
             title: Text(variant.name),
