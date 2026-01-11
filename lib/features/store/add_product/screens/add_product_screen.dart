@@ -611,6 +611,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   labelText: 'Description',
                   maxLength: 300,
                   maxLines: 3,
+                  expandOnFocus: true,
                 ),
                 const SizedBox(height: 16),
                 Center(

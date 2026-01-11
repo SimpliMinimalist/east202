@@ -18,6 +18,7 @@ class ClearableTextFormField extends StatefulWidget {
   final String? suffixText;
   final FocusNode? focusNode;
   final int? maxLines;
+  final bool expandOnFocus;
 
   const ClearableTextFormField({
     super.key,
@@ -37,6 +38,7 @@ class ClearableTextFormField extends StatefulWidget {
     this.suffixText,
     this.focusNode,
     this.maxLines,
+    this.expandOnFocus = false,
   });
 
   @override
@@ -136,6 +138,18 @@ class _ClearableTextFormFieldState extends State<ClearableTextFormField> {
         ],
       );
     }
+    
+    int? currentMaxLines;
+    if (widget.expandOnFocus) {
+      currentMaxLines = _hasFocus ? (widget.maxLines ?? 3) : 1;
+    } else {
+      currentMaxLines = widget.maxLines;
+    }
+
+    final currentKeyboardType = (widget.expandOnFocus && _hasFocus)
+        ? TextInputType.multiline
+        : widget.keyboardType;
+
 
     return TextFormField(
       controller: widget.controller,
@@ -143,7 +157,7 @@ class _ClearableTextFormFieldState extends State<ClearableTextFormField> {
       readOnly: widget.readOnly,
       onTap: widget.onTap,
       maxLength: widget.maxLength,
-      maxLines: widget.maxLines,
+      maxLines: currentMaxLines,
       buildCounter: (context,
           {required currentLength, required isFocused, required maxLength}) {
         if (isFocused && maxLength != null) {
@@ -174,7 +188,7 @@ class _ClearableTextFormFieldState extends State<ClearableTextFormField> {
       validator: widget.validator,
       onChanged: widget.onChanged,
       autovalidateMode: widget.autovalidateMode,
-      keyboardType: widget.keyboardType,
+      keyboardType: currentKeyboardType,
     );
   }
 }
