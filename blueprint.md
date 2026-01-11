@@ -44,10 +44,13 @@ The project follows a feature-based folder structure.
 -   Removed the shadow effect from the variant cards in the product details screen.
 -   Added a light border to maintain visual separation between the cards.
 
-## Current Change: Variant Card Style
+## Current Change: Category Field UI Fix
 
--   **Goal:** Adjust the visual presentation of the variant cards.
+-   **Goal:** Correct the height and alignment of the "Category" input field to match other text fields and ensure it expands dynamically as category chips are added.
 -   **Steps:**
-    1.  Located the `Card` widget in `lib/features/store/add_product/widgets/variants_list.dart`.
-    2.  Set the `elevation` property of the `Card` to `0` to remove the shadow.
-    3.  Added a `shape` property with a `RoundedRectangleBorder` to define a light gray border, ensuring the cards remain distinct.
+    1.  Identified that `InputDecorator` and `SizedBox` did not provide the desired dynamic behavior and consistent styling.
+    2.  Replaced the previous implementation with a `TextFormField` wrapped in a `GestureDetector` and an `AbsorbPointer`.
+    3.  The `TextFormField` is set to `readOnly: true` and acts as a perfectly styled container, inheriting the correct height, border, and label behavior from the app's theme.
+    4.  The `Wrap` widget containing the category `Chip`s is placed inside the `prefixIcon` property of the `InputDecoration`.
+    5.  A space character is used in the `TextEditingController` when categories are present to ensure the `prefixIcon` is displayed correctly and the field can expand vertically.
+    6.  Fixed a typo from `Listile` to `ListTile` in the category picker bottom sheet.

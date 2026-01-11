@@ -575,28 +575,35 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 const SizedBox(height: 16),
                 GestureDetector(
                   onTap: _showCategoryPicker,
-                  child: InputDecorator(
-                    decoration: InputDecoration(
-                      labelText: 'Category',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                  child: AbsorbPointer(
+                    child: TextFormField(
+                      readOnly: true,
+                      controller: TextEditingController(
+                          text: _editedProduct.categories.isEmpty ? '' : ' '),
+                      decoration: InputDecoration(
+                        labelText: 'Category',
+                        border: const OutlineInputBorder(),
+                        suffixIcon: const Icon(Icons.arrow_drop_down),
+                        prefixIcon: _editedProduct.categories.isEmpty
+                            ? null
+                            : Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    12, 8, 0, 8),
+                                child: Wrap(
+                                  spacing: 8.0,
+                                  runSpacing: 4.0,
+                                  children: _editedProduct.categories
+                                      .map((category) {
+                                    return Chip(
+                                      label: Text(category),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(100.0),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
                       ),
-                      suffixIcon: const Icon(Icons.arrow_drop_down),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 12.0, vertical: 8.0),
-                    ),
-                    isEmpty: _editedProduct.categories.isEmpty,
-                    child: Wrap(
-                      spacing: 8.0,
-                      runSpacing: 4.0,
-                      children: _editedProduct.categories.map((category) {
-                        return Chip(
-                          label: Text(category),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100.0),
-                          ),
-                        );
-                      }).toList(),
                     ),
                   ),
                 ),
