@@ -410,8 +410,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               } else {
                                 newCategories.remove(category);
                               }
-                              _editedProduct = _editedProduct.copyWith(
-                                  categories: newCategories);
+                              this.setState(() {
+                                _editedProduct = _editedProduct.copyWith(
+                                    categories: newCategories);
+                              });
                             });
                           },
                         );
@@ -590,15 +592,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       children: _editedProduct.categories.map((category) {
                         return Chip(
                           label: Text(category),
-                          onDeleted: () {
-                            setState(() {
-                              final newCategories = List<String>.from(
-                                  _editedProduct.categories);
-                              newCategories.remove(category);
-                              _editedProduct = _editedProduct.copyWith(
-                                  categories: newCategories);
-                            });
-                          },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100.0),
+                          ),
                         );
                       }).toList(),
                     ),
