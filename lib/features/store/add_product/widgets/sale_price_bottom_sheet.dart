@@ -75,7 +75,7 @@ class _SalePriceBottomSheetState extends State<SalePriceBottomSheet> {
           16.0,
           16.0,
           16.0,
-          MediaQuery.of(context).viewInsets.bottom + 16.0, // Adjust for keyboard
+          MediaQuery.of(context).viewInsets.bottom + 40.0, // Adjust for keyboard
         ),
         child: Form(
           key: _salePriceFormKey,
