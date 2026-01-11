@@ -40,8 +40,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final _salePriceController = TextEditingController();
   final _stockController = TextEditingController();
   final _descriptionController = TextEditingController();
-  final _categoryController = TextEditingController();
-  final _categoryFocusNode = FocusNode();
 
   Product? _initialProduct;
   late Product _editedProduct;
@@ -64,14 +62,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
     if (widget.product != null) {
       _loadProductData(widget.product!);
     }
-    
+
     _productNameController.addListener(_onFormChanged);
     _priceController.addListener(_onFormChanged);
     _salePriceController.addListener(_onFormChanged);
     _stockController.addListener(_onFormChanged);
     _descriptionController.addListener(_onFormChanged);
     _salePriceController.addListener(_calculateDiscount);
-    _updateCategoryController();
     _calculateDiscount();
   }
 
@@ -88,8 +85,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
     _salePriceController.dispose();
     _stockController.dispose();
     _descriptionController.dispose();
-    _categoryController.dispose();
-    _categoryFocusNode.dispose();
     super.dispose();
   }
 
@@ -129,7 +124,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
   }
 
-
   void _loadProductData(Product product) {
     _initialProduct = product.copyWith();
     _editedProduct = product.copyWith();
@@ -146,10 +140,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
     _stockController.text = product.stock?.toString() ?? '';
     _images.clear();
     _images.addAll(product.images.map((path) => XFile(path)));
-    _updateCategoryController();
     _calculateDiscount();
 
-    Provider.of<ProductProvider>(context, listen: false).setSelectedDraftId(product.id);
+    Provider.of<ProductProvider>(context, listen: false)
+        .setSelectedDraftId(product.id);
 
     setState(() {});
 
@@ -176,7 +170,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
       context: context,
       builder: (context) {
         if (isEditingDraft) {
-          // Editing an existing draft
           return AlertDialog(
             title: const Text('Save changes?'),
             content: const Text('Do you want to save the changes to this draft?'),
@@ -196,7 +189,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
             ],
           );
         } else if (isNewProduct) {
-          // Creating a new product
           return AlertDialog(
             title: const Text('Save changes?'),
             content: const Text('Do you want to save this product as a draft?'),
@@ -216,10 +208,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
             ],
           );
         } else {
-          // Editing a published product
           return AlertDialog(
             title: const Text('Discard changes?'),
-            content: const Text('You have unsaved changes. Are you sure you want to discard them?'),
+            content: const Text(
+                'You have unsaved changes. Are you sure you want to discard them?'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop('continue'),
@@ -257,7 +249,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Drafts Limit Reached'),
-          content: const Text('You can only save up to 5 drafts. Please delete an existing draft to save a new one.'),
+          content: const Text(
+              'You can only save up to 5 drafts. Please delete an existing draft to save a new one.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -339,7 +332,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('You have unsaved changes'),
-          content: const Text('Do you want to save your current work as a draft before loading the new one?'),
+          content: const Text(
+              'Do you want to save your current work as a draft before loading the new one?'),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.of(context).pop('cancel'),
@@ -409,13 +403,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           value: _editedProduct.categories.contains(category),
                           onChanged: (bool? value) {
                             setState(() {
-                              final newCategories = List<String>.from(_editedProduct.categories);
+                              final newCategories =
+                                  List<String>.from(_editedProduct.categories);
                               if (value == true) {
                                 newCategories.add(category);
                               } else {
                                 newCategories.remove(category);
                               }
-                               _editedProduct = _editedProduct.copyWith(categories: newCategories);
+                              _editedProduct = _editedProduct.copyWith(
+                                  categories: newCategories);
                             });
                           },
                         );
@@ -439,10 +435,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       },
     ).whenComplete(() {
       if (mounted) {
-        _categoryFocusNode.unfocus();
-        setState(() {
-          _updateCategoryController();
-        });
+        setState(() {});
       }
     });
   }
@@ -461,15 +454,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
       _calculateDiscount();
       setState(() {});
     });
-  }
-
-  void _updateCategoryController() {
-    if (_editedProduct.categories.isEmpty) {
-      _categoryController.text = '';
-    } else {
-      _categoryController.text = _editedProduct.categories.join(', ');
-    }
-    setState(() {});
   }
 
   List<ProductVariant> _generateVariants(List<VariantOption> options) {
@@ -528,7 +512,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
             onPressed: _showSaveDraftDialog,
           ),
           title: Text(
-            isEditing ? 'Edit Product' : (isDraft ? 'Edit Draft' : 'New Product'),
+            isEditing
+                ? 'Edit Product'
+                : (isDraft ? 'Edit Draft' : 'New Product'),
             style: titleTextStyle?.copyWith(
               fontWeight: FontWeight.bold,
               fontSize: (titleTextStyle.fontSize ?? 22.0) - 1.0,
@@ -537,7 +523,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
           actions: [
             if (!isEditing)
               IconButton(
-                icon: SvgPicture.asset('assets/icons/draft_products.svg', width: 24, height: 24),
+                icon: SvgPicture.asset('assets/icons/draft_products.svg',
+                    width: 24, height: 24),
                 onPressed: _showDraftsPopup,
               ),
           ],
@@ -584,13 +571,38 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   discountPercentage: _discountPercentage,
                 ),
                 const SizedBox(height: 16),
-                ClearableTextFormField(
-                  controller: _categoryController,
-                  labelText: 'Category',
-                  readOnly: true,
+                GestureDetector(
                   onTap: _showCategoryPicker,
-                  suffixIcon: const Icon(Icons.arrow_drop_down),
-                  focusNode: _categoryFocusNode,
+                  child: InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: 'Category',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      suffixIcon: const Icon(Icons.arrow_drop_down),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12.0, vertical: 8.0),
+                    ),
+                    isEmpty: _editedProduct.categories.isEmpty,
+                    child: Wrap(
+                      spacing: 8.0,
+                      runSpacing: 4.0,
+                      children: _editedProduct.categories.map((category) {
+                        return Chip(
+                          label: Text(category),
+                          onDeleted: () {
+                            setState(() {
+                              final newCategories = List<String>.from(
+                                  _editedProduct.categories);
+                              newCategories.remove(category);
+                              _editedProduct = _editedProduct.copyWith(
+                                  categories: newCategories);
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 StockInputField(
@@ -626,7 +638,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         });
                       }
                     },
-                    icon: Icon(_editedProduct.productVariants.isEmpty ? Icons.add : Icons.edit),
+                    icon: Icon(_editedProduct.productVariants.isEmpty
+                        ? Icons.add
+                        : Icons.edit),
                     label: Text(_editedProduct.productVariants.isEmpty
                         ? 'Add Product Variants'
                         : 'Edit Product Variants'),
@@ -641,8 +655,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     variants: _editedProduct.productVariants,
                     onVariantUpdated: (index, updatedVariant) {
                       setState(() {
-                        final newVariants =
-                            List<ProductVariant>.from(_editedProduct.productVariants);
+                        final newVariants = List<ProductVariant>.from(
+                            _editedProduct.productVariants);
                         newVariants[index] = updatedVariant;
                         _editedProduct = _editedProduct.copyWith(
                           productVariants: newVariants,
@@ -671,7 +685,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     ),
                     child: Text(isEditing
                         ? 'Update Product'
-                        : (isDraft ? 'Add Product' : 'Add Product')), // Changed label for drafts
+                        : (isDraft ? 'Add Product' : 'Add Product')),
                   ),
                 ),
               ],
