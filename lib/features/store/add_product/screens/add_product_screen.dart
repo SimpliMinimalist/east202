@@ -597,8 +597,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                     return Chip(
                                       label: Text(category),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(100.0),
+                                        borderRadius:
+                                            BorderRadius.circular(100.0),
                                       ),
+                                      visualDensity:
+                                          const VisualDensity(vertical: -2),
                                     );
                                   }).toList(),
                                 ),
