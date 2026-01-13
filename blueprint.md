@@ -55,17 +55,20 @@ The project follows a feature-based folder structure.
 ### Category Chip UI
 -   Reduced the height of the category chips to make them more compact.
 
-## Current Change: Variant Image Picker
+### Variant Image Picker
+-   Allows users to add an image to each product variant.
+-   Refactored `ProductImageHandler` to support a variable number of images.
+-   Updated the `maxImages` for the main product to 10 and for variants to 4.
+-   Integrated into `EditVariantScreen` to allow picking up to 4 images for a variant.
 
--   **Goal:** Allow users to add an image to each product variant.
+## Current Change: Re-use Price Field in Edit Variant Screen
+
+-   **Goal:** Reuse the `PriceInputField` in the `EditVariantScreen` to allow for sale prices on variants.
 -   **Steps:**
-    1.  **Refactor `ProductImageHandler`:**
-        -   Added a `maxImages` property to control the number of images that can be picked.
-        -   Made the `imageFieldKey` property optional.
-        -   Adjusted the UI text to reflect the `maxImages` value.
-    2.  **Integrate into `EditVariantScreen`:**
-        -   Replaced the placeholder with the `ProductImageHandler` widget, configured for a single image (`maxImages: 1`).
-        -   Load the variant's existing image (if any) when the screen opens.
-        -   Update the `ProductVariant` model with the new image path when the image is changed.
-    3.  **Update `VariantsList`:**
-        -   Display the variant's image in the list, using a placeholder if no image is available.
+    1.  **Update `ProductVariant` model:**
+        -   Added a `salePrice` property to the model.
+    2.  **Refactor `EditVariantScreen`:**
+        -   Replaced the `ClearableTextFormField` for price with the `PriceInputField` widget.
+        -   Added state management for the sale price, including a `_salePriceController`, `_discountPercentage`, and the `_calculateDiscount` method.
+        -   Implemented the `_showSalePriceBottomSheet` method to show the sale price editor.
+        -   Updated the `_saveChanges` method to include the `salePrice`.
