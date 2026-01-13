@@ -40,10 +40,16 @@ The project follows a feature-based folder structure.
 -   The sale price bottom sheet is scroll-controlled to avoid keyboard overlap.
 -   Corrected a typo from `_editedDitedProduct` to `_editedProduct`.
 
+### Edit Variant Screen
+-   Reuses the `PriceInputField` from the add product screen, allowing for sale prices on individual variants.
+-   Manages state for sale price, including the discount percentage calculation.
+-   Uses the `SalePriceBottomSheet` for a consistent editing experience.
+
 ### Variant List UI
 -   Removed the shadow effect from the variant cards in the product details screen.
 -   Added a light border to maintain visual separation between the cards.
--   Display the variant's image in the list.
+-   Displays the variant's image in the list.
+-   **Displays the sale price, original price with strikethrough, and discount percentage in the `VariantsList` widget when a sale price is active.**
 
 ### Category Field UI Fix
 -   Corrected the height and alignment of the "Category" input field to match other text fields and ensure it expands dynamically as category chips are added.
@@ -61,14 +67,9 @@ The project follows a feature-based folder structure.
 -   Updated the `maxImages` for the main product to 10 and for variants to 4.
 -   Integrated into `EditVariantScreen` to allow picking up to 4 images for a variant.
 
-## Current Change: Re-use Price Field in Edit Variant Screen
+## Current Change: Finalizing Variant Sale Price Feature
 
--   **Goal:** Reuse the `PriceInputField` in the `EditVariantScreen` to allow for sale prices on variants.
+-   **Goal:** Document the implementation of sale prices for variants and commit all related changes.
 -   **Steps:**
-    1.  **Update `ProductVariant` model:**
-        -   Added a `salePrice` property to the model.
-    2.  **Refactor `EditVariantScreen`:**
-        -   Replaced the `ClearableTextFormField` for price with the `PriceInputField` widget.
-        -   Added state management for the sale price, including a `_salePriceController`, `_discountPercentage`, and the `_calculateDiscount` method.
-        -   Implemented the `_showSalePriceBottomSheet` method to show the sale price editor.
-        -   Updated the `_saveChanges` method to include the `salePrice`.
+    1.  **Update `blueprint.md`:** Documented the reuse of `PriceInputField` in `EditVariantScreen` and the display of sale prices in `VariantsList`.
+    2.  **Commit and Push:** Committing all changes to the repository.
