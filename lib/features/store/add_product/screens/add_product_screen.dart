@@ -551,6 +551,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     });
                   },
                   imageFieldKey: _imageFieldKey,
+                  maxImages: 10,
                 ),
                 const SizedBox(height: 24),
                 ClearableTextFormField(

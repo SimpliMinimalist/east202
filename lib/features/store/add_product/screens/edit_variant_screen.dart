@@ -73,7 +73,7 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
                   _images.addAll(newImages);
                 });
               },
-              maxImages: 1,
+              maxImages: 4,
             ),
             const SizedBox(height: 24),
             // Attributes
