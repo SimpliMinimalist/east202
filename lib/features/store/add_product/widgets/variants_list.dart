@@ -1,4 +1,4 @@
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:myapp/features/store/add_product/models/product_variant_model.dart';
 import 'package:myapp/features/store/add_product/screens/edit_variant_screen.dart';
@@ -29,7 +29,14 @@ class VariantsList extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: ListTile(
-            leading: const Icon(Icons.image, color: Colors.grey, size: 40),
+            leading: variant.image != null
+                ? Image.file(
+                    File(variant.image!),
+                    width: 40,
+                    height: 40,
+                    fit: BoxFit.cover,
+                  )
+                : const Icon(Icons.image, color: Colors.grey, size: 40),
             title: Text(variant.name),
             subtitle: Text(
               '₹${variant.price.toStringAsFixed(2)} • ${variant.stock} available',

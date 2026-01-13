@@ -1,6 +1,7 @@
-
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:myapp/features/store/add_product/models/product_variant_model.dart';
+import 'package:myapp/features/store/add_product/widgets/product_image_handler.dart';
 import 'package:myapp/shared/widgets/clearable_text_form_field.dart';
 
 class EditVariantScreen extends StatefulWidget {
@@ -16,11 +17,15 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
   late final TextEditingController _priceController;
   late final TextEditingController _stockController;
   late ProductVariant _editedVariant;
+  final List<XFile> _images = [];
 
   @override
   void initState() {
     super.initState();
     _editedVariant = widget.variant.copyWith();
+    if (_editedVariant.image != null) {
+      _images.add(XFile(_editedVariant.image!));
+    }
     _priceController = TextEditingController(text: _editedVariant.price.toStringAsFixed(2));
     _stockController = TextEditingController(text: _editedVariant.stock.toString());
   }
@@ -35,7 +40,11 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
   void _saveChanges() {
     final price = double.tryParse(_priceController.text) ?? 0.0;
     final stock = int.tryParse(_stockController.text) ?? 0;
-    _editedVariant = _editedVariant.copyWith(price: price, stock: stock);
+    _editedVariant = _editedVariant.copyWith(
+      price: price,
+      stock: stock,
+      image: _images.isNotEmpty ? _images.first.path : null,
+    );
     Navigator.of(context).pop(_editedVariant);
   }
 
@@ -56,21 +65,15 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image placeholder
-            GestureDetector(
-              onTap: () {
-                // TODO: Implement image picking
+            ProductImageHandler(
+              initialImages: _images,
+              onImagesChanged: (newImages) {
+                setState(() {
+                  _images.clear();
+                  _images.addAll(newImages);
+                });
               },
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8.0),
-                  border: Border.all(color: Colors.grey[400]!),
-                ),
-                child: const Icon(Icons.add_a_photo, color: Colors.grey, size: 40),
-              ),
+              maxImages: 1,
             ),
             const SizedBox(height: 24),
             // Attributes

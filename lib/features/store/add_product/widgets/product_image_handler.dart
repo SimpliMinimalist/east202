@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -8,13 +7,15 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 class ProductImageHandler extends StatefulWidget {
   final List<XFile> initialImages;
   final Function(List<XFile>) onImagesChanged;
-  final GlobalKey<FormFieldState<List<XFile>>> imageFieldKey;
+  final GlobalKey<FormFieldState<List<XFile>>>? imageFieldKey;
+  final int maxImages;
 
   const ProductImageHandler({
     super.key,
     required this.initialImages,
     required this.onImagesChanged,
-    required this.imageFieldKey,
+    this.imageFieldKey,
+    this.maxImages = 10,
   });
 
   @override
@@ -47,24 +48,35 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
 
   Future<void> _pickImages() async {
     final messenger = ScaffoldMessenger.of(context);
-    if (_images.length >= 10) {
+    if (_images.length >= widget.maxImages) {
       messenger.showSnackBar(
-        const SnackBar(content: Text('You can only select up to 10 images.')),
+        SnackBar(
+            content: Text(
+                'You can only select up to ${widget.maxImages} images.')),
       );
       return;
     }
 
-    final List<XFile> pickedFiles = await _picker.pickMultiImage(
-      limit: 10 - _images.length,
-    );
-
-    if (pickedFiles.isNotEmpty) {
-      setState(() {
-        _images.addAll(pickedFiles);
-        widget.onImagesChanged(_images);
-      });
-      widget.imageFieldKey.currentState?.validate();
+    if (widget.maxImages - _images.length == 1) {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() {
+          _images.add(pickedFile);
+          widget.onImagesChanged(_images);
+        });
+      }
+    } else {
+      final List<XFile> pickedFiles = await _picker.pickMultiImage(
+        limit: widget.maxImages - _images.length,
+      );
+      if (pickedFiles.isNotEmpty) {
+        setState(() {
+          _images.addAll(pickedFiles);
+          widget.onImagesChanged(_images);
+        });
+      }
     }
+    widget.imageFieldKey?.currentState?.validate();
   }
 
   void _removeImage(int index) {
@@ -75,43 +87,55 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
       }
       widget.onImagesChanged(_images);
     });
-    widget.imageFieldKey.currentState?.validate();
+    widget.imageFieldKey?.currentState?.validate();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FormField<List<XFile>>(
-      key: widget.imageFieldKey,
-      initialValue: _images,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: (value) {
-        if (_images.isEmpty) {
-          return 'Please select at least one image.';
-        }
-        return null;
-      },
-      builder: (formFieldState) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _images.isEmpty
-                ? _buildAddPhotoImage(formFieldState.hasError)
-                : _buildImageCarousel(),
-            if (formFieldState.hasError)
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, left: 12.0),
-                child: Text(
-                  formFieldState.errorText!,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.error,
-                    fontSize: 12,
+    final content = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _images.isEmpty
+            ? _buildAddPhotoImage(false)
+            : _buildImageCarousel(),
+      ],
+    );
+
+    if (widget.imageFieldKey != null) {
+      return FormField<List<XFile>>(
+        key: widget.imageFieldKey,
+        initialValue: _images,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: (value) {
+          if (widget.maxImages > 1 && _images.isEmpty) {
+            return 'Please select at least one image.';
+          }
+          return null;
+        },
+        builder: (formFieldState) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _images.isEmpty
+                  ? _buildAddPhotoImage(formFieldState.hasError)
+                  : _buildImageCarousel(),
+              if (formFieldState.hasError)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, left: 12.0),
+                  child: Text(
+                    formFieldState.errorText!,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
-              ),
-          ],
-        );
-      },
-    );
+            ],
+          );
+        },
+      );
+    }
+    return content;
   }
 
   Widget _buildImageCarousel() {
@@ -133,24 +157,26 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
                         File(_images[index].path),
                         fit: BoxFit.cover,
                       ),
-                      Positioned(
-                        top: 8,
-                        left: 8,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withAlpha(128),
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          child: Text(
-                            '${index + 1}/${_images.length}',
-                            style: const TextStyle(color: Colors.white, fontSize: 12),
+                      if (widget.maxImages > 1)
+                        Positioned(
+                          top: 8,
+                          left: 8,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withAlpha(128),
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: Text(
+                              '${index + 1}/${_images.length}',
+                              style:
+                                  const TextStyle(color: Colors.white, fontSize: 12),
+                            ),
                           ),
                         ),
-                      ),
                       Positioned(
                         top: 8,
                         right: 8,
@@ -162,7 +188,8 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
                               color: Colors.black.withAlpha(128),
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(Icons.delete_outline, color: Colors.white, size: 20),
+                            child: const Icon(Icons.delete_outline,
+                                color: Colors.white, size: 20),
                           ),
                         ),
                       ),
@@ -184,29 +211,31 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
             ),
           ),
         ),
-        const SizedBox(height: 12),
-        if (_images.length > 1)
-          Center(
-            child: AnimatedSmoothIndicator(
-              activeIndex: _activePage,
-              count: _images.length,
-              effect: ScrollingDotsEffect(
-                dotHeight: 6,
-                dotWidth: 6,
-                activeDotColor: Theme.of(context).primaryColor,
-                dotColor: Colors.grey,
-                maxVisibleDots: 5,
+        if (widget.maxImages > 1) ...[
+          const SizedBox(height: 12),
+          if (_images.length > 1)
+            Center(
+              child: AnimatedSmoothIndicator(
+                activeIndex: _activePage,
+                count: _images.length,
+                effect: ScrollingDotsEffect(
+                  dotHeight: 6,
+                  dotWidth: 6,
+                  activeDotColor: Theme.of(context).primaryColor,
+                  dotColor: Colors.grey,
+                  maxVisibleDots: 5,
+                ),
               ),
             ),
-          ),
-        const SizedBox(height: 12),
-        if (_images.length < 10)
+          const SizedBox(height: 12),
+        ],
+        if (_images.length < widget.maxImages)
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: _pickImages,
               icon: const Icon(Icons.add_a_photo_outlined),
-              label: const Text('Add More Photos'),
+              label: Text(widget.maxImages > 1 ? 'Add More Photos' : 'Add Photo'),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 backgroundColor: Colors.white,
@@ -226,6 +255,10 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
     final backgroundColor = hasError
         ? Theme.of(context).colorScheme.error.withAlpha(25)
         : Colors.white;
+
+    final label = widget.maxImages > 1
+        ? 'Add up to ${widget.maxImages} Photos'
+        : 'Add a Photo';
 
     return AspectRatio(
       aspectRatio: 1 / 1,
@@ -247,7 +280,7 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Add up to 10 Photos',
+                  label,
                   style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
                 ),
               ],
@@ -258,4 +291,3 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
     );
   }
 }
-

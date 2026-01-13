@@ -43,6 +43,7 @@ The project follows a feature-based folder structure.
 ### Variant List UI
 -   Removed the shadow effect from the variant cards in the product details screen.
 -   Added a light border to maintain visual separation between the cards.
+-   Display the variant's image in the list.
 
 ### Category Field UI Fix
 -   Corrected the height and alignment of the "Category" input field to match other text fields and ensure it expands dynamically as category chips are added.
@@ -51,8 +52,20 @@ The project follows a feature-based folder structure.
 -   The `Wrap` widget containing the category `Chip`s is placed inside the `prefixIcon` property of the `InputDecoration`.
 -   Fixed a typo from `Listile` to `ListTile` in the category picker bottom sheet.
 
-## Current Change: Category Chip UI
+### Category Chip UI
+-   Reduced the height of the category chips to make them more compact.
 
--   **Goal:** Reduce the height of the category chips to make them more compact.
+## Current Change: Variant Image Picker
+
+-   **Goal:** Allow users to add an image to each product variant.
 -   **Steps:**
-    1.  Applied `visualDensity: VisualDensity(vertical: -2)` to the `Chip` widget in `lib/features/store/add_product/screens/add_product_screen.dart`. This reduces the vertical padding of the chips, making them smaller.
+    1.  **Refactor `ProductImageHandler`:**
+        -   Added a `maxImages` property to control the number of images that can be picked.
+        -   Made the `imageFieldKey` property optional.
+        -   Adjusted the UI text to reflect the `maxImages` value.
+    2.  **Integrate into `EditVariantScreen`:**
+        -   Replaced the placeholder with the `ProductImageHandler` widget, configured for a single image (`maxImages: 1`).
+        -   Load the variant's existing image (if any) when the screen opens.
+        -   Update the `ProductVariant` model with the new image path when the image is changed.
+    3.  **Update `VariantsList`:**
+        -   Display the variant's image in the list, using a placeholder if no image is available.
