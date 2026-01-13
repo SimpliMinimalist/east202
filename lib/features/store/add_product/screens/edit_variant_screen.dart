@@ -33,9 +33,14 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
     if (_editedVariant.image != null) {
       _images.add(XFile(_editedVariant.image!));
     }
-    _priceController = TextEditingController(text: _editedVariant.price.toStringAsFixed(2));
+
+    // Initialize controllers with empty strings if values are 0
+    final priceText = _editedVariant.price == 0.0 ? '' : _editedVariant.price.toStringAsFixed(2);
+    final stockText = _editedVariant.stock == 0 ? '' : _editedVariant.stock.toString();
+
+    _priceController = TextEditingController(text: priceText);
     _salePriceController = TextEditingController(text: _editedVariant.salePrice?.toStringAsFixed(2) ?? '');
-    _stockController = TextEditingController(text: _editedVariant.stock.toString());
+    _stockController = TextEditingController(text: stockText);
 
     _priceController.addListener(_updateSaveButtonState);
     _stockController.addListener(_updateSaveButtonState);

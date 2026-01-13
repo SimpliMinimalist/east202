@@ -51,6 +51,7 @@ The project follows a feature-based folder structure.
 -   Manages state for sale price, including the discount percentage calculation.
 -   Uses the `SalePriceBottomSheet` for a consistent editing experience.
 -   **Error Handling**: Displays an error message if the user tries to save without adding an image or a price.
+-   **Empty Default Fields**: The price and stock fields are now initialized as empty strings if their initial values are 0, preventing the display of "0.00" or "0" by default.
 
 ### Variant List UI
 -   Removed the shadow effect from the variant cards in the product details screen.
@@ -78,10 +79,10 @@ The project follows a feature-based folder structure.
 -   **`ClearableTextFormField`**: Added an `errorText` parameter to allow displaying validation errors.
 -   **`PriceInputField`**: Updated to accept and display an `errorMessage`.
 
-## Current Change: Commit and Push Error Handling Fixes
+## Current Change: Fix Default Values in Edit Variant Screen
 
--   **Goal:** Commit the implemented error handling features for the variant editing screen.
+-   **Goal:** Ensure price and stock fields are empty by default in the `EditVariantScreen`.
 -   **Steps:**
-    1.  **Update `blueprint.md`:** Document the changes for error handling.
-    2.  **Commit:** Stage and commit all changes with a descriptive message.
-    3.  **Push:** Push the changes to the remote repository.
+    1.  **Update `edit_variant_screen.dart`:** Modified the `initState` to check for zero values and initialize text controllers with empty strings accordingly.
+    2.  **Update `blueprint.md`:** Documented the change to the default field values.
+    3.  **Commit and Push:** Commit all changes to the repository.
