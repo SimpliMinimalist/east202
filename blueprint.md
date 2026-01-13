@@ -40,13 +40,16 @@ The project follows a feature-based folder structure.
 -   The sale price bottom sheet is scroll-controlled to avoid keyboard overlap.
 -   Corrected a typo from `_editedDitedProduct` to `_editedProduct`.
 
+### Add Variants Screen
+
+-   The "Save" button has been moved from the app bar to a bottom navigation bar for a consistent user experience.
+
 ### Edit Variant Screen
+
+-   The "Save" button has been moved from the app bar to a bottom navigation bar, matching the design of the "Add Variants" and "Add Product" screens.
 -   Reuses the `PriceInputField` from the add product screen, allowing for sale prices on individual variants.
 -   Manages state for sale price, including the discount percentage calculation.
 -   Uses the `SalePriceBottomSheet` for a consistent editing experience.
-
-### Add Variants Screen
-- Added a "Demo" button to the bottom of the screen, replicating the exact style and position of the "Add Product" button for demonstration purposes.
 
 ### Variant List UI
 -   Removed the shadow effect from the variant cards in the product details screen.
@@ -70,10 +73,11 @@ The project follows a feature-based folder structure.
 -   Updated the `maxImages` for the main product to 10 and for variants to 4.
 -   Integrated into `EditVariantScreen` to allow picking up to 4 images for a variant.
 
-## Current Change: Add Demo Button
+## Current Change: Standardize Save Button Placement
 
--   **Goal:** Add a demo button to the Add Variants screen.
+-   **Goal:** Move the "Save" button to the bottom navigation bar on the "Add Variants" and "Edit Variant" screens for consistency.
 -   **Steps:**
-    1.  **Update `add_variants_screen.dart`:** Added a bottom navigation bar with an `ElevatedButton` styled exactly like the one on the "Add Product" screen.
-    2.  **Update `blueprint.md`:** Document the new demo button.
-    3.  **Commit and Push:** Commit all changes to the repository.
+    1.  **Update `add_variants_screen.dart`:** Removed the "Save" button from the app bar and moved the save logic to a new "Save" button in the bottom navigation bar.
+    2.  **Update `edit_variant_screen.dart`:** Removed the "Save" button from the app bar and moved the save logic to a new "Save" button in the bottom navigation bar.
+    3.  **Update `blueprint.md`:** Documented the changes to the save button placement.
+    4.  **Commit and Push:** Commit all changes to the repository.

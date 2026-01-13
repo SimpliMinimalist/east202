@@ -103,12 +103,6 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_editedVariant.name),
-        actions: [
-          TextButton(
-            onPressed: _saveChanges,
-            child: const Text('Save'),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -155,6 +149,27 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
             ),
             const SizedBox(height: 16),
           ],
+        ),
+      ),
+       bottomNavigationBar: Transform.translate(
+        offset: const Offset(0, -7),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: _saveChanges,
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                  child: const Text('Save'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

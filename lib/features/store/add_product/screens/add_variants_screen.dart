@@ -173,26 +173,6 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Variants'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: ElevatedButton(
-              onPressed: _saveVariants, // Always call _saveVariants
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isSaveEnabled
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey.shade300,
-                foregroundColor:
-                    isSaveEnabled ? Colors.white : Colors.grey.shade600,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
-                ),
-              ),
-              child: const Text('Save'),
-            ),
-          ),
-        ],
       ),
       body: Form(
         key: _formKey,
@@ -236,13 +216,16 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: _saveVariants,
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    backgroundColor: isSaveEnabled
+                    ? Theme.of(context).primaryColor
+                    : Colors.grey.shade300,
+                foregroundColor:
+                    isSaveEnabled ? Colors.white : Colors.grey.shade600,
                   ),
-                  child: const Text('Demo'),
+                  child: const Text('Save'),
                 ),
               ),
             ],
