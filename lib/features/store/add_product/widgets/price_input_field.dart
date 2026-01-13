@@ -7,6 +7,7 @@ class PriceInputField extends StatefulWidget {
   final VoidCallback onSalePriceTapped;
   final FocusNode? priceFocusNode;
   final String? discountPercentage;
+  final String? errorMessage;
 
   const PriceInputField({
     super.key,
@@ -15,6 +16,7 @@ class PriceInputField extends StatefulWidget {
     required this.onSalePriceTapped,
     this.priceFocusNode,
     this.discountPercentage,
+    this.errorMessage,
   });
 
   @override
@@ -69,8 +71,9 @@ class _PriceInputFieldState extends State<PriceInputField> {
           decoration: InputDecoration(
             labelText: 'Enter Price',
             border: const OutlineInputBorder(),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+            contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12.0, vertical: 8.0),
+            errorText: widget.errorMessage,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -93,7 +96,7 @@ class _PriceInputFieldState extends State<PriceInputField> {
               const SizedBox(width: 4),
               if (widget.discountPercentage != null)
                 Padding(
-                  padding: const EdgeInsets.only(top: 2.0), // Adjust alignment
+                  padding: const EdgeInsets.only(top: 2.0),
                   child: Text(
                     widget.discountPercentage!,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -133,6 +136,7 @@ class _PriceInputFieldState extends State<PriceInputField> {
           return null;
         },
         autovalidateMode: AutovalidateMode.onUserInteraction,
+        errorText: widget.errorMessage,
         suffixIcon: TextButton.icon(
           onPressed: _isPriceEntered ? widget.onSalePriceTapped : null,
           icon: const Icon(Icons.add, size: 16),

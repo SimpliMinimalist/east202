@@ -9,6 +9,7 @@ class ProductImageHandler extends StatefulWidget {
   final Function(List<XFile>) onImagesChanged;
   final GlobalKey<FormFieldState<List<XFile>>>? imageFieldKey;
   final int maxImages;
+  final String? errorMessage;
 
   const ProductImageHandler({
     super.key,
@@ -16,6 +17,7 @@ class ProductImageHandler extends StatefulWidget {
     required this.onImagesChanged,
     this.imageFieldKey,
     this.maxImages = 10,
+    this.errorMessage,
   });
 
   @override
@@ -92,12 +94,24 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
 
   @override
   Widget build(BuildContext context) {
+    final bool hasError = widget.errorMessage != null && widget.errorMessage!.isNotEmpty;
     final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _images.isEmpty
-            ? _buildAddPhotoImage(false)
+            ? _buildAddPhotoImage(hasError)
             : _buildImageCarousel(),
+        if (hasError)
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, left: 12.0),
+            child: Text(
+              widget.errorMessage!,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.error,
+                fontSize: 12,
+              ),
+            ),
+          ),
       ],
     );
 

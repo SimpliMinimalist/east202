@@ -50,6 +50,7 @@ The project follows a feature-based folder structure.
 -   Reuses the `PriceInputField` from the add product screen, allowing for sale prices on individual variants.
 -   Manages state for sale price, including the discount percentage calculation.
 -   Uses the `SalePriceBottomSheet` for a consistent editing experience.
+-   **Error Handling**: Displays an error message if the user tries to save without adding an image or a price.
 
 ### Variant List UI
 -   Removed the shadow effect from the variant cards in the product details screen.
@@ -69,15 +70,18 @@ The project follows a feature-based folder structure.
 
 ### Variant Image Picker
 -   Allows users to add an image to each product variant.
--   Refactored `ProductImageHandler` to support a variable number of images.
+-   Refactored `ProductImageHandler` to support a variable number of images and display error messages.
 -   Updated the `maxImages` for the main product to 10 and for variants to 4.
 -   Integrated into `EditVariantScreen` to allow picking up to 4 images for a variant.
 
-## Current Change: Standardize Save Button Placement
+### Shared Widgets
+-   **`ClearableTextFormField`**: Added an `errorText` parameter to allow displaying validation errors.
+-   **`PriceInputField`**: Updated to accept and display an `errorMessage`.
 
--   **Goal:** Move the "Save" button to the bottom navigation bar on the "Add Variants" and "Edit Variant" screens for consistency.
+## Current Change: Commit and Push Error Handling Fixes
+
+-   **Goal:** Commit the implemented error handling features for the variant editing screen.
 -   **Steps:**
-    1.  **Update `add_variants_screen.dart`:** Removed the "Save" button from the app bar and moved the save logic to a new "Save" button in the bottom navigation bar.
-    2.  **Update `edit_variant_screen.dart`:** Removed the "Save" button from the app bar and moved the save logic to a new "Save" button in the bottom navigation bar.
-    3.  **Update `blueprint.md`:** Documented the changes to the save button placement.
-    4.  **Commit and Push:** Commit all changes to the repository.
+    1.  **Update `blueprint.md`:** Document the changes for error handling.
+    2.  **Commit:** Stage and commit all changes with a descriptive message.
+    3.  **Push:** Push the changes to the remote repository.

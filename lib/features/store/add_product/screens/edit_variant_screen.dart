@@ -22,6 +22,9 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
   late ProductVariant _editedVariant;
   final List<XFile> _images = [];
   String _discountPercentage = '';
+  bool _isSaveEnabled = false;
+  String? _priceError;
+  String? _imageError;
 
   @override
   void initState() {
@@ -33,17 +36,36 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
     _priceController = TextEditingController(text: _editedVariant.price.toStringAsFixed(2));
     _salePriceController = TextEditingController(text: _editedVariant.salePrice?.toStringAsFixed(2) ?? '');
     _stockController = TextEditingController(text: _editedVariant.stock.toString());
+
+    _priceController.addListener(_updateSaveButtonState);
+    _stockController.addListener(_updateSaveButtonState);
     _salePriceController.addListener(_calculateDiscount);
+
     _calculateDiscount();
+    _updateSaveButtonState();
   }
 
   @override
   void dispose() {
+    _priceController.removeListener(_updateSaveButtonState);
+    _stockController.removeListener(_updateSaveButtonState);
     _priceController.dispose();
     _salePriceController.dispose();
     _stockController.dispose();
     _salePriceController.removeListener(_calculateDiscount);
     super.dispose();
+  }
+
+  void _updateSaveButtonState() {
+    setState(() {
+      _isSaveEnabled = _images.isNotEmpty && _priceController.text.isNotEmpty;
+      if (_images.isNotEmpty) {
+        _imageError = null;
+      }
+      if (_priceController.text.isNotEmpty) {
+        _priceError = null;
+      }
+    });
   }
 
   void _calculateDiscount() {
@@ -70,16 +92,23 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
   }
 
   void _saveChanges() {
-    final price = double.tryParse(_priceController.text) ?? 0.0;
-    final salePrice = double.tryParse(_salePriceController.text);
-    final stock = int.tryParse(_stockController.text) ?? 0;
-    _editedVariant = _editedVariant.copyWith(
-      price: price,
-      salePrice: salePrice,
-      stock: stock,
-      image: _images.isNotEmpty ? _images.first.path : null,
-    );
-    Navigator.of(context).pop(_editedVariant);
+    setState(() {
+      _imageError = _images.isEmpty ? 'Please select at least one image.' : null;
+      _priceError = _priceController.text.isEmpty ? 'Please enter a price.' : null;
+    });
+
+    if (_imageError == null && _priceError == null) {
+      final price = double.tryParse(_priceController.text) ?? 0.0;
+      final salePrice = double.tryParse(_salePriceController.text);
+      final stock = int.tryParse(_stockController.text) ?? 0;
+      _editedVariant = _editedVariant.copyWith(
+        price: price,
+        salePrice: salePrice,
+        stock: stock,
+        image: _images.isNotEmpty ? _images.first.path : null,
+      );
+      Navigator.of(context).pop(_editedVariant);
+    }
   }
 
   void _showSalePriceBottomSheet() {
@@ -115,9 +144,11 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
                 setState(() {
                   _images.clear();
                   _images.addAll(newImages);
+                  _updateSaveButtonState();
                 });
               },
               maxImages: 4,
+              errorMessage: _imageError,
             ),
             const SizedBox(height: 24),
             // Attributes
@@ -141,6 +172,7 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
               salePriceController: _salePriceController,
               onSalePriceTapped: _showSalePriceBottomSheet,
               discountPercentage: _discountPercentage,
+              errorMessage: _priceError,
             ),
             const SizedBox(height: 16),
             StockInputField(
@@ -151,7 +183,7 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
           ],
         ),
       ),
-       bottomNavigationBar: Transform.translate(
+      bottomNavigationBar: Transform.translate(
         offset: const Offset(0, -7),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -162,8 +194,12 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
                   onPressed: _saveChanges,
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    backgroundColor: _isSaveEnabled
+                        ? Theme.of(context).primaryColor
+                        : Colors.grey.shade300,
+                    foregroundColor: _isSaveEnabled
+                        ? Theme.of(context).colorScheme.onPrimary
+                        : Colors.grey.shade600,
                   ),
                   child: const Text('Save'),
                 ),

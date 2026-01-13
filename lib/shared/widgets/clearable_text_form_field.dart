@@ -19,6 +19,7 @@ class ClearableTextFormField extends StatefulWidget {
   final FocusNode? focusNode;
   final int? maxLines;
   final bool expandOnFocus;
+  final String? errorText;
 
   const ClearableTextFormField({
     super.key,
@@ -39,6 +40,7 @@ class ClearableTextFormField extends StatefulWidget {
     this.focusNode,
     this.maxLines,
     this.expandOnFocus = false,
+    this.errorText,
   });
 
   @override
@@ -184,6 +186,7 @@ class _ClearableTextFormFieldState extends State<ClearableTextFormField> {
             : null,
         prefixText: widget.prefixText,
         suffixIcon: finalSuffixWidget,
+        errorText: widget.errorText,
       ),
       validator: widget.validator,
       onChanged: widget.onChanged,
