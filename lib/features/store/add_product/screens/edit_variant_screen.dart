@@ -4,6 +4,7 @@ import 'package:myapp/features/store/add_product/models/product_variant_model.da
 import 'package:myapp/features/store/add_product/widgets/price_input_field.dart';
 import 'package:myapp/features/store/add_product/widgets/product_image_handler.dart';
 import 'package:myapp/features/store/add_product/widgets/sale_price_bottom_sheet.dart';
+import 'package:myapp/features/store/add_product/widgets/stock_input_field.dart';
 
 class EditVariantScreen extends StatefulWidget {
   final ProductVariant variant;
@@ -148,49 +149,9 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
               discountPercentage: _discountPercentage,
             ),
             const SizedBox(height: 16),
-            // Inventory
-            Text('Inventory', style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('Available'),
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.remove_circle_outline),
-                      onPressed: () {
-                        int currentStock = int.tryParse(_stockController.text) ?? 0;
-                        if (currentStock > 0) {
-                          setState(() {
-                            _stockController.text = (currentStock - 1).toString();
-                          });
-                        }
-                      },
-                    ),
-                    SizedBox(
-                      width: 50,
-                      child: TextFormField(
-                        controller: _stockController,
-                        textAlign: TextAlign.center,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.add_circle_outline),
-                      onPressed: () {
-                        int currentStock = int.tryParse(_stockController.text) ?? 0;
-                        setState(() {
-                          _stockController.text = (currentStock + 1).toString();
-                        });
-                      },
-                    ),
-                  ],
-                )
-              ],
+            StockInputField(
+              controller: _stockController,
+              labelText: 'In stock',
             ),
             const SizedBox(height: 16),
             const Divider(),
