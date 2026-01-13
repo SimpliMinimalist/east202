@@ -21,6 +21,48 @@ class VariantsList extends StatelessWidget {
       itemCount: variants.length,
       itemBuilder: (context, index) {
         final variant = variants[index];
+        final bool hasSalePrice = variant.salePrice != null && variant.salePrice! > 0 && variant.salePrice! < variant.price;
+        final stockColor = variant.stock > 0 ? Colors.green : Colors.red;
+
+        Widget subtitleWidget;
+        if (hasSalePrice) {
+          final double discount = ((variant.price - variant.salePrice!) / variant.price) * 100;
+          subtitleWidget = RichText(
+            text: TextSpan(
+              style: DefaultTextStyle.of(context).style,
+              children: <InlineSpan>[
+                TextSpan(
+                  text: '₹${variant.price.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                    decoration: TextDecoration.lineThrough,
+                    color: Colors.grey,
+                    fontSize: 12,
+                  ),
+                ),
+                TextSpan(
+                  text: ' ₹${variant.salePrice!.toStringAsFixed(2)}',
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black),
+                ),
+                TextSpan(
+                  text: ' (${discount.toStringAsFixed(0)}% off)',
+                  style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12, fontWeight: FontWeight.bold),
+                ),
+                TextSpan(
+                    text: ' • ${variant.stock} available',
+                    style: TextStyle(color: stockColor, fontSize: 12),
+                ),
+              ],
+            ),
+          );
+        } else {
+          subtitleWidget = Text(
+            '₹${variant.price.toStringAsFixed(2)} • ${variant.stock} available',
+            style: TextStyle(
+              color: stockColor,
+            ),
+          );
+        }
+
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 4.0),
           elevation: 0,
@@ -38,12 +80,7 @@ class VariantsList extends StatelessWidget {
                   )
                 : const Icon(Icons.image, color: Colors.grey, size: 40),
             title: Text(variant.name),
-            subtitle: Text(
-              '₹${variant.price.toStringAsFixed(2)} • ${variant.stock} available',
-              style: TextStyle(
-                color: variant.stock > 0 ? Colors.green : Colors.red,
-              ),
-            ),
+            subtitle: subtitleWidget,
             onTap: () async {
               final result = await Navigator.push<ProductVariant>(
                 context,
