@@ -154,16 +154,6 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
               labelText: 'In stock',
             ),
             const SizedBox(height: 16),
-            const Divider(),
-            const SizedBox(height: 16),
-            // Shipping
-            Row(
-              children: [
-                const Icon(Icons.local_shipping_outlined),
-                const SizedBox(width: 8),
-                Text('Shipping', style: Theme.of(context).textTheme.titleMedium),
-              ],
-            )
           ],
         ),
       ),
