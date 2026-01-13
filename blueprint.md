@@ -45,6 +45,9 @@ The project follows a feature-based folder structure.
 -   Manages state for sale price, including the discount percentage calculation.
 -   Uses the `SalePriceBottomSheet` for a consistent editing experience.
 
+### Add Variants Screen
+- Added a "Demo" button to the bottom of the screen, replicating the exact style and position of the "Add Product" button for demonstration purposes.
+
 ### Variant List UI
 -   Removed the shadow effect from the variant cards in the product details screen.
 -   Added a light border to maintain visual separation between the cards.
@@ -67,9 +70,10 @@ The project follows a feature-based folder structure.
 -   Updated the `maxImages` for the main product to 10 and for variants to 4.
 -   Integrated into `EditVariantScreen` to allow picking up to 4 images for a variant.
 
-## Current Change: Finalizing Variant Sale Price Feature
+## Current Change: Add Demo Button
 
--   **Goal:** Document the implementation of sale prices for variants and commit all related changes.
+-   **Goal:** Add a demo button to the Add Variants screen.
 -   **Steps:**
-    1.  **Update `blueprint.md`:** Documented the reuse of `PriceInputField` in `EditVariantScreen` and the display of sale prices in `VariantsList`.
-    2.  **Commit and Push:** Committing all changes to the repository.
+    1.  **Update `add_variants_screen.dart`:** Added a bottom navigation bar with an `ElevatedButton` styled exactly like the one on the "Add Product" screen.
+    2.  **Update `blueprint.md`:** Document the new demo button.
+    3.  **Commit and Push:** Commit all changes to the repository.

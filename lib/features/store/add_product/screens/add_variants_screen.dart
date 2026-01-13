@@ -203,10 +203,17 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
             children: [
               ..._buildVariantFields(),
               if (_optionControllers.length < 3)
-                ElevatedButton.icon(
-                  onPressed: _addOption,
-                  icon: const Icon(Icons.add),
-                  label: const Text('Add another option'),
+                Center(
+                  child: ElevatedButton.icon(
+                    onPressed: _addOption,
+                    icon: const Icon(Icons.add),
+                    label: const Text('Add another option'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+                      foregroundColor: Theme.of(context).colorScheme.onSurface,
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    ),
+                  ),
                 ),
               const SizedBox(height: 24),
               Text(
@@ -216,6 +223,27 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
                     .textTheme
                     .bodySmall
                     ?.copyWith(color: Colors.grey[600]),
+              ),
+            ],
+          ),
+        ),
+      ),
+        bottomNavigationBar: Transform.translate(
+        offset: const Offset(0, -7),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                  child: const Text('Demo'),
+                ),
               ),
             ],
           ),
