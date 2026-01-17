@@ -463,7 +463,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       return [];
     }
 
-    List<ProductVariant> variants = [];
+    List<ProductVariant> newVariants = [];
     final valueLists = options.map((o) => o.values).toList();
     final combinations = _getCombinations(valueLists);
 
@@ -472,10 +472,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
       for (int i = 0; i < options.length; i++) {
         attributes[options[i].name] = combination[i];
       }
-      variants.add(ProductVariant(attributes: attributes));
+
+      final existingVariant = _editedProduct.productVariants.firstWhere(
+        (v) =>
+            v.attributes.entries.every((e) => attributes[e.key] == e.value),
+        orElse: () => ProductVariant(attributes: attributes),
+      );
+
+      newVariants.add(existingVariant.copyWith(attributes: attributes));
     }
 
-    return variants;
+    return newVariants;
   }
 
   List<List<T>> _getCombinations<T>(List<List<T>> lists) {

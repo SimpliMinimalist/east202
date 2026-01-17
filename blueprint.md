@@ -39,6 +39,7 @@ The project follows a feature-based folder structure.
 -   The sale price is automatically cleared if the bottom sheet is dismissed with an invalid value.
 -   The sale price bottom sheet is scroll-controlled to avoid keyboard overlap.
 -   Corrected a typo from `_editedDitedProduct` to `_editedProduct`.
+-   Preserves existing variant data when editing variants.
 
 ### Add Variants Screen
 
@@ -79,10 +80,10 @@ The project follows a feature-based folder structure.
 -   **`ClearableTextFormField`**: Added an `errorText` parameter to allow displaying validation errors.
 -   **`PriceInputField`**: Updated to accept and display an `errorMessage`.
 
-## Current Change: Fix Default Values in Edit Variant Screen
+## Current Change: Preserve Variant Data
 
--   **Goal:** Ensure price and stock fields are empty by default in the `EditVariantScreen`.
+-   **Goal:** Preserve existing variant data when editing variants.
 -   **Steps:**
-    1.  **Update `edit_variant_screen.dart`:** Modified the `initState` to check for zero values and initialize text controllers with empty strings accordingly.
-    2.  **Update `blueprint.md`:** Documented the change to the default field values.
+    1.  **Update `add_product_screen.dart`:** Modified the `_generateVariants` function to check for existing variants and update them, rather than creating new ones from scratch.
+    2.  **Update `blueprint.md`:** Documented the change.
     3.  **Commit and Push:** Commit all changes to the repository.
