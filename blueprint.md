@@ -26,6 +26,7 @@ The project follows a feature-based folder structure.
 -   Fields for product name, price, category, stock, and description.
 -   Character limit for product name and description fields is only shown on focus.
 -   Ability to add product variants.
+-   The master price and stock fields are hidden when product variants are added.
 -   "Add Product Variants" button width is now based on its content and centered.
 -   The icon for the "Add Product Variants" button changes from an add icon to an edit icon when variants are present.
 -   Draft saving functionality.
@@ -80,10 +81,10 @@ The project follows a feature-based folder structure.
 -   **`ClearableTextFormField`**: Added an `errorText` parameter to allow displaying validation errors.
 -   **`PriceInputField`**: Updated to accept and display an `errorMessage`.
 
-## Current Change: Preserve Variant Data
+## Current Change: Hide Price/Stock Fields When Variants Exist
 
--   **Goal:** Preserve existing variant data when editing variants.
+-   **Goal:** Hide the main price and stock input fields on the `AddProductScreen` when the product has variants.
 -   **Steps:**
-    1.  **Update `add_product_screen.dart`:** Modified the `_generateVariants` function to check for existing variants and update them, rather than creating new ones from scratch.
+    1.  **Update `add_product_screen.dart`:** Conditionally rendered the `PriceInputField` and `StockInputField` based on whether `_editedProduct.productVariants` is empty.
     2.  **Update `blueprint.md`:** Documented the change.
     3.  **Commit and Push:** Commit all changes to the repository.

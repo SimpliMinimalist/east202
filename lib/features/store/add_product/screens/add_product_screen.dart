@@ -573,13 +573,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   },
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
-                const SizedBox(height: 16),
-                PriceInputField(
-                  priceController: _priceController,
-                  salePriceController: _salePriceController,
-                  onSalePriceTapped: _showSalePriceBottomSheet,
-                  discountPercentage: _discountPercentage,
-                ),
+                if (_editedProduct.productVariants.isEmpty) ...[
+                  const SizedBox(height: 16),
+                  PriceInputField(
+                    priceController: _priceController,
+                    salePriceController: _salePriceController,
+                    onSalePriceTapped: _showSalePriceBottomSheet,
+                    discountPercentage: _discountPercentage,
+                  ),
+                ],
                 const SizedBox(height: 16),
                 GestureDetector(
                   onTap: _showCategoryPicker,
@@ -618,11 +620,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
-                StockInputField(
-                  controller: _stockController,
-                  labelText: 'Stock',
-                ),
+                if (_editedProduct.productVariants.isEmpty) ...[
+                  const SizedBox(height: 16),
+                  StockInputField(
+                    controller: _stockController,
+                    labelText: 'Stock',
+                  ),
+                ],
                 const SizedBox(height: 16),
                 ClearableTextFormField(
                   controller: _descriptionController,
