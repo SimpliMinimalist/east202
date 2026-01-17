@@ -700,6 +700,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         MaterialPageRoute(
                           builder: (context) => AddVariantsScreen(
                             initialVariants: _editedProduct.variants,
+                            isUpdating: _editedProduct.productVariants.isNotEmpty,
                           ),
                         ),
                       );

@@ -3,7 +3,13 @@ import 'package:myapp/features/store/add_product/models/variant_model.dart';
 
 class AddVariantsScreen extends StatefulWidget {
   final List<VariantOption> initialVariants;
-  const AddVariantsScreen({super.key, this.initialVariants = const []});
+  final bool isUpdating;
+
+  const AddVariantsScreen({
+    super.key, 
+    this.initialVariants = const [],
+    this.isUpdating = false,
+  });
 
   @override
   State<AddVariantsScreen> createState() => _AddVariantsScreenState();
@@ -172,7 +178,7 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
     bool isSaveEnabled = _isFormSufficient();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Variants'),
+        title: Text(widget.isUpdating ? 'Edit Variants' : 'Add Variants'),
       ),
       body: Form(
         key: _formKey,

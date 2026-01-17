@@ -45,6 +45,7 @@ The project follows a feature-based folder structure.
 ### Add Variants Screen
 
 -   The "Save" button has been moved from the app bar to a bottom navigation bar for a consistent user experience.
+-   The app bar title dynamically changes to "Edit Variants" when variants are being edited.
 
 ### Edit Variant Screen
 
@@ -129,13 +130,14 @@ The project follows a feature-based folder structure.
     4.  **Update `blueprint.md`:** Documented the bug fix and the steps taken to resolve the errors.
     5.  **Commit and Push:** Committing the final, corrected code to the repository.
 
-## Current Change: Variant List UI/UX Improvement
+## Current Change: Dynamic App Bar Title for Variants Screen
 
--   **Goal:** Improve the user experience of the variant list by adjusting the delete icon and adding a confirmation dialog.
+-   **Goal:** Change the app bar title of the `AddVariantsScreen` to "Edit Variants" when the user is editing existing product variants.
 -   **Steps:**
-    1.  **`variants_list.dart`:**
-        -   Wrapped the `IconButton` in a `Transform.translate` widget to move it slightly to the right, reducing the right-side padding.
-        -   Added a `showDialog` confirmation before calling the `onVariantDeleted` callback to prevent accidental deletions.
-        -   Updated the deletion confirmation message to be consistent with the `EditVariantScreen`.
-    2.  **Update `blueprint.md`:** Documented the UI and UX improvements.
-    3.  **Commit and Push:** Committing the changes to the repository.
+    1.  **`add_product_screen.dart`:**
+        -   Passed an `isUpdating` boolean to the `AddVariantsScreen` to indicate whether the user is adding new variants or editing existing ones.
+    2.  **`add_variants_screen.dart`:**
+        -   Added an `isUpdating` parameter to the `AddVariantsScreen` widget.
+        -   The app bar title now dynamically changes to "Edit Variants" if `isUpdating` is true.
+    3.  **Update `blueprint.md`:** Documented the new dynamic title feature.
+    4.  **Commit and Push:** Committing the changes to the repository.
