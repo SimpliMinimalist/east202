@@ -10,6 +10,7 @@ class ProductImageHandler extends StatefulWidget {
   final GlobalKey<FormFieldState<List<XFile>>>? imageFieldKey;
   final int maxImages;
   final String? errorMessage;
+  final bool isVariantGallery;
 
   const ProductImageHandler({
     super.key,
@@ -18,6 +19,7 @@ class ProductImageHandler extends StatefulWidget {
     this.imageFieldKey,
     this.maxImages = 10,
     this.errorMessage,
+    this.isVariantGallery = false,
   });
 
   @override
@@ -49,6 +51,7 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
   }
 
   Future<void> _pickImages() async {
+    if (widget.isVariantGallery) return;
     final messenger = ScaffoldMessenger.of(context);
     if (_images.length >= widget.maxImages) {
       messenger.showSnackBar(
@@ -82,6 +85,7 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
   }
 
   void _removeImage(int index) {
+    if (widget.isVariantGallery) return;
     setState(() {
       _images.removeAt(index);
       if (_images.isNotEmpty && _activePage >= _images.length) {
@@ -121,7 +125,7 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
         initialValue: _images,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (value) {
-          if (widget.maxImages > 1 && _images.isEmpty) {
+          if (widget.maxImages > 1 && _images.isEmpty && !widget.isVariantGallery) {
             return 'Please select at least one image.';
           }
           return null;
@@ -191,22 +195,23 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
                             ),
                           ),
                         ),
-                      Positioned(
-                        top: 8,
-                        right: 8,
-                        child: GestureDetector(
-                          onTap: () => _removeImage(index),
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withAlpha(128),
-                              shape: BoxShape.circle,
+                      if (!widget.isVariantGallery)
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: GestureDetector(
+                            onTap: () => _removeImage(index),
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withAlpha(128),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.delete_outline,
+                                  color: Colors.white, size: 20),
                             ),
-                            child: const Icon(Icons.delete_outline,
-                                color: Colors.white, size: 20),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),
@@ -243,7 +248,7 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
             ),
           const SizedBox(height: 12),
         ],
-        if (_images.length < widget.maxImages)
+        if (_images.length < widget.maxImages && !widget.isVariantGallery)
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
@@ -270,9 +275,11 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
         ? Theme.of(context).colorScheme.error.withAlpha(25)
         : Colors.white;
 
-    final label = widget.maxImages > 1
-        ? 'Add up to ${widget.maxImages} Photos'
-        : 'Add a Photo';
+    final label = widget.isVariantGallery
+        ? 'Variant images will be shown here'
+        : widget.maxImages > 1
+            ? 'Add up to ${widget.maxImages} Photos'
+            : 'Add a Photo';
 
     return AspectRatio(
       aspectRatio: 1 / 1,
@@ -288,7 +295,7 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.add_a_photo_outlined,
+                  widget.isVariantGallery ? Icons.image : Icons.add_a_photo_outlined,
                   size: 64,
                   color: Colors.grey.shade600,
                 ),
@@ -296,6 +303,7 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
                 Text(
                   label,
                   style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),

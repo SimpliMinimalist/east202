@@ -80,11 +80,15 @@ The project follows a feature-based folder structure.
 ### Shared Widgets
 -   **`ClearableTextFormField`**: Added an `errorText` parameter to allow displaying validation errors.
 -   **`PriceInputField`**: Updated to accept and display an `errorMessage`.
+-   **`ProductImageHandler`**: Added an `isVariantGallery` property to change the UI and behavior when displaying variant images.
 
-## Current Change: Hide Price/Stock Fields When Variants Exist
+## Current Change: Variant Image Gallery and Data Model Fixes
 
--   **Goal:** Hide the main price and stock input fields on the `AddProductScreen` when the product has variants.
+-   **Goal:** Implement a read-only image gallery on the main product page that displays all variant images. This involved fixing the product variant data model and updating all related widgets.
 -   **Steps:**
-    1.  **Update `add_product_screen.dart`:** Conditionally rendered the `PriceInputField` and `StockInputField` based on whether `_editedProduct.productVariants` is empty.
-    2.  **Update `blueprint.md`:** Documented the change.
-    3.  **Commit and Push:** Commit all changes to the repository.
+    1.  **`product_variant_model.dart`:** Changed the `image` property from `String?` to `List<String> images` to support multiple images per variant.
+    2.  **`edit_variant_screen.dart`:** Updated the screen to use the new `images` list, allowing users to add, remove, and save multiple images.
+    3.  **`add_product_screen.dart`:** Implemented the `_getVariantImages` method to aggregate images from all variants. The `ProductImageHandler` now displays these images in a read-only gallery view when variants are present.
+    4.  **`variants_list.dart`:** Fixed the widget to display the first image from the `images` list as the variant thumbnail.
+    5.  **Update `blueprint.md`:** Documented the changes.
+    6.  **Commit and Push:** Commit all changes to the repository.

@@ -498,12 +498,21 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
     return result;
   }
+  
+  List<XFile> _getVariantImages() {
+    return _editedProduct.productVariants
+        .expand((variant) => variant.images.map((path) => XFile(path)))
+        .toList();
+  }
+
 
   @override
   Widget build(BuildContext context) {
     final titleTextStyle = Theme.of(context).textTheme.titleLarge;
     final isEditing = _initialProduct != null && !_initialProduct!.isDraft;
     final isDraft = _initialProduct != null && _initialProduct!.isDraft;
+    final hasVariants = _editedProduct.productVariants.isNotEmpty;
+
 
     return PopScope(
       canPop: !_isFormModified(),
@@ -547,18 +556,21 @@ class _AddProductScreenState extends State<AddProductScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ProductImageHandler(
-                  initialImages: _images,
+                  initialImages: hasVariants ? _getVariantImages() : _images,
                   onImagesChanged: (newImages) {
-                    setState(() {
-                      _images.clear();
-                      _images.addAll(newImages);
-                      _editedProduct = _editedProduct.copyWith(
-                        images: _images.map((image) => image.path).toList(),
-                      );
-                    });
+                    if (!hasVariants) {
+                      setState(() {
+                        _images.clear();
+                        _images.addAll(newImages);
+                        _editedProduct = _editedProduct.copyWith(
+                          images: _images.map((image) => image.path).toList(),
+                        );
+                      });
+                    }
                   },
                   imageFieldKey: _imageFieldKey,
                   maxImages: 10,
+                  isVariantGallery: hasVariants,
                 ),
                 const SizedBox(height: 24),
                 ClearableTextFormField(

@@ -71,9 +71,9 @@ class VariantsList extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: ListTile(
-            leading: variant.image != null
+            leading: variant.images.isNotEmpty
                 ? Image.file(
-                    File(variant.image!),
+                    File(variant.images.first),
                     width: 40,
                     height: 40,
                     fit: BoxFit.cover,

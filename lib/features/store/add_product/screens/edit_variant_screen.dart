@@ -30,9 +30,7 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
   void initState() {
     super.initState();
     _editedVariant = widget.variant.copyWith();
-    if (_editedVariant.image != null) {
-      _images.add(XFile(_editedVariant.image!));
-    }
+    _images.addAll(_editedVariant.images.map((path) => XFile(path)));
 
     // Initialize controllers with empty strings if values are 0
     final priceText = _editedVariant.price == 0.0 ? '' : _editedVariant.price.toStringAsFixed(2);
@@ -110,7 +108,7 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
         price: price,
         salePrice: salePrice,
         stock: stock,
-        image: _images.isNotEmpty ? _images.first.path : null,
+        images: _images.map((image) => image.path).toList(),
       );
       Navigator.of(context).pop(_editedVariant);
     }
