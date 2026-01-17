@@ -188,14 +188,14 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
                       ),
                       Positioned(
                         top: 8,
-                        left: 0,
-                        right: 0,
+                        left: 8,
+                        right: 8,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             if (widget.maxImages > 1)
                               Container(
-                                margin: const EdgeInsets.only(left: 8),
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 8,
                                   vertical: 4,
@@ -211,30 +211,32 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
                                 ),
                               ),
                             if (label != null)
-                              Expanded(
-                                child: Container(
-                                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black.withAlpha(128),
-                                    borderRadius: BorderRadius.circular(100),
-                                  ),
-                                  child: Text(
-                                    label,
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 12),
-                                    textAlign: TextAlign.center,
-                                    overflow: TextOverflow.ellipsis,
+                              Flexible(
+                                child: Align(
+                                  alignment: Alignment.topCenter,
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withAlpha(128),
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    child: Text(
+                                      label,
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 12),
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
                                 ),
                               ),
                             GestureDetector(
                               onTap: () => _removeImage(index),
                               child: Container(
-                                margin: const EdgeInsets.only(right: 8),
                                 padding: const EdgeInsets.all(4),
                                 decoration: BoxDecoration(
                                   color: Colors.black.withAlpha(128),

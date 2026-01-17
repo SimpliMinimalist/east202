@@ -103,18 +103,14 @@ The project follows a feature-based folder structure.
         -   Created a `_deleteVariantImage` method that finds the correct product variant and removes the specified image from its `images` list.
         -   This ensures that deleting an image from the main gallery immediately updates the underlying data model and refreshes the UI.
 
-## Current Change: Display Variant Values in Image Gallery
+## Current Change: Variant Image Label UI Refinement
 
--   **Goal:** Display the variant values (e.g., "Red / Large") in the image gallery for both the main product page and the edit variant screen.
+-   **Goal:** Improve the UI of the variant image labels.
 -   **Steps:**
-    1.  **`product_image_handler.dart`:**
-        -   Added an optional `imageLabels` parameter to the `ProductImageHandler`.
-        -   When `imageLabels` is provided, the widget displays the label in the center of the image overlay, between the image counter and the delete button.
-    2.  **`add_product_screen.dart`:**
-        -   Implemented a `_getVariantImageLabels` method to generate a list of labels from the product variants.
-        -   Passed the generated labels to the `ProductImageHandler`.
-    3.  **`edit_variant_screen.dart`:**
-        -   Generated a label for the variant being edited.
-        -   Passed a list of repeating labels to the `ProductImageHandler`.
-    4.  **Update `blueprint.md`:** Documented the new image label functionality.
-    5.  **Commit and Push:** Committing all changes to the repository.
+    1.  **Display Variant Values:**
+        -   **`product_image_handler.dart`:** Added an optional `imageLabels` parameter to display variant values in the image gallery.
+        -   **`add_product_screen.dart` & `edit_variant_screen.dart`:** Updated to provide the appropriate labels to the `ProductImageHandler`.
+    2.  **Adjust Label Width:**
+        -   **`product_image_handler.dart`:** Modified the layout to ensure the label's background width fits the text content, preventing it from expanding to the full width of the image.
+    3.  **Update `blueprint.md`:** Documented the UI refinements.
+    4.  **Commit and Push:** Committing all changes to the repository.
