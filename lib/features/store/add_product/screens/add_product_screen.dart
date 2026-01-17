@@ -498,7 +498,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
     return result;
   }
-  
+
   List<XFile> _getVariantImages() {
     return _editedProduct.productVariants
         .expand((variant) => variant.images.map((path) => XFile(path)))
@@ -507,15 +507,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   void _deleteVariantImage(XFile imageFile) {
     setState(() {
-      final newProductVariants = _editedProduct.productVariants.map((variant) {
-        final newImages = List<String>.from(variant.images);
-        final index = newImages.indexOf(imageFile.path);
-        if (index != -1) {
-          newImages.removeAt(index);
-        }
-        return variant.copyWith(images: newImages);
-      }).toList();
-      _editedProduct = _editedProduct.copyWith(productVariants: newProductVariants);
+      _editedProduct = _editedProduct.copyWith(
+        productVariants: _editedProduct.productVariants.map((variant) {
+          final newImages = List<String>.from(variant.images);
+          newImages.remove(imageFile.path);
+          return variant.copyWith(images: newImages);
+        }).toList(),
+      );
     });
   }
 
@@ -525,7 +523,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
     final isEditing = _initialProduct != null && !_initialProduct!.isDraft;
     final isDraft = _initialProduct != null && _initialProduct!.isDraft;
     final hasVariants = _editedProduct.productVariants.isNotEmpty;
-
 
     return PopScope(
       canPop: !_isFormModified(),
