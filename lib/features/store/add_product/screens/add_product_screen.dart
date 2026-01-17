@@ -398,7 +398,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       } else {
         setState(() {
           _variantsErrorText =
-              'All price variants should have at least one image and price';
+              'All variants should have atleast one image and a price';
         });
       }
     }

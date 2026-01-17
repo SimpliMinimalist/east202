@@ -313,7 +313,7 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
         : Colors.white;
 
     final label = widget.isVariantGallery
-        ? 'Variant images will be shown here'
+        ? 'All variants image will be shown here'
         : widget.maxImages > 1
             ? 'Add up to ${widget.maxImages} Photos'
             : 'Add a Photo';
