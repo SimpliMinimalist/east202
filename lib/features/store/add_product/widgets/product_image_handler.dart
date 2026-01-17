@@ -85,7 +85,6 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
   }
 
   void _removeImage(int index) {
-    if (widget.isVariantGallery) return;
     setState(() {
       _images.removeAt(index);
       if (_images.isNotEmpty && _activePage >= _images.length) {
@@ -195,23 +194,22 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
                             ),
                           ),
                         ),
-                      if (!widget.isVariantGallery)
-                        Positioned(
-                          top: 8,
-                          right: 8,
-                          child: GestureDetector(
-                            onTap: () => _removeImage(index),
-                            child: Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                color: Colors.black.withAlpha(128),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(Icons.delete_outline,
-                                  color: Colors.white, size: 20),
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: GestureDetector(
+                          onTap: () => _removeImage(index),
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withAlpha(128),
+                              shape: BoxShape.circle,
                             ),
+                            child: const Icon(Icons.delete_outline,
+                                color: Colors.white, size: 20),
                           ),
                         ),
+                      ),
                     ],
                   ),
                 ),

@@ -82,7 +82,7 @@ The project follows a feature-based folder structure.
 -   **`PriceInputField`**: Updated to accept and display an `errorMessage`.
 -   **`ProductImageHandler`**: Added an `isVariantGallery` property to change the UI and behavior when displaying variant images.
 
-## Current Change: Variant Image Gallery and Data Model Fixes
+### Variant Image Gallery and Data Model Fixes
 
 -   **Goal:** Implement a read-only image gallery on the main product page that displays all variant images. This involved fixing the product variant data model and updating all related widgets.
 -   **Steps:**
@@ -90,5 +90,13 @@ The project follows a feature-based folder structure.
     2.  **`edit_variant_screen.dart`:** Updated the screen to use the new `images` list, allowing users to add, remove, and save multiple images.
     3.  **`add_product_screen.dart`:** Implemented the `_getVariantImages` method to aggregate images from all variants. The `ProductImageHandler` now displays these images in a read-only gallery view when variants are present.
     4.  **`variants_list.dart`:** Fixed the widget to display the first image from the `images` list as the variant thumbnail.
-    5.  **Update `blueprint.md`:** Documented the changes.
-    6.  **Commit and Push:** Commit all changes to the repository.
+
+## Current Change: Show Delete Button in Variant Gallery
+
+-   **Goal:** Always display the delete button for images in the product image carousel, including the read-only variant gallery.
+-   **Steps:**
+    1.  **`product_image_handler.dart`:**
+        -   Removed the conditional logic (`if (!widget.isVariantGallery)`) that was hiding the delete button in the variant gallery view.
+        -   Modified the `_removeImage` function to allow image deletion even when `isVariantGallery` is true, enabling users to remove images directly from the aggregated variant image gallery on the add/edit product screen.
+    2.  **Update `blueprint.md`:** Document the changes.
+    3.  **Commit and Push:** Commit all changes to the repository.
