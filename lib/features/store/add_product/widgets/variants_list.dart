@@ -23,12 +23,15 @@ class VariantsList extends StatelessWidget {
       itemCount: variants.length,
       itemBuilder: (context, index) {
         final variant = variants[index];
-        final bool hasSalePrice = variant.salePrice != null && variant.salePrice! > 0 && variant.salePrice! < variant.price;
+        final bool hasSalePrice = variant.salePrice != null &&
+            variant.salePrice! > 0 &&
+            variant.salePrice! < variant.price;
         final stockColor = variant.stock > 0 ? Colors.green : Colors.red;
 
         Widget subtitleWidget;
         if (hasSalePrice) {
-          final double discount = ((variant.price - variant.salePrice!) / variant.price) * 100;
+          final double discount =
+              ((variant.price - variant.salePrice!) / variant.price) * 100;
           subtitleWidget = RichText(
             text: TextSpan(
               style: DefaultTextStyle.of(context).style,
@@ -43,15 +46,21 @@ class VariantsList extends StatelessWidget {
                 ),
                 TextSpan(
                   text: ' ₹${variant.salePrice!.toStringAsFixed(2)}',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      color: Colors.black),
                 ),
                 TextSpan(
                   text: ' (${discount.toStringAsFixed(0)}% off)',
-                  style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold),
                 ),
                 TextSpan(
-                    text: ' • ${variant.stock} available',
-                    style: TextStyle(color: stockColor, fontSize: 12),
+                  text: ' • ${variant.stock} available',
+                  style: TextStyle(color: stockColor, fontSize: 12),
                 ),
               ],
             ),
@@ -83,9 +92,38 @@ class VariantsList extends StatelessWidget {
                 : const Icon(Icons.image, color: Colors.grey, size: 40),
             title: Text(variant.name),
             subtitle: subtitleWidget,
-            trailing: IconButton(
-              icon: const Icon(Icons.delete_outline),
-              onPressed: () => onVariantDeleted(index),
+            trailing: Transform.translate(
+              offset: const Offset(8, 0), // Move the icon 8 pixels to the right
+              child: IconButton(
+                icon: const Icon(Icons.delete_outline),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Delete Variant?'),
+                        content: const Text(
+                            'Are you sure you want to delete this variant? This action cannot be undone.'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('Cancel'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: const Text('Delete'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              onVariantDeleted(index);
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
             ),
             onTap: () async {
               final result = await Navigator.push(

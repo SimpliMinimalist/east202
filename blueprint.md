@@ -57,11 +57,12 @@ The project follows a feature-based folder structure.
 -   **Empty Default Fields**: The price and stock fields are now initialized as empty strings if their initial values are 0, preventing the display of "0.00" or "0" by default.
 
 ### Variant List UI
--   **Delete Functionality**: Added a delete icon to each variant card, allowing for quick deletion from the list.
+-   **Delete Functionality**: Added a delete icon to each variant card, allowing for quick deletion from the list. A confirmation dialog is now shown before deleting a variant.
 -   Removed the shadow effect from the variant cards in the product details screen.
 -   Added a light border to maintain visual separation between the cards.
 -   Displays the variant's image in the list.
 -   **Displays the sale price, original price with strikethrough, and discount percentage in the `VariantsList` widget when a sale price is active.**
+-   The delete icon in the variant list card has been moved slightly to the right to improve the layout.
 
 ### Category Field UI Fix
 -   Corrected the height and alignment of the "Category" input field to match other text fields and ensure it expands dynamically as category chips are added.
@@ -115,7 +116,7 @@ The project follows a feature-based folder structure.
     2.  **Adjust Label Width:**
         -   **`product_image_handler.dart`:** Modified the layout to ensure the label's background width fits the text content, preventing it from expanding to the full width of the image.
 
-## Current Change: Fix Variant Deletion Logic
+### Fix Variant Deletion Logic
 
 -   **Goal:** Correctly handle variant deletion to prevent deleted variants from reappearing and resolve related errors.
 -   **Steps:**
@@ -126,3 +127,13 @@ The project follows a feature-based folder structure.
     3.  **Analysis and Verification:** Ran `analyze_files` to ensure all errors were resolved.
     4.  **Update `blueprint.md`:** Documented the bug fix and the steps taken to resolve the errors.
     5.  **Commit and Push:** Committing the final, corrected code to the repository.
+
+## Current Change: Variant List UI/UX Improvement
+
+-   **Goal:** Improve the user experience of the variant list by adjusting the delete icon and adding a confirmation dialog.
+-   **Steps:**
+    1.  **`variants_list.dart`:**
+        -   Wrapped the `IconButton` in a `Transform.translate` widget to move it slightly to the right, reducing the right-side padding.
+        -   Added a `showDialog` confirmation before calling the `onVariantDeleted` callback to prevent accidental deletions.
+    2.  **Update `blueprint.md`:** Documented the UI and UX improvements.
+    3.  **Commit and Push:** Committing the changes to the repository.
