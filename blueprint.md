@@ -141,10 +141,21 @@ The project follows a feature-based folder structure.
     2.  **Update `blueprint.md`:** Documented the new delete all variants feature.
     3.  **Commit and Push:** Committing the changes to the repository.
 
-## Current Change: Preserve Variant Option Values on Deletion
+### Preserve Variant Option Values on Deletion
 
 -   **Goal:** Correct the variant deletion logic to ensure that deleting a specific `ProductVariant` does not remove the underlying option values (e.g., "Small", "Red") if they are still used by other variants.
 -   **Steps:**
     1.  **`add_product_screen.dart`:** Modified the `_deleteVariant` method to only remove the selected `ProductVariant` from the list, without altering the `variants` (the `VariantOption` list).
     2.  **Update `blueprint.md`:** Documented this critical bug fix.
     3.  **Commit and Push:** Committing the corrected code to the repository.
+
+## Current Change: Variant Validation on Save
+
+-   **Goal:** Ensure that all product variants have at least one image and a price before saving the product.
+-   **Steps:**
+    1.  **`add_product_screen.dart`:**
+        -   Added a `_variantsErrorText` state variable to hold validation messages.
+        -   Updated the `_attemptSave` method to validate that each product variant has at least one image and a price greater than zero.
+        -   If validation fails, the `_variantsErrorText` is updated, and an error message is displayed below the "Edit Product Variants" button.
+    2.  **Update `blueprint.md`:** Documented the new validation feature.
+    3.  **Commit and Push:** Committing the changes to the repository.

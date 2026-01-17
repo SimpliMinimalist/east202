@@ -44,6 +44,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   Product? _initialProduct;
   late Product _editedProduct;
   String _discountPercentage = '';
+  String? _variantsErrorText;
 
   @override
   void initState() {
@@ -355,28 +356,50 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   void _attemptSave() {
     if (_formKey.currentState!.validate()) {
-      final navigator = Navigator.of(context);
-      final productProvider = Provider.of<ProductProvider>(context, listen: false);
-
-      final productToSave = _editedProduct.copyWith(isDraft: false);
-
-      if (_initialProduct == null || _initialProduct!.isDraft) {
-        productProvider.addProduct(productToSave);
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Product added successfully!')),
-          );
-        }
-      } else {
-        productProvider.updateProduct(productToSave);
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Product updated successfully!')),
-          );
+      bool allVariantsValid = true;
+      if (_editedProduct.productVariants.isNotEmpty) {
+        for (var variant in _editedProduct.productVariants) {
+          if (variant.images.isEmpty || variant.price <= 0) {
+            allVariantsValid = false;
+            break;
+          }
         }
       }
-      if (mounted) {
-        navigator.pop();
+
+      if (allVariantsValid) {
+        setState(() {
+          _variantsErrorText = null;
+        });
+
+        final navigator = Navigator.of(context);
+        final productProvider =
+            Provider.of<ProductProvider>(context, listen: false);
+
+        final productToSave = _editedProduct.copyWith(isDraft: false);
+
+        if (_initialProduct == null || _initialProduct!.isDraft) {
+          productProvider.addProduct(productToSave);
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Product added successfully!')),
+            );
+          }
+        } else {
+          productProvider.updateProduct(productToSave);
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Product updated successfully!')),
+            );
+          }
+        }
+        if (mounted) {
+          navigator.pop();
+        }
+      } else {
+        setState(() {
+          _variantsErrorText =
+              'All price variants should have at least one image and price';
+        });
       }
     }
   }
@@ -711,6 +734,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     ),
                   ),
                 ),
+                if (_variantsErrorText != null) ...[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Center(
+                      child: Text(
+                        _variantsErrorText!,
+                        style: TextStyle(color: Theme.of(context).colorScheme.error),
+                      ),
+                    ),
+                  ),
+                ],
                 if (_editedProduct.productVariants.isNotEmpty) ...[
                   const SizedBox(height: 16),
                   VariantsList(
