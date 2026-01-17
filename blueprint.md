@@ -91,12 +91,16 @@ The project follows a feature-based folder structure.
     3.  **`add_product_screen.dart`:** Implemented the `_getVariantImages` method to aggregate images from all variants. The `ProductImageHandler` now displays these images in a read-only gallery view when variants are present.
     4.  **`variants_list.dart`:** Fixed the widget to display the first image from the `images` list as the variant thumbnail.
 
-## Current Change: Show Delete Button in Variant Gallery
+## Current Change: Real-time Variant Image Deletion
 
--   **Goal:** Always display the delete button for images in the product image carousel, including the read-only variant gallery.
+-   **Goal:** Enable real-time, synchronous deletion of variant images from the aggregated gallery view on the main product page.
 -   **Steps:**
     1.  **`product_image_handler.dart`:**
-        -   Removed the conditional logic (`if (!widget.isVariantGallery)`) that was hiding the delete button in the variant gallery view.
-        -   Modified the `_removeImage` function to allow image deletion even when `isVariantGallery` is true, enabling users to remove images directly from the aggregated variant image gallery on the add/edit product screen.
-    2.  **Update `blueprint.md`:** Document the changes.
-    3.  **Commit and Push:** Commit all changes to the repository.
+        -   Added a new optional callback function, `onImageDeleted`, which is triggered when an image is removed.
+        -   The `_removeImage` function now calls `onImageDeleted` if it's provided, allowing the parent widget to handle the deletion logic. Otherwise, it updates its internal state as before.
+    2.  **`add_product_screen.dart`:**
+        -   Implemented the `onImageDeleted` callback in the `ProductImageHandler` for the variant image gallery.
+        -   Created a `_deleteVariantImage` method that finds the correct product variant and removes the specified image from its `images` list.
+        -   This ensures that deleting an image from the main gallery immediately updates the underlying data model and refreshes the UI.
+    3.  **Update `blueprint.md`:** Documented the real-time deletion functionality.
+    4.  **Commit and Push:** Committing all changes to the repository.

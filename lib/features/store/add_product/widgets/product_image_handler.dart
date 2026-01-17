@@ -7,6 +7,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 class ProductImageHandler extends StatefulWidget {
   final List<XFile> initialImages;
   final Function(List<XFile>) onImagesChanged;
+  final Function(XFile)? onImageDeleted;
   final GlobalKey<FormFieldState<List<XFile>>>? imageFieldKey;
   final int maxImages;
   final String? errorMessage;
@@ -16,6 +17,7 @@ class ProductImageHandler extends StatefulWidget {
     super.key,
     required this.initialImages,
     required this.onImagesChanged,
+    this.onImageDeleted,
     this.imageFieldKey,
     this.maxImages = 10,
     this.errorMessage,
@@ -85,13 +87,18 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
   }
 
   void _removeImage(int index) {
-    setState(() {
-      _images.removeAt(index);
-      if (_images.isNotEmpty && _activePage >= _images.length) {
-        _activePage = _images.length - 1;
-      }
-      widget.onImagesChanged(_images);
-    });
+    final imageToRemove = _images[index];
+    if (widget.onImageDeleted != null) {
+      widget.onImageDeleted!(imageToRemove);
+    } else {
+      setState(() {
+        _images.removeAt(index);
+        if (_images.isNotEmpty && _activePage >= _images.length) {
+          _activePage = _images.length - 1;
+        }
+        widget.onImagesChanged(_images);
+      });
+    }
     widget.imageFieldKey?.currentState?.validate();
   }
 

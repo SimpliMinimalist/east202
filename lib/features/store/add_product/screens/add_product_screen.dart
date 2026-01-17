@@ -505,6 +505,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
         .toList();
   }
 
+  void _deleteVariantImage(XFile imageFile) {
+    setState(() {
+      final newProductVariants = _editedProduct.productVariants.map((variant) {
+        final newImages = List<String>.from(variant.images);
+        final index = newImages.indexOf(imageFile.path);
+        if (index != -1) {
+          newImages.removeAt(index);
+        }
+        return variant.copyWith(images: newImages);
+      }).toList();
+      _editedProduct = _editedProduct.copyWith(productVariants: newProductVariants);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -568,6 +581,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       });
                     }
                   },
+                  onImageDeleted: hasVariants ? _deleteVariantImage : null,
                   imageFieldKey: _imageFieldKey,
                   maxImages: 10,
                   isVariantGallery: hasVariants,
