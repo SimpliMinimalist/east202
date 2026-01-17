@@ -6,11 +6,13 @@ import 'package:myapp/features/store/add_product/screens/edit_variant_screen.dar
 class VariantsList extends StatelessWidget {
   final List<ProductVariant> variants;
   final Function(int, ProductVariant) onVariantUpdated;
+  final Function(int) onVariantDeleted;
 
   const VariantsList({
     super.key,
     required this.variants,
     required this.onVariantUpdated,
+    required this.onVariantDeleted,
   });
 
   @override
@@ -81,15 +83,23 @@ class VariantsList extends StatelessWidget {
                 : const Icon(Icons.image, color: Colors.grey, size: 40),
             title: Text(variant.name),
             subtitle: subtitleWidget,
+            trailing: IconButton(
+              icon: const Icon(Icons.delete_outline),
+              onPressed: () => onVariantDeleted(index),
+            ),
             onTap: () async {
-              final result = await Navigator.push<ProductVariant>(
+              final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => EditVariantScreen(variant: variant),
                 ),
               );
               if (result != null) {
-                onVariantUpdated(index, result);
+                if (result == 'DELETE') {
+                  onVariantDeleted(index);
+                } else if (result is ProductVariant) {
+                  onVariantUpdated(index, result);
+                }
               }
             },
           ),

@@ -48,6 +48,7 @@ The project follows a feature-based folder structure.
 
 ### Edit Variant Screen
 
+-   **Delete Functionality**: Added a delete icon to the app bar. Tapping the icon shows a confirmation dialog before deleting the variant.
 -   The "Save" button has been moved from the app bar to a bottom navigation bar, matching the design of the "Add Variants" and "Add Product" screens.
 -   Reuses the `PriceInputField` from the add product screen, allowing for sale prices on individual variants.
 -   Manages state for sale price, including the discount percentage calculation.
@@ -56,6 +57,7 @@ The project follows a feature-based folder structure.
 -   **Empty Default Fields**: The price and stock fields are now initialized as empty strings if their initial values are 0, preventing the display of "0.00" or "0" by default.
 
 ### Variant List UI
+-   **Delete Functionality**: Added a delete icon to each variant card, allowing for quick deletion from the list.
 -   Removed the shadow effect from the variant cards in the product details screen.
 -   Added a light border to maintain visual separation between the cards.
 -   Displays the variant's image in the list.
@@ -103,7 +105,7 @@ The project follows a feature-based folder structure.
         -   Created a `_deleteVariantImage` method that finds the correct product variant and removes the specified image from its `images` list.
         -   This ensures that deleting an image from the main gallery immediately updates the underlying data model and refreshes the UI.
 
-## Current Change: Variant Image Label UI Refinement
+### Variant Image Label UI Refinement
 
 -   **Goal:** Improve the UI of the variant image labels.
 -   **Steps:**
@@ -112,5 +114,21 @@ The project follows a feature-based folder structure.
         -   **`add_product_screen.dart` & `edit_variant_screen.dart`:** Updated to provide the appropriate labels to the `ProductImageHandler`.
     2.  **Adjust Label Width:**
         -   **`product_image_handler.dart`:** Modified the layout to ensure the label's background width fits the text content, preventing it from expanding to the full width of the image.
-    3.  **Update `blueprint.md`:** Documented the UI refinements.
-    4.  **Commit and Push:** Committing all changes to the repository.
+
+## Current Change: Implement Variant Deletion
+
+-   **Goal:** Allow users to delete product variants from the edit screen and the variant list.
+-   **Steps:**
+    1.  **`edit_variant_screen.dart`:**
+        -   Added a `delete` icon to the app bar.
+        -   Implemented a confirmation dialog to prevent accidental deletions.
+        -   The screen now returns a special 'DELETE' string to notify the `add_product_screen` of the deletion.
+    2.  **`variants_list.dart`:**
+        -   Added a `delete` icon button to each variant card.
+        -   The `onTap` handler for the list tile now checks for the 'DELETE' string when returning from the `EditVariantScreen`.
+        -   A new `onVariantDeleted` callback is passed to the widget.
+    3.  **`add_product_screen.dart`:**
+        -   Implemented the `_deleteVariant` method to remove a variant from the product's variant list.
+        -   Passed the `_deleteVariant` method to the `VariantsList` widget.
+    4.  **Update `blueprint.md`:** Documented the new variant deletion functionality.
+    5.  **Commit and Push:** Committing all changes to the repository.

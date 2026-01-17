@@ -524,6 +524,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
     });
   }
 
+  void _deleteVariant(int index) {
+    setState(() {
+      final newProductVariants = List<ProductVariant>.from(_editedProduct.productVariants);
+      newProductVariants.removeAt(index);
+      _editedProduct = _editedProduct.copyWith(
+        productVariants: newProductVariants,
+      );
+      if (newProductVariants.isEmpty) {
+        _editedProduct = _editedProduct.copyWith(variants: []);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final titleTextStyle = Theme.of(context).textTheme.titleLarge;
@@ -713,6 +726,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         );
                       });
                     },
+                    onVariantDeleted: _deleteVariant,
                   ),
                 ]
               ],

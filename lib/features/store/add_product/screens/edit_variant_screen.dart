@@ -130,6 +130,29 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
     });
   }
 
+  void _deleteVariant() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Variant'),
+        content: const Text('Are you sure you want to delete this variant?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+              Navigator.of(context).pop('DELETE'); // Pop the screen with a delete indicator
+            },
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final variantName = _editedVariant.attributes.values.join(' / ');
@@ -137,6 +160,12 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_editedVariant.name),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete_outline),
+            onPressed: _deleteVariant,
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
