@@ -172,6 +172,34 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
     }
   }
 
+  void _deleteAllVariants() {
+    Navigator.pop(context, <VariantOption>[]);
+  }
+
+  Future<void> _showDeleteConfirmationDialog() async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Variants'),
+        content: const Text('Are you sure you want to delete all the variants?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (result == true) {
+      _deleteAllVariants();
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -179,6 +207,13 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.isUpdating ? 'Edit Variants' : 'Add Variants'),
+        actions: [
+          if (widget.isUpdating)
+            IconButton(
+              icon: const Icon(Icons.delete_outline),
+              onPressed: _showDeleteConfirmationDialog,
+            ),
+        ],
       ),
       body: Form(
         key: _formKey,

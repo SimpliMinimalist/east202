@@ -130,14 +130,13 @@ The project follows a feature-based folder structure.
     4.  **Update `blueprint.md`:** Documented the bug fix and the steps taken to resolve the errors.
     5.  **Commit and Push:** Committing the final, corrected code to the repository.
 
-## Current Change: Dynamic App Bar Title for Variants Screen
+## Current Change: Delete All Variants Functionality
 
--   **Goal:** Change the app bar title of the `AddVariantsScreen` to "Edit Variants" when the user is editing existing product variants.
+-   **Goal:** Add a delete icon to the app bar in the "Edit Product Variants" screen that allows the user to delete all variants after a confirmation.
 -   **Steps:**
-    1.  **`add_product_screen.dart`:**
-        -   Passed an `isUpdating` boolean to the `AddVariantsScreen` to indicate whether the user is adding new variants or editing existing ones.
-    2.  **`add_variants_screen.dart`:**
-        -   Added an `isUpdating` parameter to the `AddVariantsScreen` widget.
-        -   The app bar title now dynamically changes to "Edit Variants" if `isUpdating` is true.
-    3.  **Update `blueprint.md`:** Documented the new dynamic title feature.
-    4.  **Commit and Push:** Committing the changes to the repository.
+    1.  **`add_variants_screen.dart`:**
+        -   Added a delete icon to the app bar, which is only visible when `isUpdating` is true.
+        -   Implemented a `_showDeleteConfirmationDialog` to confirm the deletion of all variants.
+        -   Created a `_deleteAllVariants` method to clear all variants and return an empty list to the previous screen.
+    2.  **Update `blueprint.md`:** Documented the new delete all variants feature.
+    3.  **Commit and Push:** Committing the changes to the repository.
