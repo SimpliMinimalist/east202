@@ -130,7 +130,7 @@ The project follows a feature-based folder structure.
     4.  **Update `blueprint.md`:** Documented the bug fix and the steps taken to resolve the errors.
     5.  **Commit and Push:** Committing the final, corrected code to the repository.
 
-## Current Change: Delete All Variants Functionality
+### Delete All Variants Functionality
 
 -   **Goal:** Add a delete icon to the app bar in the "Edit Product Variants" screen that allows the user to delete all variants after a confirmation.
 -   **Steps:**
@@ -140,3 +140,11 @@ The project follows a feature-based folder structure.
         -   Created a `_deleteAllVariants` method to clear all variants and return an empty list to the previous screen.
     2.  **Update `blueprint.md`:** Documented the new delete all variants feature.
     3.  **Commit and Push:** Committing the changes to the repository.
+
+## Current Change: Preserve Variant Option Values on Deletion
+
+-   **Goal:** Correct the variant deletion logic to ensure that deleting a specific `ProductVariant` does not remove the underlying option values (e.g., "Small", "Red") if they are still used by other variants.
+-   **Steps:**
+    1.  **`add_product_screen.dart`:** Modified the `_deleteVariant` method to only remove the selected `ProductVariant` from the list, without altering the `variants` (the `VariantOption` list).
+    2.  **Update `blueprint.md`:** Documented this critical bug fix.
+    3.  **Commit and Push:** Committing the corrected code to the repository.
