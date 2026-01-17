@@ -115,20 +115,14 @@ The project follows a feature-based folder structure.
     2.  **Adjust Label Width:**
         -   **`product_image_handler.dart`:** Modified the layout to ensure the label's background width fits the text content, preventing it from expanding to the full width of the image.
 
-## Current Change: Implement Variant Deletion
+## Current Change: Fix Variant Deletion Logic
 
--   **Goal:** Allow users to delete product variants from the edit screen and the variant list.
+-   **Goal:** Correctly handle variant deletion to prevent deleted variants from reappearing and resolve related errors.
 -   **Steps:**
-    1.  **`edit_variant_screen.dart`:**
-        -   Added a `delete` icon to the app bar.
-        -   Implemented a confirmation dialog to prevent accidental deletions.
-        -   The screen now returns a special 'DELETE' string to notify the `add_product_screen` of the deletion.
-    2.  **`variants_list.dart`:**
-        -   Added a `delete` icon button to each variant card.
-        -   The `onTap` handler for the list tile now checks for the 'DELETE' string when returning from the `EditVariantScreen`.
-        -   A new `onVariantDeleted` callback is passed to the widget.
-    3.  **`add_product_screen.dart`:**
-        -   Implemented the `_deleteVariant` method to remove a variant from the product's variant list.
-        -   Passed the `_deleteVariant` method to the `VariantsList` widget.
-    4.  **Update `blueprint.md`:** Documented the new variant deletion functionality.
-    5.  **Commit and Push:** Committing all changes to the repository.
+    1.  **`variant_model.dart`:** Added a `copyWith` method to the `VariantOption` class to resolve an `undefined_method` error.
+    2.  **`add_product_screen.dart`:**
+        -   Corrected the logic in the `_deleteVariant` method to properly update the underlying variant options.
+        -   Fixed null-check errors that were occurring during the deletion process.
+    3.  **Analysis and Verification:** Ran `analyze_files` to ensure all errors were resolved.
+    4.  **Update `blueprint.md`:** Documented the bug fix and the steps taken to resolve the errors.
+    5.  **Commit and Push:** Committing the final, corrected code to the repository.

@@ -11,6 +11,16 @@ class VariantOption {
     required this.values,
   });
 
+  VariantOption copyWith({
+    String? name,
+    List<String>? values,
+  }) {
+    return VariantOption(
+      name: name ?? this.name,
+      values: values ?? this.values,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'name': name,

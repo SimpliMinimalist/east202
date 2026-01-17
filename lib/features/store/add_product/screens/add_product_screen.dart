@@ -526,16 +526,28 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   void _deleteVariant(int index) {
     setState(() {
-      final newProductVariants = List<ProductVariant>.from(_editedProduct.productVariants);
-      newProductVariants.removeAt(index);
-      _editedProduct = _editedProduct.copyWith(
-        productVariants: newProductVariants,
-      );
-      if (newProductVariants.isEmpty) {
-        _editedProduct = _editedProduct.copyWith(variants: []);
-      }
+        final variantToDelete = _editedProduct.productVariants[index];
+        final newProductVariants = List<ProductVariant>.from(_editedProduct.productVariants);
+        newProductVariants.removeAt(index);
+
+        final newVariants = _editedProduct.variants.map((v) {
+            final newValues = List<String>.from(v.values);
+            final valueToRemove = variantToDelete.attributes[v.name];
+            if (valueToRemove != null) {
+                newValues.remove(valueToRemove);
+            }
+            return v.copyWith(values: newValues);
+        }).toList();
+
+        newVariants.removeWhere((v) => v.values.isEmpty);
+
+        _editedProduct = _editedProduct.copyWith(
+            productVariants: newProductVariants,
+            variants: newVariants,
+        );
     });
-  }
+}
+
 
   @override
   Widget build(BuildContext context) {
