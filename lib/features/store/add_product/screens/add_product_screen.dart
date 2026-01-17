@@ -505,6 +505,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
         .toList();
   }
 
+  List<String> _getVariantImageLabels() {
+    return _editedProduct.productVariants
+        .expand((variant) => List.filled(
+            variant.images.length, variant.attributes.values.join(' / ')))
+        .toList();
+  }
+
   void _deleteVariantImage(XFile imageFile) {
     setState(() {
       _editedProduct = _editedProduct.copyWith(
@@ -567,6 +574,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               children: [
                 ProductImageHandler(
                   initialImages: hasVariants ? _getVariantImages() : _images,
+                  imageLabels: hasVariants ? _getVariantImageLabels() : null,
                   onImagesChanged: (newImages) {
                     if (!hasVariants) {
                       setState(() {

@@ -132,6 +132,8 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final variantName = _editedVariant.attributes.values.join(' / ');
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_editedVariant.name),
@@ -143,6 +145,7 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
           children: [
             ProductImageHandler(
               initialImages: _images,
+              imageLabels: List.filled(_images.length, variantName),
               onImagesChanged: (newImages) {
                 setState(() {
                   _images.clear();

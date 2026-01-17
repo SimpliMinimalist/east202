@@ -91,7 +91,7 @@ The project follows a feature-based folder structure.
     3.  **`add_product_screen.dart`:** Implemented the `_getVariantImages` method to aggregate images from all variants. The `ProductImageHandler` now displays these images in a read-only gallery view when variants are present.
     4.  **`variants_list.dart`:** Fixed the widget to display the first image from the `images` list as the variant thumbnail.
 
-## Current Change: Real-time Variant Image Deletion
+### Real-time Variant Image Deletion
 
 -   **Goal:** Enable real-time, synchronous deletion of variant images from the aggregated gallery view on the main product page.
 -   **Steps:**
@@ -102,5 +102,19 @@ The project follows a feature-based folder structure.
         -   Implemented the `onImageDeleted` callback in the `ProductImageHandler` for the variant image gallery.
         -   Created a `_deleteVariantImage` method that finds the correct product variant and removes the specified image from its `images` list.
         -   This ensures that deleting an image from the main gallery immediately updates the underlying data model and refreshes the UI.
-    3.  **Update `blueprint.md`:** Documented the real-time deletion functionality.
-    4.  **Commit and Push:** Committing all changes to the repository.
+
+## Current Change: Display Variant Values in Image Gallery
+
+-   **Goal:** Display the variant values (e.g., "Red / Large") in the image gallery for both the main product page and the edit variant screen.
+-   **Steps:**
+    1.  **`product_image_handler.dart`:**
+        -   Added an optional `imageLabels` parameter to the `ProductImageHandler`.
+        -   When `imageLabels` is provided, the widget displays the label in the center of the image overlay, between the image counter and the delete button.
+    2.  **`add_product_screen.dart`:**
+        -   Implemented a `_getVariantImageLabels` method to generate a list of labels from the product variants.
+        -   Passed the generated labels to the `ProductImageHandler`.
+    3.  **`edit_variant_screen.dart`:**
+        -   Generated a label for the variant being edited.
+        -   Passed a list of repeating labels to the `ProductImageHandler`.
+    4.  **Update `blueprint.md`:** Documented the new image label functionality.
+    5.  **Commit and Push:** Committing all changes to the repository.

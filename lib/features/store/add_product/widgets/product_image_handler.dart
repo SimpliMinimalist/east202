@@ -6,6 +6,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProductImageHandler extends StatefulWidget {
   final List<XFile> initialImages;
+  final List<String>? imageLabels;
   final Function(List<XFile>) onImagesChanged;
   final Function(XFile)? onImageDeleted;
   final GlobalKey<FormFieldState<List<XFile>>>? imageFieldKey;
@@ -16,6 +17,7 @@ class ProductImageHandler extends StatefulWidget {
   const ProductImageHandler({
     super.key,
     required this.initialImages,
+    this.imageLabels,
     required this.onImagesChanged,
     this.onImageDeleted,
     this.imageFieldKey,
@@ -170,6 +172,9 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
           child: CarouselSlider.builder(
             itemCount: _images.length,
             itemBuilder: (context, index, realIndex) {
+              final label = (widget.imageLabels != null && index < widget.imageLabels!.length)
+                  ? widget.imageLabels![index]
+                  : null;
               return Container(
                 margin: const EdgeInsets.symmetric(horizontal: 2.0),
                 child: ClipRRect(
@@ -181,40 +186,65 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
                         File(_images[index].path),
                         fit: BoxFit.cover,
                       ),
-                      if (widget.maxImages > 1)
-                        Positioned(
-                          top: 8,
-                          left: 8,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withAlpha(128),
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: Text(
-                              '${index + 1}/${_images.length}',
-                              style:
-                                  const TextStyle(color: Colors.white, fontSize: 12),
-                            ),
-                          ),
-                        ),
                       Positioned(
                         top: 8,
-                        right: 8,
-                        child: GestureDetector(
-                          onTap: () => _removeImage(index),
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withAlpha(128),
-                              shape: BoxShape.circle,
+                        left: 0,
+                        right: 0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            if (widget.maxImages > 1)
+                              Container(
+                                margin: const EdgeInsets.only(left: 8),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withAlpha(128),
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: Text(
+                                  '${index + 1}/${_images.length}',
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 12),
+                                ),
+                              ),
+                            if (label != null)
+                              Expanded(
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withAlpha(128),
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  child: Text(
+                                    label,
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 12),
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            GestureDetector(
+                              onTap: () => _removeImage(index),
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 8),
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withAlpha(128),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(Icons.delete_outline,
+                                    color: Colors.white, size: 20),
+                              ),
                             ),
-                            child: const Icon(Icons.delete_outline,
-                                color: Colors.white, size: 20),
-                          ),
+                          ],
                         ),
                       ),
                     ],
