@@ -101,9 +101,9 @@ class VariantsList extends StatelessWidget {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: const Text('Delete Variant?'),
+                        title: const Text('Delete Variant'),
                         content: const Text(
-                            'Are you sure you want to delete this variant? This action cannot be undone.'),
+                            'Are you sure you want to delete this variant?'),
                         actions: <Widget>[
                           TextButton(
                             child: const Text('Cancel'),

@@ -63,6 +63,7 @@ The project follows a feature-based folder structure.
 -   Displays the variant's image in the list.
 -   **Displays the sale price, original price with strikethrough, and discount percentage in the `VariantsList` widget when a sale price is active.**
 -   The delete icon in the variant list card has been moved slightly to the right to improve the layout.
+-   The delete confirmation message in the `VariantsList` now matches the message in the `EditVariantScreen` for consistency.
 
 ### Category Field UI Fix
 -   Corrected the height and alignment of the "Category" input field to match other text fields and ensure it expands dynamically as category chips are added.
@@ -135,5 +136,6 @@ The project follows a feature-based folder structure.
     1.  **`variants_list.dart`:**
         -   Wrapped the `IconButton` in a `Transform.translate` widget to move it slightly to the right, reducing the right-side padding.
         -   Added a `showDialog` confirmation before calling the `onVariantDeleted` callback to prevent accidental deletions.
+        -   Updated the deletion confirmation message to be consistent with the `EditVariantScreen`.
     2.  **Update `blueprint.md`:** Documented the UI and UX improvements.
     3.  **Commit and Push:** Committing the changes to the repository.
