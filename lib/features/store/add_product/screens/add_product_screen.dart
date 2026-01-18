@@ -788,6 +788,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ],
                 if (_editedProduct.productVariants.isNotEmpty) ...[
                   const SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      'Total Variants: ${_editedProduct.productVariants.length}',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
                   VariantsList(
                     variants: _editedProduct.productVariants,
                     onVariantUpdated: (index, updatedVariant) {

@@ -41,6 +41,7 @@ The project follows a feature-based folder structure.
 -   The sale price bottom sheet is scroll-controlled to avoid keyboard overlap.
 -   Corrected a typo from `_editedDitedProduct` to `_editedProduct`.
 -   Preserves existing variant data when editing variants.
+-   **Display Total Variant Count**: Shows the total number of variants above the variants list.
 
 ### Add Variants Screen
 
@@ -159,7 +160,7 @@ The project follows a feature-based folder structure.
     2.  **Update `blueprint.md`:** Documented the new validation feature.
     3.  **Commit and Push:** Committing the changes to the repository.
 
-## Current Change: Variant Bulk Editing
+### Variant Bulk Editing
 
 -   **Goal:** Allow users to apply the same image, price, and stock to all product variants from the "Edit Variant" screen using toggle switches.
 -   **Steps:**
