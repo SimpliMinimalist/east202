@@ -878,7 +878,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: isButtonEnabled ? _attemptSave : null,
+                    onPressed: _attemptSave,
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
                       backgroundColor: isButtonEnabled
