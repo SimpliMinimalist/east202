@@ -177,3 +177,10 @@ The project follows a feature-based folder structure.
     4.  **Update `variants_list.dart`:**
         -   Modified the widget to accept the toggle states and callbacks from `add_product_screen.dart`.
         -   Updated the `onTap` action for each variant to pass these states and callbacks down to the `edit_variant_screen.dart`.
+
+-   **Bug Fix: Toggle State Management**
+    -   **Problem**: The toggle switches in the `EditVariantScreen` were not updating their visual state correctly, and the data synchronization was using the wrong variant's data.
+    -   **Solution**:
+        1.  **Local State in `EditVariantScreen`**: Added local state variables to `EditVariantScreen` to manage the toggles' UI, ensuring they update instantly.
+        2.  **Corrected Data Sync**: Modified the `onChanged` callbacks to pass the currently edited variant's data back to `AddProductScreen`.
+        3.  **Updated Sync Logic**: Updated the synchronization methods in `AddProductScreen` to use the data from the correct variant.

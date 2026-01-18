@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:myapp/features/store/add_product/models/product_variant_model.dart';
 import 'package:myapp/features/store/add_product/screens/edit_variant_screen.dart';
 
@@ -10,9 +11,9 @@ class VariantsList extends StatelessWidget {
   final bool useSameImage;
   final bool useSamePrice;
   final bool useSameStock;
-  final Function(bool) onSameImageToggled;
-  final Function(bool) onSamePriceToggled;
-  final Function(bool) onSameStockToggled;
+  final Function(bool, List<XFile>) onSameImageToggled;
+  final Function(bool, double, double?) onSamePriceToggled;
+  final Function(bool, int) onSameStockToggled;
 
   const VariantsList({
     super.key,

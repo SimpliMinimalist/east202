@@ -561,39 +561,37 @@ class _AddProductScreenState extends State<AddProductScreen> {
     });
   }
 
-  void _onSameImageToggled(bool value) {
+  void _onSameImageToggled(bool value, List<XFile> images) {
     setState(() {
       _useSameImage = value;
       if (value) {
-        final currentVariant = _editedProduct.productVariants.first;
+        final imagePaths = images.map((image) => image.path).toList();
         final updatedVariants = _editedProduct.productVariants.map((v) {
-          return v.copyWith(images: currentVariant.images);
+          return v.copyWith(images: imagePaths);
         }).toList();
         _editedProduct = _editedProduct.copyWith(productVariants: updatedVariants);
       }
     });
   }
 
-  void _onSamePriceToggled(bool value) {
+  void _onSamePriceToggled(bool value, double price, double? salePrice) {
     setState(() {
       _useSamePrice = value;
       if (value) {
-        final currentVariant = _editedProduct.productVariants.first;
         final updatedVariants = _editedProduct.productVariants.map((v) {
-          return v.copyWith(price: currentVariant.price, salePrice: currentVariant.salePrice);
+          return v.copyWith(price: price, salePrice: salePrice);
         }).toList();
         _editedProduct = _editedProduct.copyWith(productVariants: updatedVariants);
       }
     });
   }
 
-  void _onSameStockToggled(bool value) {
+  void _onSameStockToggled(bool value, int stock) {
     setState(() {
       _useSameStock = value;
       if (value) {
-        final currentVariant = _editedProduct.productVariants.first;
         final updatedVariants = _editedProduct.productVariants.map((v) {
-          return v.copyWith(stock: currentVariant.stock);
+          return v.copyWith(stock: stock);
         }).toList();
         _editedProduct = _editedProduct.copyWith(productVariants: updatedVariants);
       }

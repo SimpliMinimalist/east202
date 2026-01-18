@@ -11,9 +11,9 @@ class EditVariantScreen extends StatefulWidget {
   final bool useSameImage;
   final bool useSamePrice;
   final bool useSameStock;
-  final Function(bool) onSameImageToggled;
-  final Function(bool) onSamePriceToggled;
-  final Function(bool) onSameStockToggled;
+  final Function(bool, List<XFile>) onSameImageToggled;
+  final Function(bool, double, double?) onSamePriceToggled;
+  final Function(bool, int) onSameStockToggled;
 
   const EditVariantScreen({
     super.key,
@@ -41,11 +41,19 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
   String? _priceError;
   String? _imageError;
 
+  late bool _useSameImage;
+  late bool _useSamePrice;
+  late bool _useSameStock;
+
   @override
   void initState() {
     super.initState();
     _editedVariant = widget.variant.copyWith();
     _images.addAll(_editedVariant.images.map((path) => XFile(path)));
+
+    _useSameImage = widget.useSameImage;
+    _useSamePrice = widget.useSamePrice;
+    _useSameStock = widget.useSameStock;
 
     final priceText = _editedVariant.price == 0.0 ? '' : _editedVariant.price.toStringAsFixed(2);
     final stockText = _editedVariant.stock == 0 ? '' : _editedVariant.stock.toString();
@@ -56,14 +64,23 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
 
     _priceController.addListener(() {
       _updateSaveButtonState();
-      if (widget.useSamePrice) {
-        widget.onSamePriceToggled(false);
+      if (_useSamePrice) {
+        setState(() {
+          _useSamePrice = false;
+        });
+        final price = double.tryParse(_priceController.text) ?? 0.0;
+        final salePrice = double.tryParse(_salePriceController.text);
+        widget.onSamePriceToggled(false, price, salePrice);
       }
     });
     _stockController.addListener(() {
       _updateSaveButtonState();
-      if (widget.useSameStock) {
-        widget.onSameStockToggled(false);
+      if (_useSameStock) {
+        setState(() {
+          _useSameStock = false;
+        });
+        final stock = int.tryParse(_stockController.text) ?? 0;
+        widget.onSameStockToggled(false, stock);
       }
     });
     _salePriceController.addListener(_calculateDiscount);
@@ -214,8 +231,11 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
                   _images.clear();
                   _images.addAll(newImages);
                   _updateSaveButtonState();
-                  if (widget.useSameImage) {
-                    widget.onSameImageToggled(false);
+                  if (_useSameImage) {
+                    setState(() {
+                      _useSameImage = false;
+                    });
+                    widget.onSameImageToggled(false, _images);
                   }
                 });
               },
@@ -240,18 +260,36 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
             const SizedBox(height: 16),
             _buildToggleSwitch(
               'Use same image for all variants',
-              widget.useSameImage,
-              widget.onSameImageToggled,
+              _useSameImage,
+              (value) {
+                setState(() {
+                  _useSameImage = value;
+                });
+                widget.onSameImageToggled(value, _images);
+              },
             ),
             _buildToggleSwitch(
               'Use same price for all variants',
-              widget.useSamePrice,
-              widget.onSamePriceToggled,
+              _useSamePrice,
+              (value) {
+                setState(() {
+                  _useSamePrice = value;
+                });
+                final price = double.tryParse(_priceController.text) ?? 0.0;
+                final salePrice = double.tryParse(_salePriceController.text);
+                widget.onSamePriceToggled(value, price, salePrice);
+              },
             ),
             _buildToggleSwitch(
               'Use same number of stock',
-              widget.useSameStock,
-              widget.onSameStockToggled,
+              _useSameStock,
+              (value) {
+                setState(() {
+                  _useSameStock = value;
+                });
+                final stock = int.tryParse(_stockController.text) ?? 0;
+                widget.onSameStockToggled(value, stock);
+              },
             ),
           ],
         ),
