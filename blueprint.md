@@ -56,7 +56,7 @@ The project follows a feature-based folder structure.
 #### Button State and Validation
 -   The "Add Product" button is only enabled when the product name, price, and at least one image are provided.
 -   The "Update Product" button is disabled by default and is only enabled if the product's data has been modified.
--   For products with variants, the button is enabled if the product name and at least one image in any of the variants are provided.
+-   For products with variants, the button is enabled only when the product name is provided and *all* variants have at least one image and a price greater than zero.
 -   Validation for all required fields is triggered when the "Add Product" or "Update Product" button is pressed, even if it appears to be inactive.
 -   All validation checks are performed concurrently, so all relevant error messages are displayed at once.
 -   The "Add Product" button is now properly disabled when inactive to prevent accidental submissions.

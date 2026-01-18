@@ -622,9 +622,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
     } else {
       final hasName = _productNameController.text.isNotEmpty;
       if (hasVariants) {
-        final hasVariantImages = _getVariantImages().isNotEmpty;
-        final hasVariantPrices = _editedProduct.productVariants.any((v) => v.price > 0);
-        isButtonEnabled = hasName && hasVariantImages && hasVariantPrices;
+        final allVariantsValid = _editedProduct.productVariants.every((v) => v.price > 0 && v.images.isNotEmpty);
+        isButtonEnabled = hasName && allVariantsValid;
       } else {
         final hasPrice = _priceController.text.isNotEmpty;
         final hasImages = _images.isNotEmpty;
