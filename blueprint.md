@@ -49,7 +49,13 @@ The project follows a feature-based folder structure.
 -   The total number of variants is now displayed inside the "Edit Product Variants" button.
 -   The "Add/Edit Product Variants" button now has the same background and border style as the variant list cards.
 -   Preserves existing variant data when editing variants.
--   Fixed an issue where `withOpacity` was used in `add_product_screen.dart` and replaced it with `Color.fromRGBO`.
+-   Fixed an issue where `withOpacity` was used in `add_product_screen.dart` and replaced it with `withAlpha`.
+
+#### Button State
+-   The "Add Product" button is only enabled when the product name, price, and at least one image are provided.
+-   The "Update Product" button is disabled by default and is only enabled if the product's data has been modified.
+-   For products with variants, the button is enabled if the product name and at least one image in any of the variants are provided.
+-   **Validation Trigger**: The "Add Product" button now triggers validation for all required fields (including images) when pressed, even if it appears inactive.
 
 ### Add Variants Screen
 

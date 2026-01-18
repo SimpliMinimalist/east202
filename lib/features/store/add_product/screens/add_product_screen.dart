@@ -359,7 +359,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   void _attemptSave() {
-    if (_formKey.currentState!.validate()) {
+    final isFormValid = _formKey.currentState!.validate();
+    final isImageValid = _imageFieldKey.currentState!.validate();
+
+    if (isFormValid && isImageValid) {
       bool allVariantsValid = true;
       if (_editedProduct.productVariants.isNotEmpty) {
         for (var variant in _editedProduct.productVariants) {
@@ -838,7 +841,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: isButtonEnabled ? _attemptSave : null,
+                    onPressed: isEditing
+                        ? (isButtonEnabled ? _attemptSave : null)
+                        : _attemptSave,
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
                       backgroundColor: isButtonEnabled
