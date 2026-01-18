@@ -10,6 +10,7 @@ class ProductVariant {
   final double? salePrice;
   final int stock;
   final List<String> images;
+  final bool isDefault;
 
   ProductVariant({
     String? id,
@@ -18,6 +19,7 @@ class ProductVariant {
     this.salePrice,
     this.stock = 0,
     List<String>? images,
+    this.isDefault = false,
   })  : id = id ?? const Uuid().v4(),
         images = images ?? [];
 
@@ -35,7 +37,7 @@ class ProductVariant {
     double? salePrice,
     int? stock,
     List<String>? images,
-    bool? isSelected,
+    bool? isDefault,
   }) {
     return ProductVariant(
       id: id ?? this.id,
@@ -44,6 +46,7 @@ class ProductVariant {
       salePrice: salePrice ?? this.salePrice,
       stock: stock ?? this.stock,
       images: images ?? this.images,
+      isDefault: isDefault ?? this.isDefault,
     );
   }
 
@@ -63,6 +66,7 @@ class ProductVariantEquality implements Equality<ProductVariant> {
         e1.salePrice == e2.salePrice &&
         e1.stock == e2.stock &&
         e1.images.toString() == e2.images.toString() &&
+        e1.isDefault == e2.isDefault &&
         const MapEquality().equals(e1.attributes, e2.attributes);
   }
 
@@ -73,6 +77,7 @@ class ProductVariantEquality implements Equality<ProductVariant> {
         e.salePrice.hashCode ^
         e.stock.hashCode ^
         e.images.hashCode ^
+        e.isDefault.hashCode ^
         const MapEquality().hash(e.attributes);
   }
 

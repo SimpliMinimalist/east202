@@ -103,7 +103,20 @@ class VariantsList extends StatelessWidget {
                     fit: BoxFit.cover,
                   )
                 : const Icon(Icons.image, color: Colors.grey, size: 40),
-            title: Text(variant.name),
+            title: Row(
+              children: [
+                Text(variant.name),
+                if (variant.isDefault)
+                  const Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: Chip(
+                      label: Text('Default'),
+                      visualDensity: VisualDensity(horizontal: 0.0, vertical: -4.0),
+                      padding: EdgeInsets.only(left: 4.0, right: 4.0),
+                    ),
+                  ),
+              ],
+            ),
             subtitle: subtitleWidget,
             trailing: Transform.translate(
               offset: const Offset(8, 0), // Move the icon 8 pixels to the right

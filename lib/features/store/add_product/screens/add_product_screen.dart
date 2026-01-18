@@ -538,8 +538,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   List<String> _getVariantImageLabels() {
     return _editedProduct.productVariants
-        .expand((variant) => List.filled(
-            variant.images.length, variant.attributes.values.join(' / ')))
+        .expand((variant) {
+          final label = variant.attributes.values.join(' / ');
+          if (variant.isDefault) {
+            return List.filled(variant.images.length, '$label (Default)');
+          }
+          return List.filled(variant.images.length, label);
+        })
         .toList();
   }
 
@@ -761,6 +766,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 const SizedBox(height: 16),
                 OutlinedButton.icon(
                   onPressed: () async {
+                    final mainPrice = double.tryParse(_priceController.text) ?? 0.0;
+                    final mainSalePrice = double.tryParse(_salePriceController.text);
+                    final mainStock = int.tryParse(_stockController.text) ?? 0;
+                    final mainImages = List<XFile>.from(_images);
+
                     final result = await Navigator.push<List<VariantOption>>(
                       context,
                       MaterialPageRoute(
@@ -775,6 +785,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         _formKey.currentState!.reset();
                       }
                       final newProductVariants = _generateVariants(result);
+
+                      if (newProductVariants.isNotEmpty && !(_editedProduct.productVariants.isNotEmpty)) {
+                        final firstVariant = newProductVariants.first.copyWith(
+                          price: mainPrice,
+                          salePrice: mainSalePrice,
+                          stock: mainStock,
+                          images: mainImages.map((e) => e.path).toList(),
+                          isDefault: true,
+                        );
+                        newProductVariants[0] = firstVariant;
+                      }
+
                       setState(() {
                         _editedProduct = _editedProduct.copyWith(
                           variants: result,

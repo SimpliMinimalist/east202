@@ -51,6 +51,7 @@ The project follows a feature-based folder structure.
 -   Preserves existing variant data when editing variants.
 -   Fixed an issue where `withOpacity` was used in `add_product_screen.dart` and replaced it with `withAlpha`.
 -   Validation errors are cleared when variants are added or edited.
+-   When adding variants for the first time, the data from the main product (price, sale price, stock, and images) is automatically copied to the first variant, which is marked as the "Default" variant.
 
 #### Button State and Validation
 -   The "Add Product" button is only enabled when the product name, price, and at least one image are provided.
@@ -83,6 +84,7 @@ The project follows a feature-based folder structure.
 -   **Displays the sale price, original price with strikethrough, and discount percentage in the `VariantsList` widget when a sale price is active.**
 -   The delete icon in the variant list card has been moved slightly to the right to improve the layout.
 -   The delete confirmation message in the `VariantsList` now matches the message in the `EditVariantScreen` for consistency.
+-   Displays a "Default" tag next to the variant name if it is the default variant.
 
 ### Category Field UI Fix
 -   Corrected the height and alignment of the "Category" input field to match other text fields and ensure it expands dynamically as category chips are added.
