@@ -173,7 +173,7 @@ The project follows a feature-based folder structure.
         -   The screen receives the toggle states and `onChanged` callbacks from `add_product_screen.dart`.
 
     3.  **Implement Synchronization Logic in `add_product_screen.dart`:**
-        -   **Toggle ON**: When a toggle is activated, a function copies the corresponding data (images, price, or stock) from the currently edited variant to all other variants.
+        -   **Toggle ON**: When a toggle is activated, a function copies the corresponding data (images, price, or stock) from the currently edited variant to all other variants. The "Use same price" toggle now synchronizes both the original and sale price.
         -   **Automatic Toggle OFF**: When a user manually edits a synchronized field (price, stock, or images) in `edit_variant_screen.dart`, a callback is triggered to set the corresponding toggle state to `false` in `add_product_screen.dart`, indicating the values are no longer in sync.
 
     4.  **Update `variants_list.dart`:**

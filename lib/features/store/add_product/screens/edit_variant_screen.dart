@@ -83,7 +83,17 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
         widget.onSameStockToggled(false, stock);
       }
     });
-    _salePriceController.addListener(_calculateDiscount);
+    _salePriceController.addListener((){
+       _calculateDiscount();
+      if (_useSamePrice) {
+        setState(() {
+          _useSamePrice = false;
+        });
+        final price = double.tryParse(_priceController.text) ?? 0.0;
+        final salePrice = double.tryParse(_salePriceController.text);
+        widget.onSamePriceToggled(false, price, salePrice);
+      }
+    });
 
     _calculateDiscount();
     _updateSaveButtonState();
