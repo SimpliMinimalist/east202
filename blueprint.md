@@ -27,7 +27,7 @@ The project follows a feature-based folder structure.
 -   Character limit for product name and description fields is only shown on focus.
 -   Ability to add product variants.
 -   The master price and stock fields are hidden when product variants are added.
--   "Add Product Variants" button width is now based on its content and centered.
+-   "Add/Edit Product Variants" button is now a full-width button.
 -   The icon for the "Add Product Variants" button changes from an add icon to an edit icon when variants are present.
 -   Draft saving functionality.
 -   Sale price functionality with a dedicated bottom sheet widget (`SalePriceBottomSheet`).

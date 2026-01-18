@@ -117,7 +117,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       final discount = ((originalPrice - salePrice) / originalPrice) * 100;
       if (mounted) {
         setState(() {
-          _discountPercentage = '(${discount.toStringAsFixed(0)}% off)';
+          _discountPercentage = '(${discount.toStringAsFixed(0)}% off) ';
         });
       }
     } else {
@@ -742,7 +742,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   expandOnFocus: true,
                 ),
                 const SizedBox(height: 16),
-                Center(
+                SizedBox(
+                  width: double.infinity, // Make button take full width
                   child: OutlinedButton.icon(
                     onPressed: () async {
                       final result = await Navigator.push<List<VariantOption>>(
