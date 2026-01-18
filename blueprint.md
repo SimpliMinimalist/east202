@@ -149,8 +149,7 @@ The project follows a feature-based folder structure.
     2.  **Update `blueprint.md`:** Documented this critical bug fix.
     3.  **Commit and Push:** Committing the corrected code to the repository.
 
-## Current Change: Variant Validation on Save
-
+### Variant Validation on Save
 -   **Goal:** Ensure that all product variants have at least one image and a price before saving the product.
 -   **Steps:**
     1.  **`add_product_screen.dart`:**
@@ -159,3 +158,22 @@ The project follows a feature-based folder structure.
         -   If validation fails, the `_variantsErrorText` is updated, and an error message is displayed below the "Edit Product Variants" button.
     2.  **Update `blueprint.md`:** Documented the new validation feature.
     3.  **Commit and Push:** Committing the changes to the repository.
+
+## Current Change: Variant Bulk Editing
+
+-   **Goal:** Allow users to apply the same image, price, and stock to all product variants from the "Edit Variant" screen using toggle switches.
+-   **Steps:**
+    1.  **Centralize State Management:**
+        -   Managed the state of three toggles (`useSameImage`, `useSamePrice`, `useSameStock`) in `add_product_screen.dart`.
+
+    2.  **Update `edit_variant_screen.dart`:**
+        -   Added three new toggle switches for "Use same image for all variants," "Use same price for all variants," and "Use same number of stock."
+        -   The screen receives the toggle states and `onChanged` callbacks from `add_product_screen.dart`.
+
+    3.  **Implement Synchronization Logic in `add_product_screen.dart`:**
+        -   **Toggle ON**: When a toggle is activated, a function copies the corresponding data (images, price, or stock) from the currently edited variant to all other variants.
+        -   **Automatic Toggle OFF**: When a user manually edits a synchronized field (price, stock, or images) in `edit_variant_screen.dart`, a callback is triggered to set the corresponding toggle state to `false` in `add_product_screen.dart`, indicating the values are no longer in sync.
+
+    4.  **Update `variants_list.dart`:**
+        -   Modified the widget to accept the toggle states and callbacks from `add_product_screen.dart`.
+        -   Updated the `onTap` action for each variant to pass these states and callbacks down to the `edit_variant_screen.dart`.

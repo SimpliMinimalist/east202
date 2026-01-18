@@ -8,8 +8,23 @@ import 'package:myapp/features/store/add_product/widgets/stock_input_field.dart'
 
 class EditVariantScreen extends StatefulWidget {
   final ProductVariant variant;
+  final bool useSameImage;
+  final bool useSamePrice;
+  final bool useSameStock;
+  final Function(bool) onSameImageToggled;
+  final Function(bool) onSamePriceToggled;
+  final Function(bool) onSameStockToggled;
 
-  const EditVariantScreen({super.key, required this.variant});
+  const EditVariantScreen({
+    super.key,
+    required this.variant,
+    required this.useSameImage,
+    required this.useSamePrice,
+    required this.useSameStock,
+    required this.onSameImageToggled,
+    required this.onSamePriceToggled,
+    required this.onSameStockToggled,
+  });
 
   @override
   State<EditVariantScreen> createState() => _EditVariantScreenState();
@@ -32,7 +47,6 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
     _editedVariant = widget.variant.copyWith();
     _images.addAll(_editedVariant.images.map((path) => XFile(path)));
 
-    // Initialize controllers with empty strings if values are 0
     final priceText = _editedVariant.price == 0.0 ? '' : _editedVariant.price.toStringAsFixed(2);
     final stockText = _editedVariant.stock == 0 ? '' : _editedVariant.stock.toString();
 
@@ -40,8 +54,18 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
     _salePriceController = TextEditingController(text: _editedVariant.salePrice?.toStringAsFixed(2) ?? '');
     _stockController = TextEditingController(text: stockText);
 
-    _priceController.addListener(_updateSaveButtonState);
-    _stockController.addListener(_updateSaveButtonState);
+    _priceController.addListener(() {
+      _updateSaveButtonState();
+      if (widget.useSamePrice) {
+        widget.onSamePriceToggled(false);
+      }
+    });
+    _stockController.addListener(() {
+      _updateSaveButtonState();
+      if (widget.useSameStock) {
+        widget.onSameStockToggled(false);
+      }
+    });
     _salePriceController.addListener(_calculateDiscount);
 
     _calculateDiscount();
@@ -50,12 +74,9 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
 
   @override
   void dispose() {
-    _priceController.removeListener(_updateSaveButtonState);
-    _stockController.removeListener(_updateSaveButtonState);
     _priceController.dispose();
     _salePriceController.dispose();
     _stockController.dispose();
-    _salePriceController.removeListener(_calculateDiscount);
     super.dispose();
   }
 
@@ -143,13 +164,26 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(); // Close the dialog
-              Navigator.of(context).pop('DELETE'); // Pop the screen with a delete indicator
+              Navigator.of(context).pop();
+              Navigator.of(context).pop('DELETE');
             },
             child: const Text('Delete'),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildToggleSwitch(String title, bool value, Function(bool) onChanged) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title, style: Theme.of(context).textTheme.titleMedium),
+        Switch(
+          value: value,
+          onChanged: onChanged,
+        ),
+      ],
     );
   }
 
@@ -180,28 +214,15 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
                   _images.clear();
                   _images.addAll(newImages);
                   _updateSaveButtonState();
+                  if (widget.useSameImage) {
+                    widget.onSameImageToggled(false);
+                  }
                 });
               },
               maxImages: 4,
               errorMessage: _imageError,
             ),
             const SizedBox(height: 24),
-            // Attributes
-            ..._editedVariant.attributes.entries.map((entry) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(entry.key, style: Theme.of(context).textTheme.titleMedium),
-                    Text(entry.value, style: Theme.of(context).textTheme.titleMedium),
-                  ],
-                ),
-              );
-            }),
-            const SizedBox(height: 16),
-            const Divider(),
-            const SizedBox(height: 16),
             PriceInputField(
               priceController: _priceController,
               salePriceController: _salePriceController,
@@ -214,7 +235,24 @@ class _EditVariantScreenState extends State<EditVariantScreen> {
               controller: _stockController,
               labelText: 'In stock',
             ),
+            const SizedBox(height: 24),
+            const Divider(),
             const SizedBox(height: 16),
+            _buildToggleSwitch(
+              'Use same image for all variants',
+              widget.useSameImage,
+              widget.onSameImageToggled,
+            ),
+            _buildToggleSwitch(
+              'Use same price for all variants',
+              widget.useSamePrice,
+              widget.onSamePriceToggled,
+            ),
+            _buildToggleSwitch(
+              'Use same number of stock',
+              widget.useSameStock,
+              widget.onSameStockToggled,
+            ),
           ],
         ),
       ),

@@ -46,6 +46,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
   String _discountPercentage = '';
   String? _variantsErrorText;
 
+  bool _useSameImage = false;
+  bool _useSamePrice = false;
+  bool _useSameStock = false;
+
   @override
   void initState() {
     super.initState();
@@ -557,6 +561,45 @@ class _AddProductScreenState extends State<AddProductScreen> {
     });
   }
 
+  void _onSameImageToggled(bool value) {
+    setState(() {
+      _useSameImage = value;
+      if (value) {
+        final currentVariant = _editedProduct.productVariants.first;
+        final updatedVariants = _editedProduct.productVariants.map((v) {
+          return v.copyWith(images: currentVariant.images);
+        }).toList();
+        _editedProduct = _editedProduct.copyWith(productVariants: updatedVariants);
+      }
+    });
+  }
+
+  void _onSamePriceToggled(bool value) {
+    setState(() {
+      _useSamePrice = value;
+      if (value) {
+        final currentVariant = _editedProduct.productVariants.first;
+        final updatedVariants = _editedProduct.productVariants.map((v) {
+          return v.copyWith(price: currentVariant.price, salePrice: currentVariant.salePrice);
+        }).toList();
+        _editedProduct = _editedProduct.copyWith(productVariants: updatedVariants);
+      }
+    });
+  }
+
+  void _onSameStockToggled(bool value) {
+    setState(() {
+      _useSameStock = value;
+      if (value) {
+        final currentVariant = _editedProduct.productVariants.first;
+        final updatedVariants = _editedProduct.productVariants.map((v) {
+          return v.copyWith(stock: currentVariant.stock);
+        }).toList();
+        _editedProduct = _editedProduct.copyWith(productVariants: updatedVariants);
+      }
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -760,6 +803,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       });
                     },
                     onVariantDeleted: _deleteVariant,
+                    useSameImage: _useSameImage,
+                    useSamePrice: _useSamePrice,
+                    useSameStock: _useSameStock,
+                    onSameImageToggled: _onSameImageToggled,
+                    onSamePriceToggled: _onSamePriceToggled,
+                    onSameStockToggled: _onSameStockToggled,
                   ),
                 ]
               ],

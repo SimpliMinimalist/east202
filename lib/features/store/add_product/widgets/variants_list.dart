@@ -7,12 +7,24 @@ class VariantsList extends StatelessWidget {
   final List<ProductVariant> variants;
   final Function(int, ProductVariant) onVariantUpdated;
   final Function(int) onVariantDeleted;
+  final bool useSameImage;
+  final bool useSamePrice;
+  final bool useSameStock;
+  final Function(bool) onSameImageToggled;
+  final Function(bool) onSamePriceToggled;
+  final Function(bool) onSameStockToggled;
 
   const VariantsList({
     super.key,
     required this.variants,
     required this.onVariantUpdated,
     required this.onVariantDeleted,
+    required this.useSameImage,
+    required this.useSamePrice,
+    required this.useSameStock,
+    required this.onSameImageToggled,
+    required this.onSamePriceToggled,
+    required this.onSameStockToggled,
   });
 
   @override
@@ -129,7 +141,15 @@ class VariantsList extends StatelessWidget {
               final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => EditVariantScreen(variant: variant),
+                  builder: (context) => EditVariantScreen(
+                    variant: variant,
+                    useSameImage: useSameImage,
+                    useSamePrice: useSamePrice,
+                    useSameStock: useSameStock,
+                    onSameImageToggled: onSameImageToggled,
+                    onSamePriceToggled: onSamePriceToggled,
+                    onSameStockToggled: onSameStockToggled,
+                  ),
                 ),
               );
               if (result != null) {
