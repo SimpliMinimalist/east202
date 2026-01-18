@@ -605,6 +605,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     final isEditing = _initialProduct != null && !_initialProduct!.isDraft;
     final isDraft = _initialProduct != null && _initialProduct!.isDraft;
     final hasVariants = _editedProduct.productVariants.isNotEmpty;
+    final outlineColor = Theme.of(context).colorScheme.outline;
 
     return PopScope(
       canPop: !_isFormModified(),
@@ -770,6 +771,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ? 'Add Product Variants'
                       : 'Edit Product Variants (${_editedProduct.productVariants.length} variants)'),
                   style: OutlinedButton.styleFrom(
+                    backgroundColor: Theme.of(context).cardColor,
+                    side: BorderSide(
+                      color: Color.fromRGBO(outlineColor.red, outlineColor.green, outlineColor.blue, 0.5),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
                     minimumSize: const Size(double.infinity, 50),
                   ),
                 ),

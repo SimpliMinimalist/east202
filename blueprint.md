@@ -21,16 +21,16 @@ The project follows a feature-based folder structure.
 ## Features Implemented
 
 ### Add/Edit Product Screen
+
+#### General
 -   Allows creating and editing products.
 -   Image picker for adding up to 10 product images.
 -   Fields for product name, price, category, stock, and description.
 -   Character limit for product name and description fields is only shown on focus.
--   Ability to add product variants.
--   The master price and stock fields are hidden when product variants are added.
--   "Add/Edit Product Variants" button is now a full-width button.
--   The icon for the "Add Product Variants" button changes from an add icon to an edit icon when variants are present.
--   The total number of variants is now displayed inside the "Edit Product Variants" button.
 -   Draft saving functionality.
+-   Corrected a typo from `_editedDitedProduct` to `_editedProduct`.
+
+#### Sale Price
 -   Sale price functionality with a dedicated bottom sheet widget (`SalePriceBottomSheet`).
 -   Display of the original price with a strikethrough when a sale price is active.
 -   The strikethrough line and the text color for the original price are now the same.
@@ -40,8 +40,16 @@ The project follows a feature-based folder structure.
 -   The "Done" button in the sale price bottom sheet is disabled if the validation fails.
 -   The sale price is automatically cleared if the bottom sheet is dismissed with an invalid value.
 -   The sale price bottom sheet is scroll-controlled to avoid keyboard overlap.
--   Corrected a typo from `_editedDitedProduct` to `_editedProduct`.
+
+#### Variants
+-   Ability to add product variants.
+-   The master price and stock fields are hidden when product variants are added.
+-   "Add/Edit Product Variants" button is now a full-width button.
+-   The icon for the "Add Product Variants" button changes from an add icon to an edit icon when variants are present.
+-   The total number of variants is now displayed inside the "Edit Product Variants" button.
+-   The "Add/Edit Product Variants" button now has the same background and border style as the variant list cards.
 -   Preserves existing variant data when editing variants.
+-   Fixed an issue where `withOpacity` was used in `add_product_screen.dart` and replaced it with `Color.fromRGBO`.
 
 ### Add Variants Screen
 
