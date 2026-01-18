@@ -57,6 +57,7 @@ The project follows a feature-based folder structure.
 -   Uses the `SalePriceBottomSheet` for a consistent editing experience.
 -   **Error Handling**: Displays an error message if the user tries to save without adding an image or a price.
 -   **Empty Default Fields**: The price and stock fields are now initialized as empty strings if their initial values are 0, preventing the display of "0.00" or "0" by default.
+-   **Removed Image Labels**: Removed the redundant image labels from the `ProductImageHandler` in this screen, as they are only necessary in the aggregated gallery view.
 
 ### Variant List UI
 -   **Delete Functionality**: Added a delete icon to each variant card, allowing for quick deletion from the list. A confirmation dialog is now shown before deleting a variant.
