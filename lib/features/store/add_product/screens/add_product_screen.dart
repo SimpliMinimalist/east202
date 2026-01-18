@@ -607,6 +607,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
     final hasVariants = _editedProduct.productVariants.isNotEmpty;
     final outlineColor = Theme.of(context).colorScheme.outline;
 
+    bool isButtonEnabled = false;
+    if (isEditing) {
+      isButtonEnabled = _isFormModified();
+    } else {
+      final hasName = _productNameController.text.isNotEmpty;
+      final hasPrice = _priceController.text.isNotEmpty;
+      final hasImages = _images.isNotEmpty ||
+          (hasVariants && _getVariantImages().isNotEmpty);
+      isButtonEnabled = hasName && hasPrice && hasImages;
+    }
+
     return PopScope(
       canPop: !_isFormModified(),
       onPopInvokedWithResult: (bool didPop, bool? result) async {
@@ -827,11 +838,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: _attemptSave,
+                    onPressed: isButtonEnabled ? _attemptSave : null,
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      backgroundColor: isButtonEnabled
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).primaryColor.withAlpha(128),
+                      foregroundColor: isButtonEnabled
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : Theme.of(context).colorScheme.onPrimary.withAlpha(128),
                     ),
                     child: Text(isEditing
                         ? 'Update Product'
