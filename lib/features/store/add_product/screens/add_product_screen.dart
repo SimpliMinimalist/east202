@@ -645,7 +645,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ProductImageHandler(
                   initialImages: hasVariants ? _getVariantImages() : _images,
@@ -742,38 +742,35 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   expandOnFocus: true,
                 ),
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity, // Make button take full width
-                  child: OutlinedButton.icon(
-                    onPressed: () async {
-                      final result = await Navigator.push<List<VariantOption>>(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AddVariantsScreen(
-                            initialVariants: _editedProduct.variants,
-                            isUpdating: _editedProduct.productVariants.isNotEmpty,
-                          ),
+                OutlinedButton.icon(
+                  onPressed: () async {
+                    final result = await Navigator.push<List<VariantOption>>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddVariantsScreen(
+                          initialVariants: _editedProduct.variants,
+                          isUpdating: _editedProduct.productVariants.isNotEmpty,
                         ),
-                      );
-                      if (result != null) {
-                        final newProductVariants = _generateVariants(result);
-                        setState(() {
-                          _editedProduct = _editedProduct.copyWith(
-                            variants: result,
-                            productVariants: newProductVariants,
-                          );
-                        });
-                      }
-                    },
-                    icon: Icon(_editedProduct.productVariants.isEmpty
-                        ? Icons.add
-                        : Icons.edit),
-                    label: Text(_editedProduct.productVariants.isEmpty
-                        ? 'Add Product Variants'
-                        : 'Edit Product Variants'),
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: const Size(0, 50),
-                    ),
+                      ),
+                    );
+                    if (result != null) {
+                      final newProductVariants = _generateVariants(result);
+                      setState(() {
+                        _editedProduct = _editedProduct.copyWith(
+                          variants: result,
+                          productVariants: newProductVariants,
+                        );
+                      });
+                    }
+                  },
+                  icon: Icon(_editedProduct.productVariants.isEmpty
+                      ? Icons.add
+                      : Icons.edit),
+                  label: Text(_editedProduct.productVariants.isEmpty
+                      ? 'Add Product Variants'
+                      : 'Edit Product Variants (${_editedProduct.productVariants.length} variants)'),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 50),
                   ),
                 ),
                 if (_variantsErrorText != null) ...[
@@ -789,13 +786,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ],
                 if (_editedProduct.productVariants.isNotEmpty) ...[
                   const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Text(
-                      'Total Variants: ${_editedProduct.productVariants.length}',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ),
                   VariantsList(
                     variants: _editedProduct.productVariants,
                     onVariantUpdated: (index, updatedVariant) {

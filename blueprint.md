@@ -29,6 +29,7 @@ The project follows a feature-based folder structure.
 -   The master price and stock fields are hidden when product variants are added.
 -   "Add/Edit Product Variants" button is now a full-width button.
 -   The icon for the "Add Product Variants" button changes from an add icon to an edit icon when variants are present.
+-   The total number of variants is now displayed inside the "Edit Product Variants" button.
 -   Draft saving functionality.
 -   Sale price functionality with a dedicated bottom sheet widget (`SalePriceBottomSheet`).
 -   Display of the original price with a strikethrough when a sale price is active.
@@ -41,7 +42,6 @@ The project follows a feature-based folder structure.
 -   The sale price bottom sheet is scroll-controlled to avoid keyboard overlap.
 -   Corrected a typo from `_editedDitedProduct` to `_editedProduct`.
 -   Preserves existing variant data when editing variants.
--   **Display Total Variant Count**: Shows the total number of variants above the variants list.
 
 ### Add Variants Screen
 
