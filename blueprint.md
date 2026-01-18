@@ -54,9 +54,11 @@ The project follows a feature-based folder structure.
 -   When adding variants for the first time, the data from the main product (price, sale price, stock, and images) is automatically copied to the first variant, which is marked as the "Default" variant.
 
 #### Button State and Validation
--   The "Add Product" button is only enabled when the product name, price, and at least one image are provided.
--   The "Update Product" button is disabled by default and is only enabled if the product's data has been modified.
--   For products with variants, the button is enabled only when the product name is provided and *all* variants have at least one image and a price greater than zero.
+-   **`Add Product` Button**: This button is enabled only when the product form is valid. This means:
+    -   The product name is not empty.
+    -   If there are no variants, the product has a price and at least one image.
+    -   If there are variants, *all* variants must have a price and at least one image.
+-   **`Update Product` Button**: This button is enabled only when the product has been modified *and* the product form is valid (following the same validation rules as the "Add Product" button).
 -   Validation for all required fields is triggered when the "Add Product" or "Update Product" button is pressed, even if it appears to be inactive.
 -   All validation checks are performed concurrently, so all relevant error messages are displayed at once.
 -   The "Add Product" button is now properly disabled when inactive to prevent accidental submissions.

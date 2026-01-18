@@ -161,6 +161,20 @@ class _AddProductScreenState extends State<AddProductScreen> {
     return !(_initialProduct?.equals(_editedProduct) ?? false);
   }
 
+  bool _isFormValid() {
+    final hasName = _productNameController.text.isNotEmpty;
+    final hasVariants = _editedProduct.productVariants.isNotEmpty;
+
+    if (hasVariants) {
+      final allVariantsValid = _editedProduct.productVariants.every((v) => v.price > 0 && v.images.isNotEmpty);
+      return hasName && allVariantsValid;
+    } else {
+      final hasPrice = _priceController.text.isNotEmpty;
+      final hasImages = _images.isNotEmpty;
+      return hasName && hasPrice && hasImages;
+    }
+  }
+
   Future<void> _showSaveDraftDialog() async {
     final navigator = Navigator.of(context);
     if (!_isFormModified()) {
@@ -618,17 +632,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
     bool isButtonEnabled = false;
     if (isEditing) {
-      isButtonEnabled = _isFormModified();
+      isButtonEnabled = _isFormModified() && _isFormValid();
     } else {
-      final hasName = _productNameController.text.isNotEmpty;
-      if (hasVariants) {
-        final allVariantsValid = _editedProduct.productVariants.every((v) => v.price > 0 && v.images.isNotEmpty);
-        isButtonEnabled = hasName && allVariantsValid;
-      } else {
-        final hasPrice = _priceController.text.isNotEmpty;
-        final hasImages = _images.isNotEmpty;
-        isButtonEnabled = hasName && hasPrice && hasImages;
-      }
+      isButtonEnabled = _isFormValid();
     }
 
     return PopScope(
