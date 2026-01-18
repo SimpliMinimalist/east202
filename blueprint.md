@@ -51,11 +51,11 @@ The project follows a feature-based folder structure.
 -   Preserves existing variant data when editing variants.
 -   Fixed an issue where `withOpacity` was used in `add_product_screen.dart` and replaced it with `withAlpha`.
 
-#### Button State
+#### Button State and Validation
 -   The "Add Product" button is only enabled when the product name, price, and at least one image are provided.
 -   The "Update Product" button is disabled by default and is only enabled if the product's data has been modified.
 -   For products with variants, the button is enabled if the product name and at least one image in any of the variants are provided.
--   **Validation Trigger**: The "Add Product" button now triggers validation for all required fields (including images) when pressed, even if it appears inactive.
+-   Validation for all required fields is triggered when the "Add Product" or "Update Product" button is pressed, even if it appears to be inactive.
 
 ### Add Variants Screen
 

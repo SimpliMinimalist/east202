@@ -362,52 +362,53 @@ class _AddProductScreenState extends State<AddProductScreen> {
     final isFormValid = _formKey.currentState!.validate();
     final isImageValid = _imageFieldKey.currentState!.validate();
 
-    if (isFormValid && isImageValid) {
-      bool allVariantsValid = true;
-      if (_editedProduct.productVariants.isNotEmpty) {
-        for (var variant in _editedProduct.productVariants) {
-          if (variant.images.isEmpty || variant.price <= 0) {
-            allVariantsValid = false;
-            break;
-          }
+    if (!isFormValid || !isImageValid) {
+      return;
+    }
+
+    bool allVariantsValid = true;
+    if (_editedProduct.productVariants.isNotEmpty) {
+      for (var variant in _editedProduct.productVariants) {
+        if (variant.images.isEmpty || variant.price <= 0) {
+          allVariantsValid = false;
+          break;
         }
       }
+    }
 
-      if (allVariantsValid) {
-        setState(() {
-          _variantsErrorText = null;
-        });
+    if (!allVariantsValid) {
+      setState(() {
+        _variantsErrorText =
+            'All variants should have atleast one image and a price';
+      });
+      return;
+    }
+    setState(() {
+      _variantsErrorText = null;
+    });
 
-        final navigator = Navigator.of(context);
-        final productProvider =
-            Provider.of<ProductProvider>(context, listen: false);
+    final navigator = Navigator.of(context);
+    final productProvider = Provider.of<ProductProvider>(context, listen: false);
 
-        final productToSave = _editedProduct.copyWith(isDraft: false);
+    final productToSave = _editedProduct.copyWith(isDraft: false);
 
-        if (_initialProduct == null || _initialProduct!.isDraft) {
-          productProvider.addProduct(productToSave);
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Product added successfully!')),
-            );
-          }
-        } else {
-          productProvider.updateProduct(productToSave);
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Product updated successfully!')),
-            );
-          }
-        }
-        if (mounted) {
-          navigator.pop();
-        }
-      } else {
-        setState(() {
-          _variantsErrorText =
-              'All variants should have atleast one image and a price';
-        });
+    if (_initialProduct == null || _initialProduct!.isDraft) {
+      productProvider.addProduct(productToSave);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Product added successfully!')),
+        );
       }
+    } else {
+      productProvider.updateProduct(productToSave);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Product updated successfully!')),
+        );
+      }
+    }
+    if (mounted) {
+      navigator.pop();
     }
   }
 
@@ -841,9 +842,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: isEditing
-                        ? (isButtonEnabled ? _attemptSave : null)
-                        : _attemptSave,
+                    onPressed: _attemptSave,
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
                       backgroundColor: isButtonEnabled
