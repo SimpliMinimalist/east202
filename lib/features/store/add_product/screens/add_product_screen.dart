@@ -681,6 +681,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   imageFieldKey: _imageFieldKey,
                   maxImages: 10,
                   isVariantGallery: hasVariants,
+                  hasVariants: hasVariants,
                 ),
                 const SizedBox(height: 24),
                 ClearableTextFormField(
@@ -770,6 +771,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ),
                     );
                     if (result != null) {
+                      if (_formKey.currentState != null) {
+                        _formKey.currentState!.reset();
+                      }
                       final newProductVariants = _generateVariants(result);
                       setState(() {
                         _editedProduct = _editedProduct.copyWith(

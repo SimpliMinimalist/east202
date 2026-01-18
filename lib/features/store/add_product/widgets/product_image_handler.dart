@@ -13,6 +13,7 @@ class ProductImageHandler extends StatefulWidget {
   final int maxImages;
   final String? errorMessage;
   final bool isVariantGallery;
+  final bool hasVariants;
 
   const ProductImageHandler({
     super.key,
@@ -24,6 +25,7 @@ class ProductImageHandler extends StatefulWidget {
     this.maxImages = 10,
     this.errorMessage,
     this.isVariantGallery = false,
+    this.hasVariants = false,
   });
 
   @override
@@ -133,7 +135,10 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
         initialValue: _images,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (value) {
-          if (widget.maxImages > 1 && _images.isEmpty && !widget.isVariantGallery) {
+          if (widget.maxImages > 1 &&
+              _images.isEmpty &&
+              !widget.isVariantGallery &&
+              !widget.hasVariants) {
             return 'Please select at least one image.';
           }
           return null;

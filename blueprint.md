@@ -50,6 +50,7 @@ The project follows a feature-based folder structure.
 -   The "Add/Edit Product Variants" button now has the same background and border style as the variant list cards.
 -   Preserves existing variant data when editing variants.
 -   Fixed an issue where `withOpacity` was used in `add_product_screen.dart` and replaced it with `withAlpha`.
+-   Validation errors are cleared when variants are added or edited.
 
 #### Button State and Validation
 -   The "Add Product" button is only enabled when the product name, price, and at least one image are provided.
@@ -101,7 +102,7 @@ The project follows a feature-based folder structure.
 ### Shared Widgets
 -   **`ClearableTextFormField`**: Added an `errorText` parameter to allow displaying validation errors.
 -   **`PriceInputField`**: Updated to accept and display an `errorMessage`.
--   **`ProductImageHandler`**: Added an `isVariantGallery` property to change the UI and behavior when displaying variant images.
+-   **`ProductImageHandler`**: Added an `isVariantGallery` property to change the UI and behavior when displaying variant images. Added a `hasVariants` property to control validation.
 
 ### Variant Image Gallery and Data Model Fixes
 
