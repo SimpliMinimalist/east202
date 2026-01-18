@@ -57,6 +57,7 @@ The project follows a feature-based folder structure.
 -   The "Update Product" button is disabled by default and is only enabled if the product's data has been modified.
 -   For products with variants, the button is enabled if the product name and at least one image in any of the variants are provided.
 -   Validation for all required fields is triggered when the "Add Product" or "Update Product" button is pressed, even if it appears to be inactive.
+-   All validation checks are performed concurrently, so all relevant error messages are displayed at once.
 
 ### Add Variants Screen
 

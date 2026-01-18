@@ -362,10 +362,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
     final isFormValid = _formKey.currentState!.validate();
     final isImageValid = _imageFieldKey.currentState!.validate();
 
-    if (!isFormValid || !isImageValid) {
-      return;
-    }
-
     bool allVariantsValid = true;
     if (_editedProduct.productVariants.isNotEmpty) {
       for (var variant in _editedProduct.productVariants) {
@@ -381,11 +377,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
         _variantsErrorText =
             'All variants should have atleast one image and a price';
       });
+    } else {
+      setState(() {
+        _variantsErrorText = null;
+      });
+    }
+
+    if (!isFormValid || !isImageValid || !allVariantsValid) {
       return;
     }
-    setState(() {
-      _variantsErrorText = null;
-    });
 
     final navigator = Navigator.of(context);
     final productProvider = Provider.of<ProductProvider>(context, listen: false);
