@@ -621,10 +621,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
       isButtonEnabled = _isFormModified();
     } else {
       final hasName = _productNameController.text.isNotEmpty;
-      final hasPrice = _priceController.text.isNotEmpty;
-      final hasImages = _images.isNotEmpty ||
-          (hasVariants && _getVariantImages().isNotEmpty);
-      isButtonEnabled = hasName && hasPrice && hasImages;
+      if (hasVariants) {
+        final hasVariantImages = _getVariantImages().isNotEmpty;
+        final hasVariantPrices = _editedProduct.productVariants.any((v) => v.price > 0);
+        isButtonEnabled = hasName && hasVariantImages && hasVariantPrices;
+      } else {
+        final hasPrice = _priceController.text.isNotEmpty;
+        final hasImages = _images.isNotEmpty;
+        isButtonEnabled = hasName && hasPrice && hasImages;
+      }
     }
 
     return PopScope(
@@ -868,7 +873,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: _attemptSave,
+                    onPressed: isButtonEnabled ? _attemptSave : null,
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
                       backgroundColor: isButtonEnabled

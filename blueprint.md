@@ -59,6 +59,7 @@ The project follows a feature-based folder structure.
 -   For products with variants, the button is enabled if the product name and at least one image in any of the variants are provided.
 -   Validation for all required fields is triggered when the "Add Product" or "Update Product" button is pressed, even if it appears to be inactive.
 -   All validation checks are performed concurrently, so all relevant error messages are displayed at once.
+-   The "Add Product" button is now properly disabled when inactive to prevent accidental submissions.
 
 ### Add Variants Screen
 
