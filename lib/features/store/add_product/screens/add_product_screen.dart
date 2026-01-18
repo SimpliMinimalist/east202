@@ -773,7 +773,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   style: OutlinedButton.styleFrom(
                     backgroundColor: Theme.of(context).cardColor,
                     side: BorderSide(
-                      color: Color.fromRGBO(outlineColor.red, outlineColor.green, outlineColor.blue, 0.5),
+                      color: outlineColor.withAlpha(128),
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
