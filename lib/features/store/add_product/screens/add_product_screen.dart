@@ -101,6 +101,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
         stock: int.tryParse(_stockController.text),
         images: _images.map((image) => image.path).toList(),
       );
+      // Clear variant error when form changes
+      _variantsErrorText = null;
     });
   }
 
@@ -620,6 +622,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       _editedProduct = _editedProduct.copyWith(
         productVariants: newProductVariants,
       );
+      _variantsErrorText = null;
     });
   }
 
@@ -635,6 +638,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           productVariants: updatedVariants,
         );
       }
+      _variantsErrorText = null;
     });
   }
 
@@ -649,6 +653,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           productVariants: updatedVariants,
         );
       }
+      _variantsErrorText = null;
     });
   }
 
@@ -663,6 +668,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           productVariants: updatedVariants,
         );
       }
+      _variantsErrorText = null;
     });
   }
 
