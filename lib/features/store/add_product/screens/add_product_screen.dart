@@ -21,10 +21,7 @@ import 'package:myapp/features/store/add_product/widgets/stock_input_field.dart'
 class AddProductScreen extends StatefulWidget {
   final Product? product;
 
-  const AddProductScreen({
-    super.key,
-    this.product,
-  });
+  const AddProductScreen({super.key, this.product});
 
   @override
   State<AddProductScreen> createState() => _AddProductScreenState();
@@ -54,7 +51,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
   void initState() {
     super.initState();
     _initialProduct = widget.product?.copyWith();
-    _editedProduct = widget.product?.copyWith() ??
+    _editedProduct =
+        widget.product?.copyWith() ??
         Product(
           id: const Uuid().v4(),
           name: '',
@@ -147,8 +145,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
     _images.addAll(product.images.map((path) => XFile(path)));
     _calculateDiscount();
 
-    Provider.of<ProductProvider>(context, listen: false)
-        .setSelectedDraftId(product.id);
+    Provider.of<ProductProvider>(
+      context,
+      listen: false,
+    ).setSelectedDraftId(product.id);
 
     setState(() {});
 
@@ -166,7 +166,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
     final hasVariants = _editedProduct.productVariants.isNotEmpty;
 
     if (hasVariants) {
-      final allVariantsValid = _editedProduct.productVariants.every((v) => v.price > 0 && v.images.isNotEmpty);
+      final allVariantsValid = _editedProduct.productVariants.every(
+        (v) => v.price > 0 && v.images.isNotEmpty,
+      );
       return hasName && allVariantsValid;
     } else {
       final hasPrice = _priceController.text.isNotEmpty;
@@ -191,7 +193,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
         if (isEditingDraft) {
           return AlertDialog(
             title: const Text('Save changes?'),
-            content: const Text('Do you want to save the changes to this draft?'),
+            content: const Text(
+              'Do you want to save the changes to this draft?',
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop('discard'),
@@ -230,7 +234,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
           return AlertDialog(
             title: const Text('Discard changes?'),
             content: const Text(
-                'You have unsaved changes. Are you sure you want to discard them?'),
+              'You have unsaved changes. Are you sure you want to discard them?',
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop('continue'),
@@ -260,7 +265,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   bool _saveDraft() {
-    final productProvider = Provider.of<ProductProvider>(context, listen: false);
+    final productProvider = Provider.of<ProductProvider>(
+      context,
+      listen: false,
+    );
 
     if (productProvider.drafts.length >= 5 &&
         (_initialProduct == null || !_initialProduct!.isDraft)) {
@@ -269,7 +277,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
         builder: (context) => AlertDialog(
           title: const Text('Drafts Limit Reached'),
           content: const Text(
-              'You can only save up to 5 drafts. Please delete an existing draft to save a new one.'),
+            'You can only save up to 5 drafts. Please delete an existing draft to save a new one.',
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -286,9 +295,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
     productProvider.saveDraft(draftProduct);
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Product saved as draft!')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Product saved as draft!')));
     }
     return true;
   }
@@ -304,10 +313,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         return const SafeArea(
           child: Align(
             alignment: Alignment.topCenter,
-            child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: DraftsPopup(),
-            ),
+            child: Padding(padding: EdgeInsets.all(16.0), child: DraftsPopup()),
           ),
         );
       },
@@ -352,7 +358,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
         return AlertDialog(
           title: const Text('You have unsaved changes'),
           content: const Text(
-              'Do you want to save your current work as a draft before loading the new one?'),
+            'Do you want to save your current work as a draft before loading the new one?',
+          ),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.of(context).pop('cancel'),
@@ -402,7 +409,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
 
     final navigator = Navigator.of(context);
-    final productProvider = Provider.of<ProductProvider>(context, listen: false);
+    final productProvider = Provider.of<ProductProvider>(
+      context,
+      listen: false,
+    );
 
     final productToSave = _editedProduct.copyWith(isDraft: false);
 
@@ -448,8 +458,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           value: _editedProduct.categories.contains(category),
                           onChanged: (bool? value) {
                             setState(() {
-                              final newCategories =
-                                  List<String>.from(_editedProduct.categories);
+                              final newCategories = List<String>.from(
+                                _editedProduct.categories,
+                              );
                               if (value == true) {
                                 newCategories.add(category);
                               } else {
@@ -457,7 +468,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               }
                               this.setState(() {
                                 _editedProduct = _editedProduct.copyWith(
-                                    categories: newCategories);
+                                  categories: newCategories,
+                                );
                               });
                             });
                           },
@@ -519,8 +531,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       }
 
       final existingVariant = _editedProduct.productVariants.firstWhere(
-        (v) =>
-            v.attributes.entries.every((e) => attributes[e.key] == e.value),
+        (v) => v.attributes.entries.every((e) => attributes[e.key] == e.value),
         orElse: () => ProductVariant(attributes: attributes),
       );
 
@@ -551,32 +562,60 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   List<String> _getVariantImageLabels() {
-    return _editedProduct.productVariants
-        .expand((variant) {
-          final label = variant.attributes.values.join(' / ');
-          if (variant.isDefault) {
-            return List.filled(variant.images.length, '$label (Default)');
-          }
-          return List.filled(variant.images.length, label);
-        })
-        .toList();
+    return _editedProduct.productVariants.expand((variant) {
+      final label = variant.attributes.values.join(' / ');
+      if (variant.isDefault) {
+        return List.filled(variant.images.length, '$label (Default)');
+      }
+      return List.filled(variant.images.length, label);
+    }).toList();
   }
 
-  void _deleteVariantImage(XFile imageFile) {
+  void _deleteVariantImage(XFile imageFile, int deletedImageIndex) {
     setState(() {
-      _editedProduct = _editedProduct.copyWith(
-        productVariants: _editedProduct.productVariants.map((variant) {
-          final newImages = List<String>.from(variant.images);
-          newImages.remove(imageFile.path);
-          return variant.copyWith(images: newImages);
-        }).toList(),
-      );
+      // Find which variant this image belongs to by its position in the aggregated gallery
+      int currentIndex = 0;
+      int variantIndexToDelete = -1;
+      int imageIndexInVariant = -1;
+
+      // Iterate through variants to find which one contains the image at deletedImageIndex
+      for (int i = 0; i < _editedProduct.productVariants.length; i++) {
+        final variant = _editedProduct.productVariants[i];
+        for (int j = 0; j < variant.images.length; j++) {
+          if (currentIndex == deletedImageIndex) {
+            variantIndexToDelete = i;
+            imageIndexInVariant = j;
+            break;
+          }
+          currentIndex++;
+        }
+        if (variantIndexToDelete != -1) break;
+      }
+
+      // Only delete the image from the specific variant it belongs to
+      if (variantIndexToDelete != -1 && imageIndexInVariant != -1) {
+        final updatedVariants = List<ProductVariant>.from(
+          _editedProduct.productVariants,
+        );
+        final variant = updatedVariants[variantIndexToDelete];
+        final newImages = List<String>.from(variant.images);
+        newImages.removeAt(imageIndexInVariant);
+        updatedVariants[variantIndexToDelete] = variant.copyWith(
+          images: newImages,
+        );
+
+        _editedProduct = _editedProduct.copyWith(
+          productVariants: updatedVariants,
+        );
+      }
     });
   }
 
   void _deleteVariant(int index) {
     setState(() {
-      final newProductVariants = List<ProductVariant>.from(_editedProduct.productVariants);
+      final newProductVariants = List<ProductVariant>.from(
+        _editedProduct.productVariants,
+      );
       newProductVariants.removeAt(index);
       _editedProduct = _editedProduct.copyWith(
         productVariants: newProductVariants,
@@ -592,7 +631,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
         final updatedVariants = _editedProduct.productVariants.map((v) {
           return v.copyWith(images: imagePaths);
         }).toList();
-        _editedProduct = _editedProduct.copyWith(productVariants: updatedVariants);
+        _editedProduct = _editedProduct.copyWith(
+          productVariants: updatedVariants,
+        );
       }
     });
   }
@@ -604,7 +645,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
         final updatedVariants = _editedProduct.productVariants.map((v) {
           return v.copyWith(price: price, salePrice: salePrice);
         }).toList();
-        _editedProduct = _editedProduct.copyWith(productVariants: updatedVariants);
+        _editedProduct = _editedProduct.copyWith(
+          productVariants: updatedVariants,
+        );
       }
     });
   }
@@ -616,11 +659,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
         final updatedVariants = _editedProduct.productVariants.map((v) {
           return v.copyWith(stock: stock);
         }).toList();
-        _editedProduct = _editedProduct.copyWith(productVariants: updatedVariants);
+        _editedProduct = _editedProduct.copyWith(
+          productVariants: updatedVariants,
+        );
       }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -664,8 +708,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
           actions: [
             if (!isEditing)
               IconButton(
-                icon: SvgPicture.asset('assets/icons/draft_products.svg',
-                    width: 24, height: 24),
+                icon: SvgPicture.asset(
+                  'assets/icons/draft_products.svg',
+                  width: 24,
+                  height: 24,
+                ),
                 onPressed: _showDraftsPopup,
               ),
           ],
@@ -727,7 +774,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     child: TextFormField(
                       readOnly: true,
                       controller: TextEditingController(
-                          text: _editedProduct.categories.isEmpty ? '' : ' '),
+                        text: _editedProduct.categories.isEmpty ? '' : ' ',
+                      ),
                       decoration: InputDecoration(
                         labelText: 'Category',
                         border: const OutlineInputBorder(),
@@ -735,21 +783,23 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         prefixIcon: _editedProduct.categories.isEmpty
                             ? null
                             : Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                    12, 8, 0, 8),
+                                padding: const EdgeInsets.fromLTRB(12, 8, 0, 8),
                                 child: Wrap(
                                   spacing: 8.0,
                                   runSpacing: 4.0,
-                                  children: _editedProduct.categories
-                                      .map((category) {
+                                  children: _editedProduct.categories.map((
+                                    category,
+                                  ) {
                                     return Chip(
                                       label: Text(category),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100.0),
+                                        borderRadius: BorderRadius.circular(
+                                          100.0,
+                                        ),
                                       ),
-                                      visualDensity:
-                                          const VisualDensity(vertical: -2),
+                                      visualDensity: const VisualDensity(
+                                        vertical: -2,
+                                      ),
                                     );
                                   }).toList(),
                                 ),
@@ -776,8 +826,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 const SizedBox(height: 16),
                 OutlinedButton.icon(
                   onPressed: () async {
-                    final mainPrice = double.tryParse(_priceController.text) ?? 0.0;
-                    final mainSalePrice = double.tryParse(_salePriceController.text);
+                    final mainPrice =
+                        double.tryParse(_priceController.text) ?? 0.0;
+                    final mainSalePrice = double.tryParse(
+                      _salePriceController.text,
+                    );
                     final mainStock = int.tryParse(_stockController.text) ?? 0;
                     final mainImages = List<XFile>.from(_images);
 
@@ -796,7 +849,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       }
                       final newProductVariants = _generateVariants(result);
 
-                      if (newProductVariants.isNotEmpty && !(_editedProduct.productVariants.isNotEmpty)) {
+                      if (newProductVariants.isNotEmpty &&
+                          !(_editedProduct.productVariants.isNotEmpty)) {
                         final firstVariant = newProductVariants.first.copyWith(
                           price: mainPrice,
                           salePrice: mainSalePrice,
@@ -815,17 +869,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       });
                     }
                   },
-                  icon: Icon(_editedProduct.productVariants.isEmpty
-                      ? Icons.add
-                      : Icons.edit),
-                  label: Text(_editedProduct.productVariants.isEmpty
-                      ? 'Add Product Variants'
-                      : 'Edit Product Variants (${_editedProduct.productVariants.length} variants)'),
+                  icon: Icon(
+                    _editedProduct.productVariants.isEmpty
+                        ? Icons.add
+                        : Icons.edit,
+                  ),
+                  label: Text(
+                    _editedProduct.productVariants.isEmpty
+                        ? 'Add Product Variants'
+                        : 'Edit Product Variants (${_editedProduct.productVariants.length} variants)',
+                  ),
                   style: OutlinedButton.styleFrom(
                     backgroundColor: Theme.of(context).cardColor,
-                    side: BorderSide(
-                      color: outlineColor.withAlpha(128),
-                    ),
+                    side: BorderSide(color: outlineColor.withAlpha(128)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
@@ -838,7 +894,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     child: Center(
                       child: Text(
                         _variantsErrorText!,
-                        style: TextStyle(color: Theme.of(context).colorScheme.error),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
                       ),
                     ),
                   ),
@@ -850,7 +908,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     onVariantUpdated: (index, updatedVariant) {
                       setState(() {
                         final newVariants = List<ProductVariant>.from(
-                            _editedProduct.productVariants);
+                          _editedProduct.productVariants,
+                        );
                         newVariants[index] = updatedVariant;
                         _editedProduct = _editedProduct.copyWith(
                           productVariants: newVariants,
@@ -865,7 +924,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     onSamePriceToggled: _onSamePriceToggled,
                     onSameStockToggled: _onSameStockToggled,
                   ),
-                ]
+                ],
               ],
             ),
           ),
@@ -886,11 +945,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           : Theme.of(context).primaryColor.withAlpha(128),
                       foregroundColor: isButtonEnabled
                           ? Theme.of(context).colorScheme.onPrimary
-                          : Theme.of(context).colorScheme.onPrimary.withAlpha(128),
+                          : Theme.of(
+                              context,
+                            ).colorScheme.onPrimary.withAlpha(128),
                     ),
-                    child: Text(isEditing
-                        ? 'Update Product'
-                        : (isDraft ? 'Add Product' : 'Add Product')),
+                    child: Text(
+                      isEditing
+                          ? 'Update Product'
+                          : (isDraft ? 'Add Product' : 'Add Product'),
+                    ),
                   ),
                 ),
               ],

@@ -8,7 +8,7 @@ class ProductImageHandler extends StatefulWidget {
   final List<XFile> initialImages;
   final List<String>? imageLabels;
   final Function(List<XFile>) onImagesChanged;
-  final Function(XFile)? onImageDeleted;
+  final Function(XFile, int)? onImageDeleted;
   final GlobalKey<FormFieldState<List<XFile>>>? imageFieldKey;
   final int maxImages;
   final String? errorMessage;
@@ -62,8 +62,10 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
     if (_images.length >= widget.maxImages) {
       messenger.showSnackBar(
         SnackBar(
-            content: Text(
-                'You can only select up to ${widget.maxImages} images.')),
+          content: Text(
+            'You can only select up to ${widget.maxImages} images.',
+          ),
+        ),
       );
       return;
     }
@@ -93,7 +95,7 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
   void _removeImage(int index) {
     final imageToRemove = _images[index];
     if (widget.onImageDeleted != null) {
-      widget.onImageDeleted!(imageToRemove);
+      widget.onImageDeleted!(imageToRemove, index);
     } else {
       setState(() {
         _images.removeAt(index);
@@ -108,13 +110,12 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
 
   @override
   Widget build(BuildContext context) {
-    final bool hasError = widget.errorMessage != null && widget.errorMessage!.isNotEmpty;
+    final bool hasError =
+        widget.errorMessage != null && widget.errorMessage!.isNotEmpty;
     final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _images.isEmpty
-            ? _buildAddPhotoImage(hasError)
-            : _buildImageCarousel(),
+        _images.isEmpty ? _buildAddPhotoImage(hasError) : _buildImageCarousel(),
         if (hasError)
           Padding(
             padding: const EdgeInsets.only(top: 8.0, left: 12.0),
@@ -177,7 +178,9 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
           child: CarouselSlider.builder(
             itemCount: _images.length,
             itemBuilder: (context, index, realIndex) {
-              final label = (widget.imageLabels != null && index < widget.imageLabels!.length)
+              final label =
+                  (widget.imageLabels != null &&
+                      index < widget.imageLabels!.length)
                   ? widget.imageLabels![index]
                   : null;
               return Container(
@@ -187,10 +190,7 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      Image.file(
-                        File(_images[index].path),
-                        fit: BoxFit.cover,
-                      ),
+                      Image.file(File(_images[index].path), fit: BoxFit.cover),
                       Positioned(
                         top: 8,
                         left: 8,
@@ -212,7 +212,9 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
                                 child: Text(
                                   '${index + 1}/${_images.length}',
                                   style: const TextStyle(
-                                      color: Colors.white, fontSize: 12),
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
                                 ),
                               ),
                             if (label != null)
@@ -220,7 +222,9 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
                                 child: Align(
                                   alignment: Alignment.topCenter,
                                   child: Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                    ),
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 8,
                                       vertical: 4,
@@ -232,7 +236,9 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
                                     child: Text(
                                       label,
                                       style: const TextStyle(
-                                          color: Colors.white, fontSize: 12),
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                      ),
                                       textAlign: TextAlign.center,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -247,8 +253,11 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
                                   color: Colors.black.withAlpha(128),
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(Icons.delete_outline,
-                                    color: Colors.white, size: 20),
+                                child: const Icon(
+                                  Icons.delete_outline,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
                               ),
                             ),
                           ],
@@ -296,7 +305,9 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
             child: ElevatedButton.icon(
               onPressed: _pickImages,
               icon: const Icon(Icons.add_a_photo_outlined),
-              label: Text(widget.maxImages > 1 ? 'Add More Photos' : 'Add Photo'),
+              label: Text(
+                widget.maxImages > 1 ? 'Add More Photos' : 'Add Photo',
+              ),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 backgroundColor: Colors.white,
@@ -320,8 +331,8 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
     final label = widget.isVariantGallery
         ? 'All variants image will be shown here'
         : widget.maxImages > 1
-            ? 'Add up to ${widget.maxImages} Photos'
-            : 'Add a Photo';
+        ? 'Add up to ${widget.maxImages} Photos'
+        : 'Add a Photo';
 
     return AspectRatio(
       aspectRatio: 1 / 1,
@@ -337,7 +348,9 @@ class _ProductImageHandlerState extends State<ProductImageHandler> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  widget.isVariantGallery ? Icons.image : Icons.add_a_photo_outlined,
+                  widget.isVariantGallery
+                      ? Icons.image
+                      : Icons.add_a_photo_outlined,
                   size: 64,
                   color: Colors.grey.shade600,
                 ),
