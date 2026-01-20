@@ -1,7 +1,5 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/core/theme.dart';
 import 'package:myapp/features/auth/widgets/phone_otp_bottom_sheet.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -30,9 +28,9 @@ class WelcomeScreen extends StatelessWidget {
               Container(
                 width: 150,
                 height: 150,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: primaryColor,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 child: const Icon(Icons.shopping_bag_outlined, color: Colors.white, size: 80),
               ),
@@ -50,13 +48,13 @@ class WelcomeScreen extends StatelessWidget {
                     const TextSpan(text: 'Read our '),
                     TextSpan(
                       text: 'Privacy Policy',
-                      style: const TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold),
                       recognizer: TapGestureRecognizer()..onTap = () {},
                     ),
                     const TextSpan(text: '. Tap "Agree and continue" to accept the '),
                     TextSpan(
                       text: 'Terms of Service',
-                      style: const TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold),
                       recognizer: TapGestureRecognizer()..onTap = () {},
                     ),
                   ],

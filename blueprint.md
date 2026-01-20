@@ -18,11 +18,33 @@ The project follows a feature-based folder structure.
     -   `lib/features/store/search_product`: Feature for searching products.
     -   `lib/features/store/store_setup`: Feature for setting up the store.
 
-## Features Implemented
+## Implemented Features & Current Plan
 
-### Add/Edit Product Screen
+### Theme Refactoring (In Progress)
 
-#### General
+**Goal**: To refactor the application's theme to be more robust, scalable, and fully compliant with Material 3 design principles. This includes adding support for dark mode, creating a dynamic theme-switching mechanism, and defining a comprehensive typography scale.
+
+**Plan**:
+
+1.  **Add `provider` Package**: Integrate the `provider` package for state management of the theme.
+2.  **Restructure `theme.dart`**:
+    *   Define separate `ThemeData` objects for light and dark modes.
+    *   Create a complete `TextTheme` with `google_fonts` for a robust typography scale.
+    *   Implement component-specific theming for `Card`, `NavigationBar`, etc.
+3.  **Create `ThemeProvider`**:
+    *   Develop a `ThemeProvider` class using `ChangeNotifier` to manage the current theme mode (Light, Dark, System).
+4.  **Update `main.dart`**:
+    *   Wrap the application in a `ChangeNotifierProvider` to make the `ThemeProvider` available throughout the widget tree.
+    *   Use a `Consumer` to dynamically apply the selected theme.
+5.  **Implement Theme Selection UI**:
+    *   Create a new `ThemesScreen` to allow users to choose their preferred theme.
+    *   Navigate to this screen from the existing settings page.
+
+### Previous Features
+
+#### Add/Edit Product Screen
+
+##### General
 -   Allows creating and editing products.
 -   Image picker for adding up to 10 product images.
 -   Fields for product name, price, category, stock, and description.
@@ -30,7 +52,7 @@ The project follows a feature-based folder structure.
 -   Draft saving functionality.
 -   Corrected a typo from `_editedDitedProduct` to `_editedProduct`.
 
-#### Sale Price
+##### Sale Price
 -   Sale price functionality with a dedicated bottom sheet widget (`SalePriceBottomSheet`).
 -   Display of the original price with a strikethrough when a sale price is active.
 -   The strikethrough line and the text color for the original price are now the same.
@@ -41,7 +63,7 @@ The project follows a feature-based folder structure.
 -   The sale price is automatically cleared if the bottom sheet is dismissed with an invalid value.
 -   The sale price bottom sheet is scroll-controlled to avoid keyboard overlap.
 
-#### Variants
+##### Variants
 -   Ability to add product variants.
 -   The master price and stock fields are hidden when product variants are added.
 -   "Add/Edit Product Variants" button is now a full-width button.
@@ -53,7 +75,7 @@ The project follows a feature-based folder structure.
 -   Validation errors are cleared when variants are added or edited.
 -   When adding variants for the first time, the data from the main product (price, sale price, stock, and images) is automatically copied to the first variant, which is marked as the "Default" variant.
 
-#### Button State and Validation
+##### Button State and Validation
 -   **`Add Product` Button**: This button is enabled only when the product form is valid. This means:
     -   The product name is not empty.
     -   If there are no variants, the product has a price and at least one image.
@@ -63,12 +85,12 @@ The project follows a feature-based folder structure.
 -   All validation checks are performed concurrently, so all relevant error messages are displayed at once.
 -   The "Add Product" button is now properly disabled when inactive to prevent accidental submissions.
 
-### Add Variants Screen
+#### Add Variants Screen
 
 -   The "Save" button has been moved from the app bar to a bottom navigation bar for a consistent user experience.
 -   The app bar title dynamically changes to "Edit Variants" when variants are being edited.
 
-### Edit Variant Screen
+#### Edit Variant Screen
 
 -   **Delete Functionality**: Added a delete icon to the app bar. Tapping the icon shows a confirmation dialog before deleting the variant.
 -   The "Save" button has been moved from the app bar to a bottom navigation bar, matching the design of the "Add Variants" and "Add Product" screens.
@@ -79,7 +101,7 @@ The project follows a feature-based folder structure.
 -   **Empty Default Fields**: The price and stock fields are now initialized as empty strings if their initial values are 0, preventing the display of "0.00" or "0" by default.
 -   **Removed Image Labels**: Removed the redundant image labels from the `ProductImageHandler` in this screen, as they are only necessary in the aggregated gallery view.
 
-### Variant List UI
+#### Variant List UI
 -   **Delete Functionality**: Added a delete icon to each variant card, allowing for quick deletion from the list. A confirmation dialog is now shown before deleting a variant.
 -   Removed the shadow effect from the variant cards in the product details screen.
 -   Added a light border to maintain visual separation between the cards.
@@ -89,28 +111,28 @@ The project follows a feature-based folder structure.
 -   The delete confirmation message in the `VariantsList` now matches the message in the `EditVariantScreen` for consistency.
 -   Displays a "Default" tag next to the variant name if it is the default variant.
 
-### Category Field UI Fix
+#### Category Field UI Fix
 -   Corrected the height and alignment of the "Category" input field to match other text fields and ensure it expands dynamically as category chips are added.
 -   Replaced the previous implementation with a `TextFormField` wrapped in a `GestureDetector` and an `AbsorbPointer`.
 -   The `TextFormField` is set to `readOnly: true` and acts as a styled container.
 -   The `Wrap` widget containing the category `Chip`s is placed inside the `prefixIcon` property of the `InputDecoration`.
 -   Fixed a typo from `Listile` to `ListTile` in the category picker bottom sheet.
 
-### Category Chip UI
+#### Category Chip UI
 -   Reduced the height of the category chips to make them more compact.
 
-### Variant Image Picker
+#### Variant Image Picker
 -   Allows users to add an image to each product variant.
 -   Refactored `ProductImageHandler` to support a variable number of images and display error messages.
 -   Updated the `maxImages` for the main product to 10 and for variants to 4.
 -   Integrated into `EditVariantScreen` to allow picking up to 4 images for a variant.
 
-### Shared Widgets
+#### Shared Widgets
 -   **`ClearableTextFormField`**: Added an `errorText` parameter to allow displaying validation errors.
 -   **`PriceInputField`**: Updated to accept and display an `errorMessage`.
 -   **`ProductImageHandler`**: Added an `isVariantGallery` property to change the UI and behavior when displaying variant images. Added a `hasVariants` property to control validation.
 
-### Variant Image Gallery and Data Model Fixes
+#### Variant Image Gallery and Data Model Fixes
 
 -   **Goal:** Implement a read-only image gallery on the main product page that displays all variant images. This involved fixing the product variant data model and updating all related widgets.
 -   **Steps:**
@@ -119,7 +141,7 @@ The project follows a feature-based folder structure.
     3.  **`add_product_screen.dart`:** Implemented the `_getVariantImages` method to aggregate images from all variants. The `ProductImageHandler` now displays these images in a read-only gallery view when variants are present.
     4.  **`variants_list.dart`:** Fixed the widget to display the first image from the `images` list as the variant thumbnail.
 
-### Real-time Variant Image Deletion
+#### Real-time Variant Image Deletion
 
 -   **Goal:** Enable real-time, synchronous deletion of variant images from the aggregated gallery view on the main product page.
 -   **Steps:**
@@ -131,7 +153,7 @@ The project follows a feature-based folder structure.
         -   Created a `_deleteVariantImage` method that finds the correct product variant and removes the specified image from its `images` list.
         -   This ensures that deleting an image from the main gallery immediately updates the underlying data model and refreshes the UI.
 
-### Variant Image Label UI Refinement
+#### Variant Image Label UI Refinement
 
 -   **Goal:** Improve the UI of the variant image labels.
 -   **Steps:**
@@ -141,7 +163,7 @@ The project follows a feature-based folder structure.
     2.  **Adjust Label Width:**
         -   **`product_image_handler.dart`:** Modified the layout to ensure the label's background width fits the text content, preventing it from expanding to the full width of the image.
 
-### Fix Variant Deletion Logic
+#### Fix Variant Deletion Logic
 
 -   **Goal:** Correctly handle variant deletion to prevent deleted variants from reappearing and resolve related errors.
 -   **Steps:**
@@ -153,7 +175,7 @@ The project follows a feature-based folder structure.
     4.  **Update `blueprint.md`:** Documented the bug fix and the steps taken to resolve the errors.
     5.  **Commit and Push:** Committing the final, corrected code to the repository.
 
-### Delete All Variants Functionality
+#### Delete All Variants Functionality
 
 -   **Goal:** Add a delete icon to the app bar in the "Edit Product Variants" screen that allows the user to delete all variants after a confirmation.
 -   **Steps:**
@@ -164,7 +186,7 @@ The project follows a feature-based folder structure.
     2.  **Update `blueprint.md`:** Documented the new delete all variants feature.
     3.  **Commit and Push:** Committing the changes to the repository.
 
-### Preserve Variant Option Values on Deletion
+#### Preserve Variant Option Values on Deletion
 
 -   **Goal:** Correct the variant deletion logic to ensure that deleting a specific `ProductVariant` does not remove the underlying option values (e.g., "Small", "Red") if they are still used by other variants.
 -   **Steps:**
@@ -172,7 +194,7 @@ The project follows a feature-based folder structure.
     2.  **Update `blueprint.md`:** Documented this critical bug fix.
     3.  **Commit and Push:** Committing the corrected code to the repository.
 
-### Variant Validation on Save
+#### Variant Validation on Save
 -   **Goal:** Ensure that all product variants have at least one image and a price before saving the product.
 -   **Steps:**
     1.  **`add_product_screen.dart`:**
@@ -182,7 +204,7 @@ The project follows a feature-based folder structure.
     2.  **Update `blueprint.md`:** Documented the new validation feature.
     3.  **Commit and Push:** Committing the changes to the repository.
 
-### Variant Bulk Editing
+#### Variant Bulk Editing
 
 -   **Goal:** Allow users to apply the same image, price, and stock to all product variants from the "Edit Variant" screen using toggle switches.
 -   **Steps:**
