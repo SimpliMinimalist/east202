@@ -6,7 +6,7 @@ class AddVariantsScreen extends StatefulWidget {
   final bool isUpdating;
 
   const AddVariantsScreen({
-    super.key, 
+    super.key,
     this.initialVariants = const [],
     this.isUpdating = false,
   });
@@ -28,9 +28,13 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
     ['Cotton', 'Silk', 'Nylon']
   ];
 
+  late List<VariantOption> _originalVariants;
+  bool _isDirty = false;
+
   @override
   void initState() {
     super.initState();
+    _originalVariants = widget.initialVariants.map((v) => VariantOption(name: v.name, values: List.from(v.values))).toList();
     if (widget.initialVariants.isNotEmpty) {
       _loadInitialVariants();
     } else {
@@ -45,11 +49,14 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
       _optionControllers.add(optionController);
       _optionFocusNodes.add(focusNode);
       focusNode.addListener(_onFocusChange);
+      optionController.addListener(_checkForChanges);
 
       final valueControllersForOption = <TextEditingController>[];
       final valueFocusNodesForOption = <FocusNode>[];
       for (var value in variant.values) {
-        valueControllersForOption.add(TextEditingController(text: value));
+        final valueController = TextEditingController(text: value);
+        valueController.addListener(_checkForChanges);
+        valueControllersForOption.add(valueController);
         valueFocusNodesForOption.add(FocusNode());
       }
       _valueControllers.add(valueControllersForOption);
@@ -58,31 +65,61 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
     setState(() {});
   }
 
+  void _checkForChanges() {
+    bool changed = false;
+    if (_optionControllers.length != _originalVariants.length) {
+      changed = true;
+    } else {
+      for (int i = 0; i < _optionControllers.length; i++) {
+        if (_optionControllers[i].text != _originalVariants[i].name) {
+          changed = true;
+          break;
+        }
+        if (_valueControllers[i].length != _originalVariants[i].values.length) {
+          changed = true;
+          break;
+        }
+        for (int j = 0; j < _valueControllers[i].length; j++) {
+          if (_valueControllers[i][j].text != _originalVariants[i].values[j]) {
+            changed = true;
+            break;
+          }
+        }
+        if (changed) break;
+      }
+    }
+    setState(() {
+      _isDirty = changed;
+    });
+  }
+
   void _addOption() {
     if (_optionControllers.length < 3) {
       final optionController = TextEditingController();
-      final focusNode = FocusNode(); // Create a new FocusNode here
+      optionController.addListener(_checkForChanges);
+      final focusNode = FocusNode(); 
       final valueController = TextEditingController();
+      valueController.addListener(_checkForChanges);
 
       setState(() {
         _optionControllers.add(optionController);
         _valueControllers.add([valueController]);
-        _optionFocusNodes.add(focusNode); // Add it to the list
+        _optionFocusNodes.add(focusNode); 
         _valueFocusNodes.add([FocusNode()]);
       });
-      // Add listener to the new focus node
       focusNode.addListener(_onFocusChange);
+      _checkForChanges();
     }
   }
 
   void _onFocusChange() {
-    // This rebuilds the UI to update the dynamic label
     setState(() {});
   }
 
   void _addValue(int optionIndex) {
     final newFocusNode = FocusNode();
     final newValueController = TextEditingController();
+    newValueController.addListener(_checkForChanges);
     setState(() {
       _valueControllers[optionIndex].add(newValueController);
       _valueFocusNodes[optionIndex].add(newFocusNode);
@@ -90,6 +127,7 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(newFocusNode);
     });
+    _checkForChanges();
   }
 
   void _removeOption(int optionIndex) {
@@ -100,7 +138,7 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
     for (var focusNode in _valueFocusNodes[optionIndex]) {
       focusNode.dispose();
     }
-    _optionFocusNodes[optionIndex].removeListener(_onFocusChange); // Remove listener
+    _optionFocusNodes[optionIndex].removeListener(_onFocusChange);
     _optionFocusNodes[optionIndex].dispose();
 
     setState(() {
@@ -109,6 +147,7 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
       _optionFocusNodes.removeAt(optionIndex);
       _valueFocusNodes.removeAt(optionIndex);
     });
+    _checkForChanges();
   }
 
   void _removeValue(int optionIndex, int valueIndex) {
@@ -118,20 +157,23 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
       _valueControllers[optionIndex].removeAt(valueIndex);
       _valueFocusNodes[optionIndex].removeAt(valueIndex);
     });
+    _checkForChanges();
   }
 
   @override
   void dispose() {
     for (var controller in _optionControllers) {
+      controller.removeListener(_checkForChanges);
       controller.dispose();
     }
     for (var valueList in _valueControllers) {
       for (var controller in valueList) {
+        controller.removeListener(_checkForChanges);
         controller.dispose();
       }
     }
     for (var focusNode in _optionFocusNodes) {
-      focusNode.removeListener(_onFocusChange); // Remove listener on dispose
+      focusNode.removeListener(_onFocusChange);
       focusNode.dispose();
     }
     for (var focusNodeList in _valueFocusNodes) {
@@ -143,7 +185,6 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
   }
 
   bool _isFormSufficient() {
-    // True if at least one option has a name and at least one value.
     return _optionControllers.any((optCtrl) {
       if (optCtrl.text.trim().isEmpty) return false;
       int index = _optionControllers.indexOf(optCtrl);
@@ -151,7 +192,7 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
     });
   }
 
- void _saveVariants() {
+  void _saveVariants() {
     if (_formKey.currentState!.validate()) {
       if (_isFormSufficient()) {
         final variants = <VariantOption>[];
@@ -200,10 +241,9 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    bool isSaveEnabled = _isFormSufficient();
+    bool isSaveEnabled = _isFormSufficient() && (widget.isUpdating ? _isDirty : true);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.isUpdating ? 'Edit Variants' : 'Add Variants'),
@@ -217,7 +257,7 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
       ),
       body: Form(
         key: _formKey,
-        autovalidateMode: AutovalidateMode.disabled, // Form validation still disabled until manual call
+        autovalidateMode: AutovalidateMode.disabled,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ListView(
@@ -249,7 +289,7 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
           ),
         ),
       ),
-        bottomNavigationBar: Transform.translate(
+      bottomNavigationBar: Transform.translate(
         offset: const Offset(0, -7),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -257,14 +297,14 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: _saveVariants,
+                  onPressed: isSaveEnabled ? _saveVariants : null,
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                     backgroundColor: isSaveEnabled
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey.shade300,
-                foregroundColor:
-                    isSaveEnabled ? Colors.white : Colors.grey.shade600,
+                        ? Theme.of(context).primaryColor
+                        : Colors.grey.shade300,
+                    foregroundColor:
+                        isSaveEnabled ? Colors.white : Colors.grey.shade600,
                   ),
                   child: const Text('Save'),
                 ),
@@ -279,7 +319,6 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
   List<Widget> _buildVariantFields() {
     List<Widget> fields = [];
     for (int i = 0; i < _optionControllers.length; i++) {
-      // Determine the dynamic labelText
       final bool isFocused = _optionFocusNodes[i].hasFocus;
       final bool hasText = _optionControllers[i].text.isNotEmpty;
       final String currentPlaceholder = (i < _optionPlaceholders.length)
@@ -312,8 +351,7 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
                 controller: _optionControllers[i],
                 focusNode: _optionFocusNodes[i],
                 decoration: InputDecoration(
-                  labelText: dynamicLabelText, // Use dynamic labelText
-                  // hintText is removed as per requirement for dynamic labelText
+                  labelText: dynamicLabelText,
                   border: const OutlineInputBorder(),
                 ),
                 validator: (value) {
@@ -322,10 +360,10 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
                   }
                   return null;
                 },
-                onChanged: (value) { // Added onChanged callback
-                  setState(() {}); // Rebuild to update labelText based on text presence
+                onChanged: (value) {
+                  setState(() {});
                 },
-                autovalidateMode: AutovalidateMode.onUserInteraction, // Changed to onUserInteraction
+                autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
               const SizedBox(height: 16),
               Text('Values (${_valueControllers[i].length})',
@@ -368,7 +406,8 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
   List<Widget> _buildValueFields(int optionIndex) {
     List<Widget> valueFields = [];
     for (int j = 0; j < _valueControllers[optionIndex].length; j++) {
-      final String hintText = (optionIndex < _valuePlaceholders.length && j < _valuePlaceholders[optionIndex].length)
+      final String hintText = (optionIndex < _valuePlaceholders.length &&
+              j < _valuePlaceholders[optionIndex].length)
           ? 'e.g., ${_valuePlaceholders[optionIndex][j]}'
           : 'Value';
 
@@ -387,16 +426,15 @@ class _AddVariantsScreenState extends State<AddVariantsScreen> {
                   border: InputBorder.none,
                 ),
                 validator: (value) {
-                  // Unconditionally make value fields required.
                   if (value == null || value.trim().isEmpty) {
                     return 'Value is required';
                   }
                   return null;
                 },
-                onChanged: (value) { // Added onChanged callback
+                onChanged: (value) {
                   setState(() {});
                 },
-                autovalidateMode: AutovalidateMode.onUserInteraction, // Changed to onUserInteraction
+                autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
             ),
             if (_valueControllers[optionIndex].length > 1)
